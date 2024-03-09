@@ -1,8 +1,9 @@
-package com.rentspace.entity;
+package com.rentspace.model.user;
 
+import com.rentspace.model.place.PlaceReservation;
+import com.rentspace.model.service.ServiceReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,7 @@ public class EventOwner extends User {
     @OneToMany
     private List<ServiceReservation> services;
 
+    public EventOwner(String name, String profilePhoto, String email, String telephone, String webSite) {
+        super();
+    }
 }

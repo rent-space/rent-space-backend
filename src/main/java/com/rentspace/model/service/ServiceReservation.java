@@ -1,8 +1,9 @@
-package com.rentspace.entity;
+package com.rentspace.model.service;
 
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,5 +13,9 @@ import lombok.Setter;
 public class ServiceReservation {
     @Id
     private Long id;
+    @OneToOne
+    private Services services;
+    private String address;
+    private String city;
 
 }

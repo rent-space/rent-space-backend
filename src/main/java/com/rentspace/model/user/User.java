@@ -1,6 +1,5 @@
-package com.rentspace.entity;
+package com.rentspace.model.user;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 

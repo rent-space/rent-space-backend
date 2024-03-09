@@ -1,5 +1,7 @@
-package com.rentspace.entity;
+package com.rentspace.model.user;
 
+import com.rentspace.model.place.Place;
+import com.rentspace.model.place.PlaceReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -24,5 +26,8 @@ public class PlaceOwner extends User {
     @OneToMany
     private List<PlaceReservation> reservations;
 
+    public PlaceOwner(String name, String profilePhoto, String email, String telephone, String webSite) {
+        super();
+    }
 }
 
