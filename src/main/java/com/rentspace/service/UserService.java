@@ -2,16 +2,12 @@ package com.rentspace.service;
 
 import com.rentspace.DTO.UserDTO;
 import com.rentspace.model.place.Place;
-import com.rentspace.model.place.PlaceReservation;
-import com.rentspace.model.service.ServiceReservation;
 import com.rentspace.model.service.Services;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.model.user.User;
 import com.rentspace.repository.UserRepository;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +35,14 @@ public class UserService {
         saveNewUser(serviceOwner);
     }
 
-    public void registerNewEventceOwner(UserDTO userDTO) {
+    public void registerNewEventOwner(UserDTO userDTO) {
         EventOwner eventOwner =
                 new EventOwner
                         (userDTO.getName(), userDTO.getProfilePhoto(), userDTO.getEmail(), userDTO.getTelephone(), userDTO.getWebSite());
         saveNewUser(eventOwner);
     }
 
-    public void registernewPlaceowner(UserDTO userDTO, List<Place> places){
+    public void registerNewPlaceOwner(UserDTO userDTO, List<Place> places){
         PlaceOwner placeOwner = new PlaceOwner
                 (userDTO.getName(), userDTO.getProfilePhoto(), userDTO.getEmail(), userDTO.getTelephone(), userDTO.getWebSite());
         placeOwner.setPlaces(places);
