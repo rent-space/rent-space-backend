@@ -8,8 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CadastroDTO {
-    private String nome;
+public class UserDTO {
+    private String name;
+    private String profilePhoto;
     private String email;
-    private String senha;
+    private String telephone;
+    private String webSite;
 }

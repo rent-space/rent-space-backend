@@ -1,5 +1,7 @@
 package com.rentspace.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CadastroOrganizador extends Cadastro{
+@Entity
+public class ServiceOwner extends User {
 
+    @Id
+    private Long id;
 
 }
-
