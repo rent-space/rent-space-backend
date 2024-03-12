@@ -1,38 +1,40 @@
 package com.rentspace.controller;
 
-import com.rentspace.DTO.UserDTO;
+import com.rentspace.DTO.persist.PersistUserDTO;
+import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.model.place.Place;
 import com.rentspace.model.service.Services;
+import com.rentspace.model.user.User;
 import com.rentspace.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping(path = "/usuario")
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @PostMapping("/register-service-owner")
-    public void registerNewServiceOwner(@RequestBody UserDTO userDTO, @RequestBody List<Services> services) {
-        userService.registerNewServiceOwner(userDTO, services);
+    public ResponseEntity<ResponseUserDTO> registerNewServiceOwner(@RequestBody PersistUserDTO persistUserDTO, @RequestBody List<Services> services) {
+        return new ResponseEntity<>(userService.registerNewServiceOwner(persistUserDTO, services), HttpStatus.CREATED);
     }
 
     @PostMapping("/register-event-owner")
-    public void registerNewEventOwner(@RequestBody UserDTO userDTO) {
-        userService.registerNewEventOwner(userDTO);
+    public ResponseEntity<ResponseUserDTO> registerNewEventOwner(@RequestBody PersistUserDTO persistUserDTO) {
+        return new ResponseEntity<>(userService.registerNewEventOwner(persistUserDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/register-place-owner")
-    public void registerNewPlaceOwner(@RequestBody UserDTO userDTO, @RequestBody List<Place> places) {
-        userService.registerNewPlaceOwner(userDTO, places);
+    public ResponseEntity<ResponseUserDTO> registerNewPlaceOwner(@RequestBody PersistUserDTO persistUserDTO, @RequestBody List<Place> places) {
+        return new ResponseEntity<>(userService.registerNewPlaceOwner(persistUserDTO, places), HttpStatus.CREATED);
     }
 }

@@ -3,10 +3,9 @@ package com.rentspace.model.user;
 import jakarta.persistence.Id;
 import lombok.*;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class User {
 
     private String name;

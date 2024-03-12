@@ -1,14 +1,11 @@
-package com.rentspace.DTO;
-
+package com.rentspace.DTO.persist;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
 @AllArgsConstructor
-public class UserDTO {
+@Data
+public class PersistUserDTO {
     private String name;
     private String profilePhoto;
     private String email;
