@@ -2,6 +2,7 @@ package com.rentspace.util;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * ModelMapper is a library used to make objects translation easier. It can be really helpful in terms
@@ -14,9 +15,17 @@ import org.modelmapper.ModelMapper;
  *
  * @author Vinícius Azevedo
  */
-@AllArgsConstructor
-public abstract class ModelMapperFuncs {
+public class ModelMapperFuncs {
 
+    @Autowired
     private ModelMapper modelMapper;
+
+    public <E, T> E map(T source, Class<E> typeDestination) {
+        E model = null;
+        if (source != null && typeDestination != null) {
+            model = modelMapper.map(source, typeDestination);
+        }
+        return model;
+    }
 
 }
