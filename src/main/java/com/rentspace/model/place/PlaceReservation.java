@@ -1,5 +1,6 @@
 package com.rentspace.model.place;
 
+import com.rentspace.model.GenericModel;
 import com.rentspace.model.service.Services;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,9 +14,8 @@ import java.util.List;
 
 @Entity
 @Data
-public class PlaceReservation {
-    @Id
-    private Long id;
+public class PlaceReservation extends GenericModel {
+
     @OneToOne
     private Place place;
     private Integer numberOfParticipants;
