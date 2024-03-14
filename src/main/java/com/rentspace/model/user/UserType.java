@@ -1,6 +1,9 @@
 package com.rentspace.model.user;
 
-import com.rentspace.exception.InvalidUserTypeException;
+import com.rentspace.exception.ApiRequestException;
+
+import static com.rentspace.exception.ExceptionMessages.USER_TYPE_NOT_SUPPORTED;
+
 
 public enum UserType {
 
@@ -16,6 +19,6 @@ public enum UserType {
         } else if (this == UserType.SERVICE_OWNER) {
             return ServiceOwner.class;
         }
-        throw new InvalidUserTypeException();
+        throw new ApiRequestException(USER_TYPE_NOT_SUPPORTED);
     }
 }
