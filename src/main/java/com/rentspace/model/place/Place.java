@@ -1,5 +1,6 @@
 package com.rentspace.model.place;
 
+import com.rentspace.model.GenericModel;
 import com.rentspace.model.service.Services;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,9 +13,8 @@ import java.util.List;
 
 @Entity
 @Data
-public class Place {
-    @Id
-    private Long id;
+public class Place extends GenericModel {
+
     private Integer maximumCapacity;
     @OneToMany
     private List<Services> services;

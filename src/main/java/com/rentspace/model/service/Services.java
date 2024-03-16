@@ -1,17 +1,15 @@
 package com.rentspace.model.service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import com.rentspace.model.GenericModel;
+import jakarta.persistence.*;
 import lombok.Data;
 
 
 @Entity
 @Data
-public class Services {
-    @Id
-    private Long id;
-    @OneToOne
+public class Services extends GenericModel {
+
+    @Enumerated(EnumType.STRING)
     private ServiceNature serviceNature;
     private Integer peopleInvolved;
     private Boolean isRelatedToSpace;
