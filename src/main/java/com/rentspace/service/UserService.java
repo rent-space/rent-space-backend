@@ -21,7 +21,7 @@ public class UserService extends ModelMapperFuncs {
         userRepository.save(appUser);
     }
 
-    public ResponseUserDTO registerUser(PersistUserDTO persistUserDTO) {
+    public ResponseUserDTO create(PersistUserDTO persistUserDTO) {
         if (this.userRepository.findByEmail(persistUserDTO.getEmail()).isPresent()) {
             throw new ApiRequestException(EMAIL_ALREADY_EXISTS);
         }
