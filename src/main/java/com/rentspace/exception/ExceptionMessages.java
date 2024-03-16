@@ -11,4 +11,6 @@ public class ExceptionMessages {
 
     public static final String EMAIL_ALREADY_EXISTS = "Já existe um usuário com este e-mail no sistema.";
 
+    public static final String INVALID_PLACE_OWNER_ID = "Não existe um proprietário de espaço com este id";
+
 }
