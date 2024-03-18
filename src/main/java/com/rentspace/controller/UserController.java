@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping()
-    public ResponseEntity<ResponseUserDTO> registerUser(@RequestBody PersistUserDTO persistUserDTO) {
-        return new ResponseEntity<>(userService.registerUser(persistUserDTO), HttpStatus.CREATED);
+    public ResponseEntity<ResponseUserDTO> create(@RequestBody PersistUserDTO persistUserDTO) {
+        return new ResponseEntity<>(userService.create(persistUserDTO), HttpStatus.CREATED);
     }
 }
