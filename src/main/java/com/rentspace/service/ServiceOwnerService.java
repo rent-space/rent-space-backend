@@ -16,7 +16,7 @@ public class ServiceOwnerService {
 
     private ServiceOwnerRepository serviceOwnerRepository;
 
-    public void save(ServiceOwner serviceOwner) { this.serviceOwnerRepository.save(serviceOwner);}
+    public void save(ServiceOwner model) { this.serviceOwnerRepository.save(model);}
 
     public ServiceOwner get(Long id) {
         return this.serviceOwnerRepository.findById(id)

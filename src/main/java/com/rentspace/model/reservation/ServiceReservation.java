@@ -1,7 +1,8 @@
-package com.rentspace.model.service;
+package com.rentspace.model.reservation;
 
 
 import com.rentspace.model.GenericModel;
+import com.rentspace.model.products.Service;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.Data;

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import com.rentspace.controller.ServiceController;
 import com.rentspace.service.ServiceService;
 import com.rentspace.service.ServiceOwnerService;
-import com.rentspace.model.service.ServiceNature;
+import com.rentspace.model.products.ServiceNature;
 import com.rentspace.DTO.persist.PersistServiceDTO;
 import com.rentspace.DTO.response.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;

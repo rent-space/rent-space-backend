@@ -17,16 +17,16 @@ public class UserService extends ModelMapperFuncs {
 
     private UserRepository<AppUser> userRepository;
 
-    private void save(AppUser appUser){
-        userRepository.save(appUser);
+    private void save(AppUser model){
+        userRepository.save(model);
     }
 
-    public ResponseUserDTO create(PersistUserDTO persistUserDTO) {
-        if (this.userRepository.findByEmail(persistUserDTO.getEmail()).isPresent()) {
+    public ResponseUserDTO create(PersistUserDTO persistDTO) {
+        if (this.userRepository.findByEmail(persistDTO.getEmail()).isPresent()) {
             throw new ApiRequestException(EMAIL_ALREADY_EXISTS);
         }
 
-        AppUser appUser = map(persistUserDTO, persistUserDTO.getUserType().toClass());
+        AppUser appUser = map(persistDTO, persistDTO.getUserType().toClass());
         save(appUser);
         return map(appUser, ResponseUserDTO.class);
     }

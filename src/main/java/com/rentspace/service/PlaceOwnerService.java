@@ -15,7 +15,7 @@ public class PlaceOwnerService extends ModelMapperFuncs {
 
     private PlaceOwnerRepository placeOwnerRepository;
 
-    public void save(PlaceOwner owner) { placeOwnerRepository.save(owner); }
+    public void save(PlaceOwner model) { placeOwnerRepository.save(model); }
 
     public PlaceOwner get(Long id) {
         return placeOwnerRepository.findById(id)

@@ -1,7 +1,7 @@
 package com.rentspace.model.user;
 
-import com.rentspace.model.service.Service;
-import com.rentspace.model.service.ServiceReservation;
+import com.rentspace.model.products.Service;
+import com.rentspace.model.reservation.ServiceReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
