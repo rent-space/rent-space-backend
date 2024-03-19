@@ -21,8 +21,8 @@ public class ServiceController {
     private ServiceService serviceService;
 
     @PostMapping
-    public ResponseEntity<ResponseServiceDTO> create(@RequestBody PersistServiceDTO persistPlaceDTO) {
-        return new ResponseEntity<>(serviceService.create(persistPlaceDTO), HttpStatus.CREATED);
+    public ResponseEntity<ResponseServiceDTO> create(@RequestBody PersistServiceDTO persistDTO) {
+        return new ResponseEntity<>(serviceService.create(persistDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/tipos")

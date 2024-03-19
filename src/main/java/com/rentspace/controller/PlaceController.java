@@ -19,7 +19,7 @@ public class PlaceController {
     private PlaceService placeService;
 
     @PostMapping
-    public ResponseEntity<ResponsePlaceDTO> create(@RequestBody PersistPlaceDTO persistPlaceDTO) {
-        return new ResponseEntity<>(placeService.create(persistPlaceDTO), HttpStatus.CREATED);
+    public ResponseEntity<ResponsePlaceDTO> create(@RequestBody PersistPlaceDTO persistDTO) {
+        return new ResponseEntity<>(placeService.create(persistDTO), HttpStatus.CREATED);
     }
 }

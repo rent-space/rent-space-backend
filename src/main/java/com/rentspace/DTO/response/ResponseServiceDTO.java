@@ -1,7 +1,7 @@
 package com.rentspace.DTO.response;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
-import com.rentspace.model.service.ServiceNature;
+import com.rentspace.model.products.ServiceNature;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
