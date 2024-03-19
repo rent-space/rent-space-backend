@@ -29,11 +29,11 @@ public class UserControllerTest {
     }
 
     @Test
-    public void registerUserEventOwner() { 
-        PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.EVENT_OWNER, "Ricardo Fagundes", "profile.jpg",
-                "rfagundes@example.com", "83911111111", "example.com");
-        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Ricardo Fagundes", "profile.jpg",
-                "rfagundes@example.com", "83911111111", "example.com");
+    public void createEventOwner() { 
+        PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.EVENT_OWNER, "Ricardo Fagundes", "",
+                "rfagundes@example.com", "83911111111", "");
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO(0L, "Ricardo Fagundes", "",
+                "rfagundes@example.com", "83911111111", "");
 
         when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
@@ -44,11 +44,11 @@ public class UserControllerTest {
     }
     
     @Test
-    public void registerUserPlaceOwner() { 
-        PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.PLACE_OWNER, "Raquel Farias", "profile.jpg",
-                "raquelfarias@example.com", "83922222222", "example.com");
-        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Raquel Farias", "profile.jpg",
-                "raquelfarias@example.com", "83922222222", "example.com");
+    public void createPlaceOwner() { 
+        PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.PLACE_OWNER, "Raquel Farias", "",
+                "raquelfarias@example.com", "83922222222", "");
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Raquel Farias", "",
+                "raquelfarias@example.com", "83922222222", "");
 
         when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
@@ -59,11 +59,11 @@ public class UserControllerTest {
     }
     
     @Test
-    public void registerUserServiceOwner() { 
-        PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.SERVICE_OWNER, "Rafael Feitosa", "profile.jpg",
-                "rafeitosa@example.com", "83933333333", "example.com");
-        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Rafael Feitosa", "profile.jpg",
-                "rafeitosa@example.com", "83933333333", "example.com");
+    public void createServiceOwner() { 
+        PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.SERVICE_OWNER, "Rafael Feitosa", "",
+                "rafeitosa@example.com", "83933333333", "");
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO(2L, "Rafael Feitosa", "",
+                "rafeitosa@example.com", "83933333333", "");
 
         when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
@@ -71,6 +71,6 @@ public class UserControllerTest {
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(responseUserDTO, responseEntity.getBody());
-    }
+    }     
     
 }
