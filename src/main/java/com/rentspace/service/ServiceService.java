@@ -10,7 +10,6 @@ import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

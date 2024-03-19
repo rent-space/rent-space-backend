@@ -4,11 +4,9 @@ import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 import java.util.List;
 

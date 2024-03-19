@@ -3,7 +3,6 @@ package com.rentspace.model.products;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Entity
 @Data
 public class Service extends BasicProductInfo {

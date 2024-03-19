@@ -11,7 +11,6 @@ import com.rentspace.model.user.ServiceOwner;
 import org.modelmapper.ModelMapper;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.lang.reflect.Type;
 import java.util.List;
 

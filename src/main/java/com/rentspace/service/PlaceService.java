@@ -9,7 +9,6 @@ import com.rentspace.repository.PlaceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
 @Service

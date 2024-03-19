@@ -6,7 +6,6 @@ import com.rentspace.repository.PlaceOwnerRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_OWNER_ID;
 
 @Service
