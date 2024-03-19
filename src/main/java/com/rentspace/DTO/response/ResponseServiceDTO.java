@@ -1,5 +1,7 @@
 package com.rentspace.DTO.response;
 
+import com.rentspace.DTO.listed.ListedPlaceDTO;
+import com.rentspace.model.service.ServiceNature;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ResponsePlaceDTO {
+public class ResponseServiceDTO {
 
     private Long id;
     private String title;
@@ -18,7 +20,8 @@ public class ResponsePlaceDTO {
     private String address;
     private String city;
     private BigDecimal pricePerHour;
-    private Integer maximumCapacity;
-    private ResponseUserDTO placeOwner;
-
+    private ResponseUserDTO serviceOwner;
+    private ServiceNature serviceNature;
+    private Integer peopleInvolved;
+    private List<ListedPlaceDTO> placesRelated;
 }

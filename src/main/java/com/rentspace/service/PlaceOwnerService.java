@@ -19,7 +19,7 @@ public class PlaceOwnerService extends ModelMapperFuncs {
 
     public PlaceOwner get(Long id) {
         return placeOwnerRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(INVALID_PLACE_OWNER_ID));
+                .orElseThrow(() -> new ApiRequestException(INVALID_PLACE_OWNER_ID + id));
     }
 
 }
