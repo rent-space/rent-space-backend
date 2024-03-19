@@ -1,6 +1,6 @@
 package com.rentspace.model.user;
 
-import com.rentspace.model.service.Services;
+import com.rentspace.model.service.Service;
 import com.rentspace.model.service.ServiceReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ServiceOwner extends AppUser {
 
     @OneToMany
-    private List<Services> services;
+    private List<Service> services;
     @OneToMany
     private List<ServiceReservation> reservations;
 }

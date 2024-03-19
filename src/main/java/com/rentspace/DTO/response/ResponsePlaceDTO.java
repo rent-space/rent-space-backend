@@ -19,6 +19,6 @@ public class ResponsePlaceDTO {
     private String city;
     private BigDecimal pricePerHour;
     private Integer maximumCapacity;
-    private Long placeOwnerId;
+    private ResponseUserDTO placeOwner;
 
 }
