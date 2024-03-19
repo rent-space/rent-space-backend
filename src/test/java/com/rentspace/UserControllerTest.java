@@ -32,12 +32,12 @@ public class UserControllerTest {
     public void registerUserEventOwner() { 
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.EVENT_OWNER, "Ricardo Fagundes", "profile.jpg",
                 "rfagundes@example.com", "83911111111", "example.com");
-        ResponseUserDTO responseUserDTO = new ResponseUserDTO("Ricardo Fagundes", "profile.jpg",
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Ricardo Fagundes", "profile.jpg",
                 "rfagundes@example.com", "83911111111", "example.com");
 
-        when(userService.registerUser(persistUserDTO)).thenReturn(responseUserDTO);
+        when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
-        ResponseEntity<ResponseUserDTO> responseEntity = userController.registerUser(persistUserDTO);
+        ResponseEntity<ResponseUserDTO> responseEntity = userController.create(persistUserDTO);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(responseUserDTO, responseEntity.getBody());
@@ -47,12 +47,12 @@ public class UserControllerTest {
     public void registerUserPlaceOwner() { 
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.PLACE_OWNER, "Raquel Farias", "profile.jpg",
                 "raquelfarias@example.com", "83922222222", "example.com");
-        ResponseUserDTO responseUserDTO = new ResponseUserDTO("Raquel Farias", "profile.jpg",
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Raquel Farias", "profile.jpg",
                 "raquelfarias@example.com", "83922222222", "example.com");
 
-        when(userService.registerUser(persistUserDTO)).thenReturn(responseUserDTO);
+        when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
-        ResponseEntity<ResponseUserDTO> responseEntity = userController.registerUser(persistUserDTO);
+        ResponseEntity<ResponseUserDTO> responseEntity = userController.create(persistUserDTO);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(responseUserDTO, responseEntity.getBody());
@@ -62,12 +62,12 @@ public class UserControllerTest {
     public void registerUserServiceOwner() { 
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.SERVICE_OWNER, "Rafael Feitosa", "profile.jpg",
                 "rafeitosa@example.com", "83933333333", "example.com");
-        ResponseUserDTO responseUserDTO = new ResponseUserDTO("Rafael Feitosa", "profile.jpg",
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Rafael Feitosa", "profile.jpg",
                 "rafeitosa@example.com", "83933333333", "example.com");
 
-        when(userService.registerUser(persistUserDTO)).thenReturn(responseUserDTO);
+        when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
-        ResponseEntity<ResponseUserDTO> responseEntity = userController.registerUser(persistUserDTO);
+        ResponseEntity<ResponseUserDTO> responseEntity = userController.create(persistUserDTO);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(responseUserDTO, responseEntity.getBody());

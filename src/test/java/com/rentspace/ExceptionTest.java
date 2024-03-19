@@ -37,7 +37,7 @@ public class ExceptionTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new AppUser()));
 
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            userService.registerUser(persistUserDTO);
+            userService.create(persistUserDTO);
         });
         assertEquals(EMAIL_ALREADY_EXISTS, exception.getMessage());
     }
