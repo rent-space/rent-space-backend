@@ -1,5 +1,6 @@
 package com.rentspace.model.service;
 
+import com.rentspace.model.BasicProductInfo;
 import com.rentspace.model.GenericModel;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,10 +8,9 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Services extends GenericModel {
+public class Service extends BasicProductInfo {
 
     @Enumerated(EnumType.STRING)
     private ServiceNature serviceNature;
     private Integer peopleInvolved;
-    private Boolean isRelatedToSpace;
 }
