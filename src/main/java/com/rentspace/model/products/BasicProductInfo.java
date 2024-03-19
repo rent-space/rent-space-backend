@@ -3,7 +3,6 @@ package com.rentspace.model.products;
 import com.rentspace.model.GenericModel;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.List;
 

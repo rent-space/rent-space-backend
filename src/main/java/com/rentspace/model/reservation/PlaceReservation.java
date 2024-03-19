@@ -1,13 +1,11 @@
 package com.rentspace.model.reservation;
 
-import com.rentspace.model.GenericModel;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
-
 import java.util.List;
 
 @Entity

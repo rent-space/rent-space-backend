@@ -5,7 +5,6 @@ import com.rentspace.model.reservation.PlaceReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
-
 import java.util.List;
 
 

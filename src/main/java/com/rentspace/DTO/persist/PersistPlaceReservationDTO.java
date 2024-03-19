@@ -1,6 +1,5 @@
 package com.rentspace.DTO.persist;
 
-import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PaymentMethod;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -8,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 import java.util.List;
 
