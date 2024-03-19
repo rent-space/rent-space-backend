@@ -1,7 +1,8 @@
-package com.rentspace.model.place;
+package com.rentspace.model.reservation;
 
 import com.rentspace.model.GenericModel;
-import com.rentspace.model.service.Service;
+import com.rentspace.model.products.Place;
+import com.rentspace.model.products.Service;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -11,11 +12,11 @@ import java.util.List;
 
 @Entity
 @Data
-public class PlaceReservation extends GenericModel {
+public class PlaceReservation extends BasicReservationInfo {
 
     @OneToOne
     private Place place;
-    private Integer numberOfParticipants;
+    private Integer numOfParticipants;
     @OneToMany
     private List<Service> hiredRelatedServices;
 

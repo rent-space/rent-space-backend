@@ -1,7 +1,5 @@
-package com.rentspace.model.service;
+package com.rentspace.model.products;
 
-import com.rentspace.model.BasicProductInfo;
-import com.rentspace.model.GenericModel;
 import jakarta.persistence.*;
 import lombok.Data;
 

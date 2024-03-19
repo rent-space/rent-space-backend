@@ -1,5 +1,6 @@
-package com.rentspace.model;
+package com.rentspace.model.products;
 
+import com.rentspace.model.GenericModel;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 
