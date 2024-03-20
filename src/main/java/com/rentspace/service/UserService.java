@@ -2,51 +2,32 @@ package com.rentspace.service;
 
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
-import com.rentspace.model.place.Place;
-import com.rentspace.model.service.Services;
-import com.rentspace.model.user.EventOwner;
-import com.rentspace.model.user.PlaceOwner;
-import com.rentspace.model.user.ServiceOwner;
-import com.rentspace.model.user.User;
+import com.rentspace.exception.ApiRequestException;
+import com.rentspace.model.user.AppUser;
 import com.rentspace.repository.UserRepository;
+import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import static com.rentspace.exception.ExceptionMessages.EMAIL_ALREADY_EXISTS;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService extends ModelMapperFuncs {
 
-    private UserRepository userRepository;
+    private UserRepository<AppUser> userRepository;
 
-    private ModelMapper modelMapper;
-
-    private void saveNewUser(User user){
-        userRepository.save(user);
+    private void save(AppUser appUser){
+        userRepository.save(appUser);
     }
 
-    public ResponseUserDTO registerNewServiceOwner(PersistUserDTO persistUserDTO, List<Services> services) {
+    public ResponseUserDTO create(PersistUserDTO persistUserDTO) {
+        if (this.userRepository.findByEmail(persistUserDTO.getEmail()).isPresent()) {
+            throw new ApiRequestException(EMAIL_ALREADY_EXISTS);
+        }
 
-        ServiceOwner serviceOwner = modelMapper.map(persistUserDTO, ServiceOwner.class);
-        serviceOwner.setServices(services);
-        saveNewUser(serviceOwner);
-        return modelMapper.map(serviceOwner, ResponseUserDTO.class);
-    }
-
-    public ResponseUserDTO registerNewEventOwner(PersistUserDTO persistUserDTO) {
-
-        EventOwner eventOwner = modelMapper.map(persistUserDTO, EventOwner.class);
-        saveNewUser(eventOwner);
-        return modelMapper.map(eventOwner, ResponseUserDTO.class);
-    }
-
-    public ResponseUserDTO registerNewPlaceOwner(PersistUserDTO persistUserDTO, List<Place> places){
-
-        PlaceOwner placeOwner = modelMapper.map(persistUserDTO, PlaceOwner.class);
-        placeOwner.setPlaces(places);
-        saveNewUser(placeOwner);
-        return modelMapper.map(placeOwner, ResponseUserDTO.class);
-
+        AppUser appUser = map(persistUserDTO, persistUserDTO.getUserType().toClass());
+        save(appUser);
+        return map(appUser, ResponseUserDTO.class);
     }
 }

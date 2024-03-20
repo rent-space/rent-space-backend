@@ -1,22 +1,22 @@
 package com.rentspace.model.place;
 
-import com.rentspace.model.service.Services;
+import com.rentspace.model.BasicProductInfo;
+import com.rentspace.model.service.Service;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Data
-public class Place {
-    @Id
-    private Long id;
+public class Place extends BasicProductInfo {
+
     private Integer maximumCapacity;
-    @OneToMany
-    private List<Services> services;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Service> services;
 
 }
