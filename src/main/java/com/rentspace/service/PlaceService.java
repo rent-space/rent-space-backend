@@ -28,7 +28,7 @@ public class PlaceService extends ModelMapperFuncs {
 
         this.save(place);
         placeOwnerService.save(owner);
-        return buildResponsePlaceDTO(place, owner);
+        return buildResponse(place, owner);
     }
 
     public Place get(Long id) {

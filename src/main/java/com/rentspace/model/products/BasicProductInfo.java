@@ -3,11 +3,14 @@ package com.rentspace.model.products;
 import com.rentspace.model.GenericModel;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 @MappedSuperclass
 @Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class BasicProductInfo extends GenericModel {
 
     private String title;

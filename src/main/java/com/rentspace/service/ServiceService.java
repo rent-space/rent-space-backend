@@ -3,6 +3,7 @@ package com.rentspace.service;
 
 import com.rentspace.DTO.persist.PersistServiceDTO;
 import com.rentspace.DTO.response.ResponseServiceDTO;
+import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.products.ServiceNature;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.rentspace.exception.ExceptionMessages.INVALID_SERVICE_ID;
+
 @org.springframework.stereotype.Service
 @AllArgsConstructor
 public class ServiceService extends ModelMapperFuncs {
@@ -23,6 +26,11 @@ public class ServiceService extends ModelMapperFuncs {
     private PlaceService placeService;
 
     public void save(Service model) { this.serviceRepository.save(model); }
+
+    public Service get(Long id) {
+        return this.serviceRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
+    }
 
     public ResponseServiceDTO create(PersistServiceDTO persistDTO) {
         ServiceOwner owner = serviceOwnerService.get(persistDTO.getServiceOwnerId());
@@ -42,7 +50,7 @@ public class ServiceService extends ModelMapperFuncs {
         }
         serviceOwnerService.save(owner);
 
-        return buildResponseServiceDTO(service, owner, places);
+        return buildResponse(service, owner, places);
     }
 
     public List<String> getServiceNatures() {

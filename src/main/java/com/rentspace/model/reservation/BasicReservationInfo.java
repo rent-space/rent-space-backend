@@ -5,15 +5,17 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
-import java.util.Date;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Data
 public abstract class BasicReservationInfo extends GenericModel {
 
-    private Date startTime;
+    private LocalDateTime startsAt;
 
-    private Date endTime;
+    private LocalDateTime endsAt;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
