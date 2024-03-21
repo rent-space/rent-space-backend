@@ -1,7 +1,6 @@
 package com.rentspace.DTO.persist;
 
-import com.rentspace.DTO.response.ResponsePlaceDTO;
-import com.rentspace.model.service.ServiceNature;
+import com.rentspace.model.products.ServiceNature;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

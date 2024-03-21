@@ -1,11 +1,10 @@
 package com.rentspace.model.user;
 
-import com.rentspace.model.place.Place;
-import com.rentspace.model.place.PlaceReservation;
+import com.rentspace.model.products.Place;
+import com.rentspace.model.reservation.PlaceReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
-
 import java.util.List;
 
 

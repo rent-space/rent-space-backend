@@ -1,13 +1,12 @@
-package com.rentspace.model.service;
+package com.rentspace.model.products;
 
-import com.rentspace.model.BasicProductInfo;
-import com.rentspace.model.GenericModel;
 import jakarta.persistence.*;
 import lombok.Data;
-
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Service extends BasicProductInfo {
 
     @Enumerated(EnumType.STRING)

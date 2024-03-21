@@ -3,17 +3,19 @@ package com.rentspace.service;
 
 import com.rentspace.DTO.persist.PersistServiceDTO;
 import com.rentspace.DTO.response.ResponseServiceDTO;
-import com.rentspace.model.place.Place;
-import com.rentspace.model.service.Service;
-import com.rentspace.model.service.ServiceNature;
+import com.rentspace.exception.ApiRequestException;
+import com.rentspace.model.products.Place;
+import com.rentspace.model.products.Service;
+import com.rentspace.model.products.ServiceNature;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.rentspace.exception.ExceptionMessages.INVALID_SERVICE_ID;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
@@ -23,17 +25,22 @@ public class ServiceService extends ModelMapperFuncs {
     private ServiceOwnerService serviceOwnerService;
     private PlaceService placeService;
 
-    public void save(Service service) { this.serviceRepository.save(service); }
+    public void save(Service model) { this.serviceRepository.save(model); }
 
-    public ResponseServiceDTO create(PersistServiceDTO persistServiceDTO) {
-        ServiceOwner owner = serviceOwnerService.get(persistServiceDTO.getServiceOwnerId());
+    public Service get(Long id) {
+        return this.serviceRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
+    }
+
+    public ResponseServiceDTO create(PersistServiceDTO persistDTO) {
+        ServiceOwner owner = serviceOwnerService.get(persistDTO.getServiceOwnerId());
 
         List<Place> places = new ArrayList<>();
-        persistServiceDTO.getPlacesIdsRelated().forEach(
+        persistDTO.getPlacesIdsRelated().forEach(
                 id -> places.add(this.placeService.get(id))
         );
 
-        Service service = map(persistServiceDTO, Service.class);
+        Service service = map(persistDTO, Service.class);
 
         this.save(service);
         owner.getServices().add(service);
@@ -43,7 +50,7 @@ public class ServiceService extends ModelMapperFuncs {
         }
         serviceOwnerService.save(owner);
 
-        return buildResponseServiceDTO(service, owner, places);
+        return buildResponse(service, owner, places);
     }
 
     public List<String> getServiceNatures() {
