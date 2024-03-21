@@ -17,4 +17,6 @@ public class ExceptionMessages {
 
     public static final String INVALID_PLACE_ID = "Não existe um espaço com o id: ";
 
+    public static final String PLACE_OWNER_SEARCH_ERROR = "Não foi possível encontrar o proprietário do espaço referente";
+
 }

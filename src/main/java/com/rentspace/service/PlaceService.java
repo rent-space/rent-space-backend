@@ -1,18 +1,18 @@
 package com.rentspace.service;
 
+
 import com.rentspace.DTO.persist.PersistPlaceDTO;
 import com.rentspace.DTO.response.ResponsePlaceDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.place.Place;
 import com.rentspace.model.user.PlaceOwner;
-import com.rentspace.repository.PlaceOwnerRepository;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
-import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_OWNER_ID;
+
 
 @Service
 @AllArgsConstructor
@@ -37,5 +37,14 @@ public class PlaceService extends ModelMapperFuncs {
     public Place get(Long id) {
         return this.placeRepository.findById(id)
                 .orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + id));
+    }
+
+    public ResponsePlaceDTO view(Long id) {
+
+        Place place = this.placeRepository.findById(id).orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + id));
+
+        PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
+
+        return buildResponsePlaceDTO(place, owner);
     }
 }
