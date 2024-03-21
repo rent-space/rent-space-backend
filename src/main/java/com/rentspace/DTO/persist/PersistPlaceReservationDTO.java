@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,15 +16,16 @@ import java.util.List;
 public class PersistPlaceReservationDTO {
 
     @NotNull
-    private Date startTime;
+    private LocalDateTime startsAt;
 
     @NotNull
-    private Date endTime;
+    private LocalDateTime endsAt;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+    @NotNull
     private Integer numOfInstallments;
 
     @NotNull
@@ -35,5 +36,8 @@ public class PersistPlaceReservationDTO {
 
     @NotNull
     private List<Long> hiredRelatedServicesIds;
+
+    @NotNull
+    private Long eventOwnerId;
 
 }
