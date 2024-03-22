@@ -19,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServiceControllerTest {
 
@@ -57,6 +60,20 @@ public class ServiceControllerTest {
  
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(responseServiceDTO, responseEntity.getBody());
+    }
+    
+    @Test
+    public void getServiceNatures() {
+    	List<String> expectedServiceNatures = Arrays.stream(ServiceNature.values())
+                .map(Enum::name)
+                .collect(Collectors.toList()); 
+        
+        when(serviceService.getServiceNatures()).thenReturn(expectedServiceNatures);
+
+        ResponseEntity<List<String>> responseEntity = serviceController.getServiceNatures();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedServiceNatures, responseEntity.getBody());
     }
     
 }
