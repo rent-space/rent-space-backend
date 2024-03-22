@@ -67,7 +67,7 @@ public class ExceptionTest {
         placeReservationService = new PlaceReservationService(null, null, null, null, null);
     }
 	
-	@Test 
+    @Test 
     void emailAlreadyExists() {
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.EVENT_OWNER, "Renato Ferreira", "", 
         		"rf@gmail.com", "83944444444", "");
@@ -152,6 +152,21 @@ public class ExceptionTest {
         	placeReservationController.create(persistDTO);
         });
         assertEquals(INVALID_PAYMENT_FORMAT, exception.getMessage());
+    }
+
+    @Test
+    public void invalidReservationPeriodOfTime() {
+        PlaceReservationController placeReservationController = 
+        		new PlaceReservationController(placeReservationService);
+
+        PersistPlaceReservationDTO persistDTO = new PersistPlaceReservationDTO(
+                LocalDateTime.of(2024, 3, 21, 15, 0), LocalDateTime.of(2024, 3, 21, 8, 0),
+                PaymentMethod.CREDIT, 2, 1L, 10, Collections.singletonList(1L), 2L); 
+        
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+        	placeReservationController.create(persistDTO);
+        });
+        assertEquals(INVALID_RESERVATION_PERIOD_OF_TIME, exception.getMessage());
     }
     
     @Test
