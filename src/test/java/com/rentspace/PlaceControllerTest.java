@@ -8,16 +8,23 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.rentspace.controller.PlaceController;
+import com.rentspace.controller.PlaceReservationController;
+import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.Status;
 import com.rentspace.service.PlaceService;
 import com.rentspace.service.PlaceOwnerService;
+import com.rentspace.service.PlaceReservationService;
 import com.rentspace.DTO.persist.PersistPlaceDTO;
+import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
 import com.rentspace.DTO.response.ResponsePlaceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
+import com.rentspace.DTO.response.ResponsePlaceReservationDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 public class PlaceControllerTest {
@@ -27,9 +34,15 @@ public class PlaceControllerTest {
     
     @Mock
     private PlaceOwnerService placeOwnerService;
+    
+    @Mock
+    private PlaceReservationService placeReservationService;
 
     @InjectMocks
     private PlaceController placeController;
+    
+    @InjectMocks
+    private PlaceReservationController placeReservationController;
 
     @BeforeEach
     public void setUp() {
@@ -58,4 +71,26 @@ public class PlaceControllerTest {
         assertEquals(responsePlaceDTO, responseEntity.getBody());
     }
     
+    @Test
+    public void createPlaceReservation() {
+        PlaceReservationController placeReservationController = 
+        		new PlaceReservationController(placeReservationService);
+
+        PersistPlaceReservationDTO persistDTO = new PersistPlaceReservationDTO(
+                LocalDateTime.of(2024, 3, 21, 10, 0), LocalDateTime.of(2024, 3, 21, 12, 0),
+                PaymentMethod.CREDIT, 2, 1L, 10, Collections.singletonList(1L), 2L); 
+
+        ResponsePlaceReservationDTO expectedResponse = new ResponsePlaceReservationDTO(
+                1L, LocalDateTime.of(2024, 3, 21, 10, 0), LocalDateTime.of(2024, 3, 21, 12, 0),
+                PaymentMethod.CREDIT, 2, new ResponsePlaceDTO(), 10, Status.ACCEPTED,
+                Collections.emptyList(), new ResponseUserDTO(), BigDecimal.ZERO, BigDecimal.ZERO);
+      
+        when(placeReservationService.create(persistDTO)).thenReturn(expectedResponse);
+
+        ResponseEntity<ResponsePlaceReservationDTO> responseEntity = placeReservationController.create(persistDTO);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+    }
+
 }
