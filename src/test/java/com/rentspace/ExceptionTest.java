@@ -298,28 +298,28 @@ public class ExceptionTest {
     @Test
     public void invalidServiceNature() {
         assertThrows(IllegalArgumentException.class, () -> {
-            ServiceNature invalid = ServiceNature.valueOf("INVALID_VALUE");
+            ServiceNature.valueOf("INVALID_VALUE");
         }); 
     }
     
     @Test
     public void invalidUserType() {
         assertThrows(IllegalArgumentException.class, () -> {
-        	UserType invalid = UserType.valueOf("INVALID_VALUE");
+        	UserType.valueOf("INVALID_VALUE");
         }); 
     }
     
     @Test
     public void invalidPaymentMethod() {
         assertThrows(IllegalArgumentException.class, () -> {
-        	PaymentMethod invalid = PaymentMethod.valueOf("INVALID_VALUE");
+        	PaymentMethod.valueOf("INVALID_VALUE");
         }); 
     }
     
     @Test
     public void invalidStatus() {
         assertThrows(IllegalArgumentException.class, () -> {
-        	Status invalid = Status.valueOf("INVALID_VALUE");
+        	Status.valueOf("INVALID_VALUE");
         }); 
     }
      

@@ -81,13 +81,13 @@ public class PlaceReservationService extends ModelMapperFuncs {
         return buildResponse(reservation, place, placeOwner, eventOwner, servicesRelated);
     }
 
-    private BigDecimal getPlaceFinalPrice(PersistPlaceReservationDTO persistDTO, Place place) {
+    public BigDecimal getPlaceFinalPrice(PersistPlaceReservationDTO persistDTO, Place place) {
         long duration = Duration.between(persistDTO.getStartsAt(), persistDTO.getEndsAt()).toMinutes();
         BigDecimal pricePerMinute = place.getPricePerHour().divide(new BigDecimal(60), RoundingMode.HALF_UP);
         return pricePerMinute.multiply(new BigDecimal(duration));
     }
 
-    private BigDecimal getServicesFinalPrice(PersistPlaceReservationDTO persistDTO, List<Service> services) {
+    public BigDecimal getServicesFinalPrice(PersistPlaceReservationDTO persistDTO, List<Service> services) {
         long duration = Duration.between(persistDTO.getStartsAt(), persistDTO.getEndsAt()).toMinutes();
         BigDecimal finalPrice = new BigDecimal(0);
         for (Service service : services) {
