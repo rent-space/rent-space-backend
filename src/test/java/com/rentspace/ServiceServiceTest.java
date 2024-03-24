@@ -2,45 +2,23 @@ package com.rentspace;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import com.rentspace.controller.PlaceController;
-import com.rentspace.controller.PlaceReservationController;
-import com.rentspace.model.reservation.PaymentMethod;
-import com.rentspace.model.reservation.Status;
-import com.rentspace.model.user.AppUser;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.products.ServiceNature;
 import com.rentspace.repository.ServiceOwnerRepository;
 import com.rentspace.repository.ServiceRepository;
-import com.rentspace.repository.UserRepository;
 import com.rentspace.service.ServiceService;
-import com.rentspace.service.PlaceService;
 import com.rentspace.service.ServiceOwnerService;
-import com.rentspace.service.UserService;
-import com.rentspace.service.PlaceOwnerService;
-import com.rentspace.service.PlaceReservationService;
-import com.rentspace.DTO.persist.PersistPlaceDTO;
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
-import com.rentspace.DTO.response.ResponsePlaceDTO;
-import com.rentspace.DTO.response.ResponseUserDTO;
-import com.rentspace.DTO.response.ResponsePlaceReservationDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ServiceServiceTest {
 
