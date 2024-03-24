@@ -16,7 +16,7 @@ public class UserService extends ModelMapperFuncs {
 
     private UserRepository<AppUser> userRepository;
 
-    private void save(AppUser model){
+    public void save(AppUser model){
         userRepository.save(model);
     }
 
