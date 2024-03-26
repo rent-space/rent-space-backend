@@ -6,10 +6,7 @@ import com.rentspace.service.PlaceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/espaco")
@@ -22,4 +19,11 @@ public class PlaceController {
     public ResponseEntity<ResponsePlaceDTO> create(@RequestBody PersistPlaceDTO persistDTO) {
         return new ResponseEntity<>(placeService.create(persistDTO), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponsePlaceDTO> view(@PathVariable Long id){
+        return new ResponseEntity<>(placeService.view(id), HttpStatus.OK);
+    }
+
+
 }
