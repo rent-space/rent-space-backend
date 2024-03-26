@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
-
 @Service
 @AllArgsConstructor
 public class PlaceService extends ModelMapperFuncs {

@@ -25,7 +25,7 @@ public class PlaceOwnerService extends ModelMapperFuncs {
 
     public PlaceOwner getByPlaceId(Long id) {
         return placeOwnerRepository.findByPlaceId(id)
-                .orElseThrow(() -> new ApiRequestException(PLACE_OWNER_SEARCH_ERROR));
+                .orElseThrow(() -> new ApiRequestException(PLACE_OWNER_SEARCH_ERROR + id));
     }
 
 }
