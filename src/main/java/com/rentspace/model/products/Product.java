@@ -11,7 +11,7 @@ import java.util.List;
 @MappedSuperclass
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class BasicProductInfo extends GenericModel {
+public abstract class Product extends GenericModel {
 
     private String title;
     private String description;

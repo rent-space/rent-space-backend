@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class PlaceReservation extends BasicReservationInfo {
+public class PlaceReservation extends Reservation {
 
     @ManyToOne
     private Place place;

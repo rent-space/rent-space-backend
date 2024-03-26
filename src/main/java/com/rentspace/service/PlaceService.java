@@ -43,6 +43,6 @@ public class PlaceService extends ModelMapperFuncs {
 
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
 
-        return buildResponsePlaceDTO(place, owner);
+        return buildResponse(place, owner);
     }
 }

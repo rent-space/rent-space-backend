@@ -8,6 +8,7 @@ import com.rentspace.DTO.response.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.model.products.Place;
+import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
 import com.rentspace.model.reservation.Status;
@@ -63,7 +64,7 @@ public class ModelMapperFuncs {
         return dto;
     }
 
-    public ResponsePlaceReservationDTO buildResponse(PlaceReservation reservation, Place place, PlaceOwner placeOwner, EventOwner eventOwner, List<Service> services) {
+    public ResponsePlaceReservationDTO buildResponse(PlaceReservation reservation, Place place, PlaceOwner placeOwner, EventOwner eventOwner, List<Product> services) {
         ResponsePlaceReservationDTO dto = map(reservation, ResponsePlaceReservationDTO.class);
         dto.setPlace(buildResponse(place, placeOwner));
         dto.setHiredRelatedServices(mapToList(services, ListedServiceDTO.class));
