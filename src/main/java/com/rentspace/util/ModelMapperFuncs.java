@@ -18,6 +18,7 @@ import com.rentspace.model.user.ServiceOwner;
 import org.modelmapper.ModelMapper;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,10 +34,19 @@ import java.util.List;
  *
  * @author Vinícius Azevedo
  */
+@Component
 public class ModelMapperFuncs {
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    private ModelMapper modelMapper;
+    public ModelMapperFuncs(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+    
+    public ModelMapperFuncs() {
+        this.modelMapper = new ModelMapper();
+    }
 
     public <E, T> E map(T source, Class<E> typeDestination) {
         E model = null;
