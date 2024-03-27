@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Service extends BasicProductInfo {
+public class Service extends Product {
 
     @Enumerated(EnumType.STRING)
     private ServiceNature serviceNature;

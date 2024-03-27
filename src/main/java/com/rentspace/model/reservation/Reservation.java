@@ -6,12 +6,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Data
-public abstract class BasicReservationInfo extends GenericModel {
+public abstract class Reservation extends GenericModel {
 
     private LocalDateTime startsAt;
 

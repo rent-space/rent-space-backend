@@ -1,5 +1,6 @@
 package com.rentspace;
 
+import com.rentspace.model.products.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
 import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
 
+import static com.rentspace.util.ProductUtil.getFinalPrice;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -24,9 +26,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.time.Duration;
 
 public class PlaceServiceTest {
@@ -132,7 +132,7 @@ public class PlaceServiceTest {
         persistDTO.setStartsAt(startsAt);
         persistDTO.setEndsAt(endsAt);
 
-        BigDecimal placeFinalPrice = placeReservationService.getPlaceFinalPrice(persistDTO, place);
+        BigDecimal placeFinalPrice = getFinalPrice(persistDTO, new ArrayList<>(Collections.singletonList(place)));
 
         long duration = Duration.between(startsAt, endsAt).toMinutes();
         BigDecimal pricePerHour = place.getPricePerHour();
@@ -148,7 +148,7 @@ public class PlaceServiceTest {
         service1.setPricePerHour(new BigDecimal("20.00")); 
         Service service2 = new Service();
         service2.setPricePerHour(new BigDecimal("30.00")); 
-        List<Service> services = Arrays.asList(service1, service2);
+        List<Product> services = Arrays.asList(service1, service2);
 
         LocalDateTime startsAt = LocalDateTime.of(2024, 3, 23, 10, 0);
         LocalDateTime endsAt = LocalDateTime.of(2024, 3, 23, 12, 0);
@@ -156,11 +156,11 @@ public class PlaceServiceTest {
         persistDTO.setStartsAt(startsAt);
         persistDTO.setEndsAt(endsAt);
 
-        BigDecimal servicesFinalPrice = placeReservationService.getServicesFinalPrice(persistDTO, services);
+        BigDecimal servicesFinalPrice = getFinalPrice(persistDTO, services);
 
         long duration = Duration.between(startsAt, endsAt).toMinutes();
         BigDecimal expectedPrice = BigDecimal.ZERO;
-        for (Service service : services) {
+        for (Product service : services) {
             BigDecimal pricePerMinute = service.getPricePerHour().divide(BigDecimal.valueOf(60), 2, 
             		RoundingMode.HALF_UP); 
             expectedPrice = expectedPrice.add(pricePerMinute.multiply(BigDecimal.valueOf(duration)));

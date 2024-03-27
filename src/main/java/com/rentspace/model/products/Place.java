@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Place extends BasicProductInfo {
+public class Place extends Product {
 
     private Integer maximumCapacity;
 
