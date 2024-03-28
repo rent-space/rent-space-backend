@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
+import java.util.ArrayList;
+
 @Service
 @AllArgsConstructor
 public class PlaceService extends ModelMapperFuncs {
@@ -25,6 +27,9 @@ public class PlaceService extends ModelMapperFuncs {
         PlaceOwner owner = placeOwnerService.get(persistDTO.getPlaceOwnerId());
 
         Place place = map(persistDTO, Place.class);
+        if (owner.getPlaces() == null) {
+        	owner.setPlaces(new ArrayList<>()); 
+        }
         owner.getPlaces().add(place);
 
         this.save(place);
