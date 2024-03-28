@@ -45,6 +45,9 @@ public class ServiceService extends ModelMapperFuncs {
         this.save(service);
         owner.getServices().add(service);
         for (Place place : places) {
+            if (place.getServices() == null) {
+                place.setServices(new ArrayList<>());
+            }
             place.getServices().add(service);
             this.placeService.save(place);
         }

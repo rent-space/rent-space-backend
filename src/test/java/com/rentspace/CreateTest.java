@@ -5,14 +5,21 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import com.rentspace.model.products.Place; 
+import com.rentspace.model.products.Place;
+import com.rentspace.model.products.Service;
+import com.rentspace.model.products.ServiceNature;
 import com.rentspace.model.user.PlaceOwner;
+import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.PlaceRepository;
+import com.rentspace.repository.ServiceRepository;
 import com.rentspace.service.PlaceService;
+import com.rentspace.service.ServiceOwnerService;
+import com.rentspace.service.ServiceService;
 import com.rentspace.util.ModelMapperFuncs;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.DTO.persist.PersistPlaceDTO; 
-import com.rentspace.DTO.response.ResponsePlaceDTO;
+import com.rentspace.DTO.persist.PersistServiceDTO;
+import com.rentspace.DTO.response.ResponsePlaceDTO; 
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -34,9 +41,20 @@ public class CreateTest {
 	@Mock
     private PlaceOwnerService placeOwnerService;
 	
+	private ServiceService serviceService; 
+	
+	@Mock
+    private ServiceRepository serviceRepository;
+	
+	@Mock
+    private ServiceOwnerService serviceOwnerService;
+	
+	@Mock
+    private PlaceService placeServices;
+	
     @BeforeEach
     public void setUp() {
-    	MockitoAnnotations.openMocks(this); 
+    	MockitoAnnotations.openMocks(this);  
     }
     
     @Test
@@ -71,6 +89,41 @@ public class CreateTest {
 
         verify(placeOwnerService, times(1)).get(1L);
         verify(placeRepository, times(1)).save(any());
+    }
+    
+    @Test
+    public void createService() {
+        serviceService = new ServiceService(serviceRepository, serviceOwnerService, placeServices);
+        
+        PersistServiceDTO persistServiceDTO = new PersistServiceDTO();
+        persistServiceDTO.setTitle("Test Service");
+        persistServiceDTO.setDescription("Test Description");
+        persistServiceDTO.setPricePerHour(BigDecimal.TEN);
+        persistServiceDTO.setServiceOwnerId(1L);
+        persistServiceDTO.setServiceNature(ServiceNature.BAR);
+        persistServiceDTO.setPeopleInvolved(5);
+        List<Long> placesIdsRelated = new ArrayList<>();
+        placesIdsRelated.add(1L);
+        placesIdsRelated.add(2L);
+        persistServiceDTO.setPlacesIdsRelated(placesIdsRelated);
+
+        ServiceOwner owner = new ServiceOwner();
+        owner.setServices(new ArrayList<>());
+
+        Place place1 = new Place();
+        Place place2 = new Place();
+
+        when(serviceOwnerService.get(1L)).thenReturn(owner);
+        when(placeServices.get(1L)).thenReturn(place1);
+        when(placeServices.get(2L)).thenReturn(place2);
+        when(serviceRepository.save(any())).thenReturn(new Service());
+
+        serviceService.create(persistServiceDTO);
+
+        verify(serviceOwnerService, times(1)).get(1L); 
+        verify(placeServices, times(1)).get(1L);
+        verify(placeServices, times(1)).get(2L);
+        verify(serviceRepository, times(1)).save(any());
     }
     
 }
