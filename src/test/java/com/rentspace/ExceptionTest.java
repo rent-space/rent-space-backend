@@ -1,6 +1,6 @@
 package com.rentspace;
 
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.controller.PlaceReservationController;
 import com.rentspace.controller.UserController;
