@@ -1,6 +1,5 @@
-package com.rentspace.DTO.persist;
+package com.rentspace.DTO.persist.product;
 
-import com.rentspace.model.products.ServiceNature;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +8,10 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-public class PersistServiceDTO {
+public class PersistProductDTO {
 
     @NotNull
     private String title;
@@ -22,22 +21,16 @@ public class PersistServiceDTO {
 
     private List<String> media;
 
+    @NotNull
     private String address;
 
+    @NotNull
     private String city;
 
     @NotNull
     private BigDecimal pricePerHour;
 
     @NotNull
-    private Long serviceOwnerId;
-
-    @NotNull
-    private ServiceNature serviceNature;
-
-    @NotNull
-    private Integer peopleInvolved;
-
-    private List<Long> placesIdsRelated;
+    private Long ownerId;
 
 }

@@ -1,22 +1,21 @@
-package com.rentspace.DTO.response;
+package com.rentspace.DTO.response.reservation;
 
-import com.rentspace.model.products.ServiceNature;
+import com.rentspace.DTO.response.ResponseUserDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ResponseServiceReservationDTO {
+public class ResponseReservationDTO {
 
     private Long id;
 
@@ -29,14 +28,9 @@ public class ResponseServiceReservationDTO {
 
     private Integer numOfInstallments;
 
-    private ResponseServiceDTO service;
+    private ResponseProductDTO product;
 
     private ResponseUserDTO eventOwner;
 
-    private ServiceNature serviceNature;
-
-    private BigDecimal finalPrice;
-
     private Status status;
-
 }

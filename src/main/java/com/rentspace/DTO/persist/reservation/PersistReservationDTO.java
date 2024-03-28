@@ -1,4 +1,4 @@
-package com.rentspace.DTO.persist;
+package com.rentspace.DTO.persist.reservation;
 
 import com.rentspace.model.reservation.PaymentMethod;
 import jakarta.persistence.EnumType;
@@ -7,13 +7,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class PersistPlaceReservationDTO {
+public class PersistReservationDTO {
 
     @NotNull
     private LocalDateTime startsAt;
@@ -29,15 +30,9 @@ public class PersistPlaceReservationDTO {
     private Integer numOfInstallments;
 
     @NotNull
-    private Long placeId;
-
-    @NotNull
-    private Integer numOfParticipants;
-
-    @NotNull
-    private List<Long> hiredRelatedServicesIds;
-
-    @NotNull
     private Long eventOwnerId;
+
+    @NotNull
+    private Long productId;
 
 }
