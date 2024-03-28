@@ -251,6 +251,7 @@ public class ExceptionTest {
         place.setMaximumCapacity(10);
         List<Service> services = new ArrayList<>();
         Service service = new Service();
+	service.setPeopleInvolved(2);
         services.add(service);
         place.setServices(services);
         
