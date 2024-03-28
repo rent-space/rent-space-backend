@@ -1,12 +1,11 @@
 package com.rentspace.service;
 
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
-import com.rentspace.DTO.response.ResponsePlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
-import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.PlaceReservation;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static com.rentspace.exception.ExceptionMessages.*;
-import static com.rentspace.util.ProductUtil.getFinalPrice;
+import static com.rentspace.util.ProductUtil.*;
 
 @org.springframework.stereotype.Service
 @AllArgsConstructor
@@ -36,8 +35,8 @@ public class PlaceReservationService extends ModelMapperFuncs {
         validatesFields(persistDTO);
 
         EventOwner eventOwner = eventOwnerService.get(persistDTO.getEventOwnerId());
-        Place place = placeService.get(persistDTO.getPlaceId());
-        checksPlaceAvailability(persistDTO, place);
+        Place place = placeService.get(persistDTO.getProductId());
+        checkProductAvailability(persistDTO, place, placeReservationRepository);
 
         List<Product> servicesRelated = getRelatedServices(persistDTO, place);
 
@@ -73,24 +72,5 @@ public class PlaceReservationService extends ModelMapperFuncs {
             throw new ApiRequestException(PEOPLE_INVOLVED_EXCEED_MAXIMUM_CAPACITY);
         }
         return services;
-    }
-
-    private void checksPlaceAvailability(PersistPlaceReservationDTO persistDTO, Place place) {
-        if (placeReservationRepository
-                .getReservationInProgress(
-                        persistDTO.getStartsAt(),
-                        persistDTO.getEndsAt(),
-                        place
-                ).isPresent()
-        ) { throw new ApiRequestException(INVALID_RESERVATION_PERIOD_OF_TIME); }
-    }
-
-    private void validatesFields(PersistPlaceReservationDTO persistDTO) {
-        if (persistDTO.getPaymentMethod() == PaymentMethod.PIX && persistDTO.getNumOfInstallments() != 0) {
-            throw new ApiRequestException(INVALID_PAYMENT_FORMAT);
-        }
-        if (persistDTO.getStartsAt().isAfter(persistDTO.getEndsAt())) {
-            throw new ApiRequestException(INVALID_RESERVATION_PERIOD_OF_TIME);
-        }
     }
 }

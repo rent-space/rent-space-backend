@@ -1,8 +1,8 @@
 package com.rentspace.service;
 
 
-import com.rentspace.DTO.persist.PersistServiceDTO;
-import com.rentspace.DTO.response.ResponseServiceDTO;
+import com.rentspace.DTO.persist.product.PersistServiceDTO;
+import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
@@ -33,7 +33,7 @@ public class ServiceService extends ModelMapperFuncs {
     }
 
     public ResponseServiceDTO create(PersistServiceDTO persistDTO) {
-        ServiceOwner owner = serviceOwnerService.get(persistDTO.getServiceOwnerId());
+        ServiceOwner owner = serviceOwnerService.get(persistDTO.getOwnerId());
 
         List<Place> places = new ArrayList<>();
         persistDTO.getPlacesIdsRelated().forEach(
@@ -55,5 +55,9 @@ public class ServiceService extends ModelMapperFuncs {
 
     public List<String> getServiceNatures() {
         return List.of(Arrays.toString(ServiceNature.values()));
+    }
+
+    public List<Place> getRelatedPlaces(Long serviceId) {
+        return this.serviceRepository.findRelatedPlaces(serviceId);
     }
 }

@@ -2,16 +2,24 @@ package com.rentspace.util;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.listed.ListedServiceDTO;
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
-import com.rentspace.DTO.response.ResponsePlaceDTO;
-import com.rentspace.DTO.response.ResponsePlaceReservationDTO;
-import com.rentspace.DTO.response.ResponseServiceDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
+import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
+import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
+import com.rentspace.DTO.response.reservation.ResponseReservationDTO;
+import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
+import com.rentspace.model.reservation.Reservation;
+import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.reservation.Status;
+import com.rentspace.model.user.AppUser;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
@@ -33,7 +41,9 @@ import java.util.List;
  *
  * @author Vinícius Azevedo
  */
-public class ModelMapperFuncs {
+public abstract class ModelMapperFuncs {
+
+    /************************************* MODELMAPPER UTILITIES *************************************/
 
     @Autowired
     private ModelMapper modelMapper;
@@ -51,34 +61,55 @@ public class ModelMapperFuncs {
         return modelMapper.map(sourceList, listType);
     }
 
-    public ResponseServiceDTO buildResponse(Service service, ServiceOwner owner, List<Place> places) {
-        ResponseServiceDTO dto = map(service, ResponseServiceDTO.class);
-        dto.setServiceOwner(map(owner, ResponseUserDTO.class));
-        dto.setPlacesRelated(mapToList(places, ListedPlaceDTO.class));
-        return dto;
+    /************************************* MODEL BUILDS *************************************/
+
+    public PlaceReservation buildModel(PersistPlaceReservationDTO dto, Place place, BigDecimal placeFinalPrice, BigDecimal servicesFinalPrice) {
+        PlaceReservation reservation = map(dto, PlaceReservation.class);
+        reservation.setStatus(Status.PENDING);
+        reservation.setProduct(place);
+        reservation.setPlaceFinalPrice(placeFinalPrice);
+        reservation.setServicesFinalPrice(servicesFinalPrice);
+        return reservation;
     }
 
-    public ResponsePlaceDTO buildResponse(Place place, PlaceOwner placeOwner) {
-        ResponsePlaceDTO dto = map(place, ResponsePlaceDTO.class);
-        dto.setPlaceOwner(map(placeOwner, ResponseUserDTO.class));
+    public ServiceReservation buildModel(PersistServiceReservationDTO dto, Service service, BigDecimal finalPrice) {
+        ServiceReservation reservation = map(dto, ServiceReservation.class);
+        reservation.setStatus(Status.PENDING);
+        reservation.setProduct(service);
+        reservation.setAddress(dto.getAddress());
+        reservation.setCity(dto.getCity());
+        reservation.setFinalPrice(finalPrice);
+        return reservation;
+    }
+
+    /************************************* RESPONSE BUILDS *************************************/
+
+    public ResponseServiceReservationDTO buildResponse(ServiceReservation reservation, Service service, EventOwner owner, ServiceOwner serviceOwner, List<Place> places) {
+        ResponseServiceReservationDTO dto = map(reservation, ResponseServiceReservationDTO.class);
+        dto.setProduct(buildResponse(service, serviceOwner, places));
+        dto.setEventOwner(map(owner, ResponseUserDTO.class));
         return dto;
     }
 
     public ResponsePlaceReservationDTO buildResponse(PlaceReservation reservation, Place place, PlaceOwner placeOwner, EventOwner eventOwner, List<Product> services) {
         ResponsePlaceReservationDTO dto = map(reservation, ResponsePlaceReservationDTO.class);
-        dto.setPlace(buildResponse(place, placeOwner));
+        dto.setProduct(buildResponse(place, placeOwner));
         dto.setHiredRelatedServices(mapToList(services, ListedServiceDTO.class));
         dto.setEventOwner(map(eventOwner, ResponseUserDTO.class));
         return dto;
     }
 
-    public PlaceReservation buildModel(PersistPlaceReservationDTO dto, Place place, BigDecimal placeFinalPrice, BigDecimal servicesFinalPrice) {
-        PlaceReservation reservation = map(dto, PlaceReservation.class);
-        reservation.setStatus(Status.PENDING);
-        reservation.setPlace(place);
-        reservation.setPlaceFinalPrice(placeFinalPrice);
-        reservation.setServicesFinalPrice(servicesFinalPrice);
-        return reservation;
+    public ResponseServiceDTO buildResponse(Service service, ServiceOwner owner, List<Place> places) {
+        ResponseServiceDTO dto = map(service, ResponseServiceDTO.class);
+        dto.setOwner(map(owner, ResponseUserDTO.class));
+        dto.setPlacesRelated(mapToList(places, ListedPlaceDTO.class));
+        return dto;
+    }
+
+    public ResponsePlaceDTO buildResponse(Place place, PlaceOwner owner) {
+        ResponsePlaceDTO dto = map(place, ResponsePlaceDTO.class);
+        dto.setOwner(map(owner, ResponseUserDTO.class));
+        return dto;
     }
 
 }
