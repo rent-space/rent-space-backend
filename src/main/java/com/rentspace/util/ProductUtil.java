@@ -1,16 +1,23 @@
 package com.rentspace.util;
 
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistReservationDTO;
+import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Product;
+import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.Reservation;
+import com.rentspace.repository.ReservationRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.List;
 
-public class ProductUtil {
+import static com.rentspace.exception.ExceptionMessages.INVALID_PAYMENT_FORMAT;
+import static com.rentspace.exception.ExceptionMessages.INVALID_RESERVATION_PERIOD_OF_TIME;
 
-    public static BigDecimal getFinalPrice(PersistPlaceReservationDTO persistDTO, List<Product> services) {
+public abstract class ProductUtil {
+
+    public static BigDecimal getFinalPrice(PersistReservationDTO persistDTO, List<Product> services) {
         long duration = Duration.between(persistDTO.getStartsAt(), persistDTO.getEndsAt()).toMinutes();
         BigDecimal finalPrice = new BigDecimal(0);
         for (Product product : services) {
@@ -19,4 +26,26 @@ public class ProductUtil {
         }
         return finalPrice;
     }
+
+    public static void validatesFields(PersistReservationDTO persistDTO) {
+        if (persistDTO.getPaymentMethod() == PaymentMethod.PIX && persistDTO.getNumOfInstallments() != 0) {
+            throw new ApiRequestException(INVALID_PAYMENT_FORMAT);
+        }
+        if (persistDTO.getStartsAt().isAfter(persistDTO.getEndsAt())) {
+            throw new ApiRequestException(INVALID_RESERVATION_PERIOD_OF_TIME);
+        }
+    }
+
+    public static void checkProductAvailability(PersistReservationDTO persistDTO, Product product, ReservationRepository<? extends Reservation> repository) {
+        if (repository
+                .getReservationInProgress(
+                        persistDTO.getStartsAt(),
+                        persistDTO.getEndsAt(),
+                        product
+                ).isPresent()
+        ) {
+            throw new ApiRequestException(INVALID_RESERVATION_PERIOD_OF_TIME);
+        }
+    }
+
 }

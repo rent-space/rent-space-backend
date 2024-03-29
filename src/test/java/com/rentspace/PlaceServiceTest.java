@@ -15,7 +15,7 @@ import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.service.PlaceService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 
 import static com.rentspace.util.ProductUtil.getFinalPrice;
 import static org.junit.jupiter.api.Assertions.assertEquals;

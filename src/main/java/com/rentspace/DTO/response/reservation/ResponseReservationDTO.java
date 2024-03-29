@@ -1,43 +1,36 @@
-package com.rentspace.DTO.persist;
+package com.rentspace.DTO.response.reservation;
 
+import com.rentspace.DTO.response.ResponseUserDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PersistPlaceReservationDTO {
+public class ResponseReservationDTO {
 
-    @NotNull
+    private Long id;
+
     private LocalDateTime startsAt;
 
-    @NotNull
     private LocalDateTime endsAt;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    @NotNull
     private Integer numOfInstallments;
 
-    @NotNull
-    private Long placeId;
+    private ResponseProductDTO product;
 
-    @NotNull
-    private Integer numOfParticipants;
+    private ResponseUserDTO eventOwner;
 
-    @NotNull
-    private List<Long> hiredRelatedServicesIds;
-
-    @NotNull
-    private Long eventOwnerId;
-
+    private Status status;
 }

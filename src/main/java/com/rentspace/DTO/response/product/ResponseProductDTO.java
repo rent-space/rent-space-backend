@@ -1,14 +1,16 @@
-package com.rentspace.DTO.response;
+package com.rentspace.DTO.response.product;
 
+import com.rentspace.DTO.response.ResponseUserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ResponsePlaceDTO {
+public class ResponseProductDTO {
 
     private Long id;
     private String title;
@@ -16,7 +18,6 @@ public class ResponsePlaceDTO {
     private String address;
     private String city;
     private BigDecimal pricePerHour;
-    private Integer maximumCapacity;
-    private ResponseUserDTO placeOwner;
+    private ResponseUserDTO owner;
 
 }

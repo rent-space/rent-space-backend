@@ -11,8 +11,8 @@ import com.rentspace.controller.ServiceController;
 import com.rentspace.service.ServiceService;
 import com.rentspace.service.ServiceOwnerService;
 import com.rentspace.model.products.ServiceNature;
-import com.rentspace.DTO.persist.PersistServiceDTO;
-import com.rentspace.DTO.response.ResponseServiceDTO;
+import com.rentspace.DTO.persist.product.PersistServiceDTO;
+import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
