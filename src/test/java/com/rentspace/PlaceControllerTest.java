@@ -14,11 +14,11 @@ import com.rentspace.model.reservation.Status;
 import com.rentspace.service.PlaceService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
-import com.rentspace.DTO.persist.PersistPlaceDTO;
-import com.rentspace.DTO.persist.PersistPlaceReservationDTO;
-import com.rentspace.DTO.response.ResponsePlaceDTO;
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
-import com.rentspace.DTO.response.ResponsePlaceReservationDTO;
+import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

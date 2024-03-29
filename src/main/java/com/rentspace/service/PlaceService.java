@@ -1,8 +1,8 @@
 package com.rentspace.service;
 
 
-import com.rentspace.DTO.persist.PersistPlaceDTO;
-import com.rentspace.DTO.response.ResponsePlaceDTO;
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.user.PlaceOwner;
@@ -24,7 +24,7 @@ public class PlaceService extends ModelMapperFuncs {
     public void save(Place model) { placeRepository.save(model); }
 
     public ResponsePlaceDTO create(PersistPlaceDTO persistDTO) {
-        PlaceOwner owner = placeOwnerService.get(persistDTO.getPlaceOwnerId());
+        PlaceOwner owner = placeOwnerService.get(persistDTO.getOwnerId());
 
         Place place = map(persistDTO, Place.class);
         if (owner.getPlaces() == null) {

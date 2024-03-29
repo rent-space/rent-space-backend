@@ -14,7 +14,7 @@ public class ExceptionMessages {
 
     public static final String INVALID_SERVICE_ID = "Não existe um serviço com o id: ";
 
-    public static final String SERVICE_NOT_RELATED_TO_SPACE = "O serviço informado não é relacionado diretamente ao espaço: id ";
+    public static final String SERVICE_NOT_RELATED_TO_SPACE = "O serviço informado não é relacionado diretamente ao espaço. Id do serviço: ";
 
     public static final String INVALID_PAYMENT_FORMAT = "A forma de pagamento informada é inválida";
 
@@ -26,4 +26,7 @@ public class ExceptionMessages {
 
     public static final String EVENT_OWNER_SEARCH_ERROR = "Não foi possível encontrar o proprietário do evento de id: ";
 
+    public static final String SERVICE_OWNER_SEARCH_ERROR = "Não foi possível encontrar o proprietário do serviço de id: ";
+
+    public static final String SERVICE_IS_EXCLUSIVE = "Este serviço é exclusivo de um espaço diferente do endereço informado na solicitação";
 }

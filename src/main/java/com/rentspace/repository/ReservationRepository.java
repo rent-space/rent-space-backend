@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface ReservationRepository<T extends Reservation> extends JpaRepository<T, Long> {
 
-    @Query("SELECT pr FROM PlaceReservation pr " +
-            "WHERE pr.status = 'ACCEPTED' " +
-            "AND pr.place = :place " +
-            "AND ((:startsAt >= pr.startsAt AND :startsAt <= pr.endsAt) " +
-            "OR (:endsAt >= pr.startsAt AND :endsAt <= pr.endsAt) " +
-            "OR (:startsAt <= pr.endsAt AND :endsAt >= pr.endsAt))"
+    @Query("SELECT r FROM Reservation r " +
+            "WHERE r.status = 'ACCEPTED' " +
+            "AND r.product = :product " +
+            "AND ((:startsAt >= r.startsAt AND :startsAt <= r.endsAt) " +
+            "OR (:endsAt >= r.startsAt AND :endsAt <= r.endsAt) " +
+            "OR (:startsAt <= r.endsAt AND :endsAt >= r.endsAt))"
     )
-    Optional<T> getReservationInProgress(LocalDateTime startsAt, LocalDateTime endsAt, Place place);
+    Optional<T> getReservationInProgress(LocalDateTime startsAt, LocalDateTime endsAt, Product product);
 }

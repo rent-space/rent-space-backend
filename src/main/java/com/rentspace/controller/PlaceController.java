@@ -1,7 +1,7 @@
 package com.rentspace.controller;
 
-import com.rentspace.DTO.persist.PersistPlaceDTO;
-import com.rentspace.DTO.response.ResponsePlaceDTO;
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.service.PlaceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

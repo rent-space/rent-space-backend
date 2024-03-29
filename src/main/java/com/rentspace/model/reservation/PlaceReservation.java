@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,8 +15,6 @@ import java.util.List;
 @Data
 public class PlaceReservation extends Reservation {
 
-    @ManyToOne
-    private Place place;
     private Integer numOfParticipants;
     @OneToMany
     private List<Service> hiredRelatedServices;
