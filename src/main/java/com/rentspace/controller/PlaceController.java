@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/espaco")
 @AllArgsConstructor
@@ -24,6 +26,15 @@ public class PlaceController {
     public ResponseEntity<ResponsePlaceDTO> view(@PathVariable Long id){
         return new ResponseEntity<>(placeService.view(id), HttpStatus.OK);
     }
+
+    @GetMapping("/allPlaces")
+    public ResponseEntity<List<ResponsePlaceDTO>> viewAll(){
+        return new ResponseEntity<>(placeService.viewAll(), HttpStatus.OK);
+    }
+
+
+
+
 
 
 }
