@@ -20,6 +20,7 @@ public class PersistServiceDTO extends PersistProductDTO{
     @NotNull
     private Integer peopleInvolved;
 
+    @NotNull 
     private List<Long> placesIdsRelated;
 
     public PersistServiceDTO(

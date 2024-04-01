@@ -3,26 +3,31 @@ package com.rentspace;
 import com.rentspace.model.products.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import com.rentspace.model.products.Place; 
 import com.rentspace.model.products.Service; 
 import com.rentspace.model.reservation.PlaceReservation;
 import com.rentspace.model.user.PlaceOwner; 
+import com.rentspace.model.user.EventOwner;
+import com.rentspace.repository.EventOwnerRepository;
 import com.rentspace.repository.PlaceOwnerRepository;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.service.PlaceService;
+import com.rentspace.util.ModelMapperFuncs;
+import com.rentspace.service.EventOwnerService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 
 import static com.rentspace.util.ProductUtil.getFinalPrice;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -36,32 +41,48 @@ public class PlaceServiceTest {
 	
 	@Mock
 	private PlaceOwnerRepository placeOwnerRepository;
-	
+
+	@Mock
+	private EventOwnerRepository eventOwnerRepository;
+
 	@Mock
 	private PlaceReservationRepository placeReservationRepository;
-	
+
 	@Mock
     private PlaceService placeService;
 	
 	@Mock
 	private PlaceOwnerService placeOwnerService; 
-	
+
+	@Mock
+	private EventOwnerService eventOwnerService;  
+
 	@Mock
 	private PlaceReservationService placeReservationService;
 
+	@InjectMocks 
+	private PlaceService placeServiceIM;
+
 	private Place place;
-	
+
 	private PlaceOwner placeOwner;
-	
+
+	private EventOwner eventOwner;
+
 	private PlaceReservation placeReservation; 
+
+	@Mock
+    private ModelMapperFuncs modelMapperFuncs;
 	
     @BeforeEach
     public void setUp() {
     	MockitoAnnotations.openMocks(this);
     	place = new Place();
     	placeOwner = new PlaceOwner();
+    	eventOwner = new EventOwner();
     	placeService = new PlaceService(placeRepository, null);
     	placeOwnerService = new PlaceOwnerService(placeOwnerRepository);
+    	eventOwnerService = new EventOwnerService(eventOwnerRepository); 
     	placeReservation = new PlaceReservation();
     	placeReservationService = new PlaceReservationService(placeReservationRepository, 
     			placeService, null, placeOwnerService, null);  
@@ -75,6 +96,41 @@ public class PlaceServiceTest {
 
         verify(placeRepository, times(1)).save(place);
     }
+    
+    @Test
+    public void saveEventOwner() {
+        when(eventOwnerRepository.save(any(EventOwner.class))).thenReturn(eventOwner);
+
+        eventOwnerService.save(eventOwner);
+
+        verify(eventOwnerRepository, times(1)).save(eventOwner);
+    }
+
+    @Test 
+    public void getEventOwnerById() {
+        when(eventOwnerRepository.findById(anyLong())).thenReturn(Optional.of(eventOwner));
+
+        EventOwner retrievedService = eventOwnerService.get(1L);
+
+        assertEquals(eventOwner, retrievedService);
+    }
+
+    @Test
+    public void viewPlace() {
+        MockitoAnnotations.openMocks(this);  
+
+        Long placeId = 1L;
+        Place mockPlace = new Place(); 
+        PlaceOwner mockOwner = new PlaceOwner(); 
+
+        when(placeRepository.findById(anyLong())).thenReturn(Optional.of(mockPlace));
+        when(placeOwnerService.getByPlaceId(anyLong())).thenReturn(mockOwner);
+
+        ResponsePlaceDTO response = placeServiceIM.view(placeId); 
+
+        assertEquals(mockPlace.getId(), response.getId());
+    }
+
      
     @Test 
     public void getPlaceById() {
