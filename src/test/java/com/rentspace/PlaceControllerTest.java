@@ -47,6 +47,7 @@ public class PlaceControllerTest {
     @BeforeEach
     public void setUp() {
     	MockitoAnnotations.openMocks(this);
+    	placeController = new PlaceController(placeService); 
     }
 
     @Test
@@ -63,12 +64,23 @@ public class PlaceControllerTest {
         
         when(placeService.create(persistPlaceDTO)).thenReturn(responsePlaceDTO);
 
-        PlaceController placeController = new PlaceController(placeService);
-
         ResponseEntity<ResponsePlaceDTO> responseEntity = placeController.create(persistPlaceDTO);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(responsePlaceDTO, responseEntity.getBody());
+    }
+    
+    @Test
+    public void viewPlace() {
+        Long placeId = 1L;
+        ResponsePlaceDTO expectedResponse = new ResponsePlaceDTO();
+
+        when(placeService.view(placeId)).thenReturn(expectedResponse);
+
+        ResponseEntity<ResponsePlaceDTO> responseEntity = placeController.view(placeId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
     }
     
     @Test
@@ -87,8 +99,9 @@ public class PlaceControllerTest {
       
         when(placeReservationService.create(persistDTO)).thenReturn(expectedResponse);
 
-        ResponseEntity<ResponsePlaceReservationDTO> responseEntity = placeReservationController.create(persistDTO);
-
+        ResponseEntity<ResponsePlaceReservationDTO> responseEntity = placeReservationController.
+        		create(persistDTO); 
+        
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
     }

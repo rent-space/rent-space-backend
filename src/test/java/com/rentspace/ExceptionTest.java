@@ -84,9 +84,11 @@ public class ExceptionTest {
 	@Mock 
     private PlaceReservationService placeReservationService;
     
-    
     @InjectMocks
     private UserController userController;
+    
+    @InjectMocks 
+  	private PlaceService placeServiceIM;
     
 
     @BeforeEach
@@ -138,6 +140,17 @@ public class ExceptionTest {
             placeService.get(ownerId);
         });
         assertEquals(INVALID_PLACE_ID + ownerId, exception.getMessage());
+    }
+    
+    @Test
+    public void invalidViewPlaceId() { 
+        Long placeId = 1L; 
+        when(placeRepository.findById(placeId)).thenReturn(Optional.empty());
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+        	placeServiceIM.view(placeId); 
+        });
+        assertEquals(INVALID_PLACE_ID + placeId, exception.getMessage());
     }
     
     @Test
