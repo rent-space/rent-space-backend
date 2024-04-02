@@ -9,8 +9,6 @@ import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 import static com.rentspace.exception.ExceptionMessages.EMAIL_ALREADY_EXISTS;
 
 @Service
