@@ -1,5 +1,6 @@
 package com.rentspace.controller;
 
+import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.service.PlaceService;
@@ -28,7 +29,7 @@ public class PlaceController {
     }
 
     @GetMapping("/allPlaces")
-    public ResponseEntity<List<ResponsePlaceDTO>> viewAll(){
+    public ResponseEntity<List<ListedPlaceDTO>> viewAll(){
         return new ResponseEntity<>(placeService.viewAll(), HttpStatus.OK);
     }
 

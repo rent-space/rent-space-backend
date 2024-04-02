@@ -1,6 +1,7 @@
 package com.rentspace.service;
 
 
+import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.exception.ApiRequestException;
@@ -50,14 +51,11 @@ public class PlaceService extends ModelMapperFuncs {
         return buildResponse(place, owner);
     }
 
-    public List<ResponsePlaceDTO> viewAll() {                                                                             
+    public List<ListedPlaceDTO> viewAll() {
 
         List<Place> places = this.placeRepository.findAll();
 
-        return places.stream().map(place -> {
-            PlaceOwner owner = this.placeOwnerService.getByPlaceId(place.getId());
-            return buildResponse(place, owner);
-        }).collect(Collectors.toList());
+        return mapToList(places, ListedPlaceDTO.class);
 
     }
 
