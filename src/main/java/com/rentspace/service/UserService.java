@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.EMAIL_ALREADY_EXISTS;
-import static com.rentspace.exception.ExceptionMessages.EMAIL_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
