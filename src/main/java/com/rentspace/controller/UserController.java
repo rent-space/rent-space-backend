@@ -20,6 +20,7 @@ public class UserController {
         return new ResponseEntity<>(userService.create(persistDTO), HttpStatus.CREATED);
     }
 
+    @GetMapping("/{userEmail}")
     public ResponseEntity<ResponseUserDTO> getByEmail(@PathVariable String userEmail){
         return new ResponseEntity<>(userService.getByEmail(userEmail), HttpStatus.OK);
     }
