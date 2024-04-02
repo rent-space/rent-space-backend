@@ -6,10 +6,7 @@ import com.rentspace.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/usuario")
@@ -21,5 +18,9 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<ResponseUserDTO> create(@RequestBody PersistUserDTO persistDTO) {
         return new ResponseEntity<>(userService.create(persistDTO), HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<ResponseUserDTO> getByEmail(@PathVariable String userEmail){
+        return new ResponseEntity<>(userService.getByEmail(userEmail), HttpStatus.OK);
     }
 }

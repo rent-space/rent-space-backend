@@ -8,7 +8,11 @@ import com.rentspace.repository.UserRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
 import static com.rentspace.exception.ExceptionMessages.EMAIL_ALREADY_EXISTS;
+import static com.rentspace.exception.ExceptionMessages.EMAIL_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -28,5 +32,13 @@ public class UserService extends ModelMapperFuncs {
         AppUser appUser = map(persistDTO, persistDTO.getUserType().toClass());
         save(appUser);
         return map(appUser, ResponseUserDTO.class);
+    }
+
+    public ResponseUserDTO getByEmail(String userEmail) {
+        AppUser appUser = this.userRepository.findByEmail(userEmail).orElseThrow();
+
+        return map(appUser, ResponseUserDTO.class);
+
+
     }
 }
