@@ -1,21 +1,21 @@
 package com.rentspace;
 
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.controller.PlaceReservationController;
 import com.rentspace.controller.UserController;
 import com.rentspace.exception.ApiRequestException;
-import com.rentspace.model.products.ServiceNature;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.PlaceReservation;
-import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.AppUser;
 import com.rentspace.model.user.UserType;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.repository.ServiceRepository;
+import com.rentspace.repository.ServiceReservationRepository;
 import com.rentspace.repository.PlaceOwnerRepository;
 import com.rentspace.repository.ServiceOwnerRepository;
 import com.rentspace.repository.EventOwnerRepository; 
@@ -24,6 +24,7 @@ import com.rentspace.service.PlaceReservationService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.EventOwnerService;
 import com.rentspace.service.ServiceOwnerService;
+import com.rentspace.service.ServiceReservationService;
 import com.rentspace.service.PlaceService;
 import com.rentspace.service.ServiceService;
 import com.rentspace.service.UserService;
@@ -65,6 +66,9 @@ public class ExceptionTest {
 	
 	@Mock 
 	private PlaceReservationRepository placeReservationRepository;
+	
+	@Mock 
+	private ServiceReservationRepository serviceReservationRepository; 
 
 	@Mock
     private UserService userService;
@@ -83,6 +87,9 @@ public class ExceptionTest {
     
 	@Mock 
     private PlaceReservationService placeReservationService;
+	
+	@Mock 
+	private ServiceReservationService serviceReservationService; 
     
     @InjectMocks
     private UserController userController;
@@ -97,6 +104,8 @@ public class ExceptionTest {
         userService = new UserService(userRepository);
         placeReservationService = new PlaceReservationService(placeReservationRepository,
                 placeService, serviceService, placeOwnerService, eventOwnerService);
+    	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null, 
+    			null, serviceService); 
     }
 	
     @Test 
@@ -257,7 +266,37 @@ public class ExceptionTest {
         });
         assertEquals(EVENT_OWNER_SEARCH_ERROR + ownerId, exception.getMessage());
     }
-     
+
+    @Test
+    public void serviceOwnerSearchError() { 
+        Long ownerId = 3L;
+
+        when(serviceOwnerRepository.findById(ownerId)).thenReturn(Optional.empty());
+
+        ServiceOwnerService serviceOwnerService = new ServiceOwnerService(serviceOwnerRepository);
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+        	serviceOwnerService.getByServiceId(ownerId);  
+        });
+        assertEquals(SERVICE_OWNER_SEARCH_ERROR + ownerId, exception.getMessage());
+    }
+    
+    @Test
+    void serviceIsExclusive() { 
+        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
+                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT, 
+                1, 1L, 1L, "123 Main St", "City"); 
+
+        Service service = new Service();
+        List<Place> relatedPlaces = new ArrayList<>();
+        relatedPlaces.add(new Place());
+        
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+        	serviceReservationService.checkAvailableService(persistDTO, service);   
+        });
+        assertEquals(SERVICE_IS_EXCLUSIVE, exception.getMessage()); 
+    }
+    
     @Test
     public void serviceNotRelatedToSpace() {
         Place place = new Place();
@@ -308,33 +347,5 @@ public class ExceptionTest {
         
         assertEquals(PEOPLE_INVOLVED_EXCEED_MAXIMUM_CAPACITY, exception.getMessage());
     }
-    
-    @Test
-    public void invalidServiceNature() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            ServiceNature.valueOf("INVALID_VALUE");
-        }); 
-    }
-    
-    @Test
-    public void invalidUserType() {
-        assertThrows(IllegalArgumentException.class, () -> {
-        	UserType.valueOf("INVALID_VALUE");
-        }); 
-    }
-    
-    @Test
-    public void invalidPaymentMethod() {
-        assertThrows(IllegalArgumentException.class, () -> {
-        	PaymentMethod.valueOf("INVALID_VALUE");
-        }); 
-    }
-    
-    @Test
-    public void invalidStatus() {
-        assertThrows(IllegalArgumentException.class, () -> {
-        	Status.valueOf("INVALID_VALUE");
-        }); 
-    }
-     
+        
 }

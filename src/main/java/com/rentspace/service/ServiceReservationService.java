@@ -54,7 +54,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
         return buildResponse(reservation, service, eventOwner, serviceOwner, relatedPlaces);
     }
 
-    private void checkAvailableService(PersistServiceReservationDTO persistDTO, Service service) {
+    public void checkAvailableService(PersistServiceReservationDTO persistDTO, Service service) {
         boolean placeFound = false;
         for (Place place : serviceService.getRelatedPlaces(service.getId())) {
             if (place.getAddress().equals(persistDTO.getAddress()) &&
