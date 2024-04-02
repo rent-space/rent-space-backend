@@ -1,6 +1,7 @@
 package com.rentspace.service;
 
 
+import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.exception.ApiRequestException;
@@ -10,6 +11,10 @@ import com.rentspace.repository.PlaceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
 @Service
@@ -28,7 +33,7 @@ public class PlaceService extends ModelMapperFuncs {
         owner.getPlaces().add(place);
 
         this.save(place);
-        placeOwnerService.save(owner);
+        placeOwnerService.save(owner); 
         return buildResponse(place, owner);
     }
 
@@ -45,4 +50,14 @@ public class PlaceService extends ModelMapperFuncs {
 
         return buildResponse(place, owner);
     }
+
+    public List<ListedPlaceDTO> viewAll() {
+
+        List<Place> places = this.placeRepository.findAll();
+
+        return mapToList(places, ListedPlaceDTO.class);
+
+    }
+
+
 }

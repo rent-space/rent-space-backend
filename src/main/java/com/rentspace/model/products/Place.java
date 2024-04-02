@@ -13,6 +13,12 @@ public class Place extends Product {
 
     private Integer maximumCapacity;
 
+    private String neighborhood;
+
+    private String complement;
+
+    private String zipCode;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @NotNull
     private List<Service> services;

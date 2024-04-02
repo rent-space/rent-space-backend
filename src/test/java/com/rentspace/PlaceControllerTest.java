@@ -54,13 +54,15 @@ public class PlaceControllerTest {
     public void createPlace() {
         PersistPlaceDTO persistPlaceDTO = new PersistPlaceDTO("Place", "Description",
                 Collections.singletonList("media"), "Address", "City",
+                "neigbohood", "complement", "zipCode",
                 BigDecimal.valueOf(100), 50, 1L);
    
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Rosane Fortuna", "",
                 "rosanefortuna@gmail.com", "83911111111", "");
         
         ResponsePlaceDTO responsePlaceDTO = new ResponsePlaceDTO(2L, "Place", "Description",
-                "Address", "City", BigDecimal.valueOf(100), 50, responseUserDTO);
+                "Address", "City", "neighborhood",
+                "complement", "zipCode", BigDecimal.valueOf(100), 50, responseUserDTO);
         
         when(placeService.create(persistPlaceDTO)).thenReturn(responsePlaceDTO);
 

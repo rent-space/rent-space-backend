@@ -2,6 +2,7 @@ package com.rentspace.util;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.listed.ListedServiceDTO;
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
@@ -30,6 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * ModelMapper is a library used to make objects translation easier. It can be really helpful in terms
