@@ -3,19 +3,30 @@ package com.rentspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.model.products.Service;
+import com.rentspace.model.products.Place;
 import com.rentspace.model.products.ServiceNature;
+import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.ServiceReservation; 
 import com.rentspace.repository.ServiceOwnerRepository;
 import com.rentspace.repository.ServiceRepository;
+import com.rentspace.repository.ServiceReservationRepository;
 import com.rentspace.service.ServiceService;
 import com.rentspace.service.ServiceOwnerService;
+import com.rentspace.service.ServiceReservationService;
+import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO; 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,14 +40,22 @@ public class ServiceServiceTest {
 	private ServiceOwnerRepository serviceOwnerRepository; 
 	
 	@Mock
+	private ServiceReservationRepository serviceReservationRepository;
+	
+	@Mock
     private ServiceService serviceService;
 	
 	@Mock
 	private ServiceOwnerService serviceOwnerService; 
 	
+	private ServiceReservation serviceReservation;
+	
 	private Service service;
 	
 	private ServiceOwner serviceOwner;  
+
+    @InjectMocks
+	private ServiceReservationService serviceReservationService; 
 
     @BeforeEach
     public void setUp() {
@@ -45,6 +64,9 @@ public class ServiceServiceTest {
     	serviceOwnerService = new ServiceOwnerService(serviceOwnerRepository); 
     	service = new Service(); 
     	serviceOwner = new ServiceOwner(); 
+    	serviceReservation = new ServiceReservation();
+    	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null, 
+    			serviceOwnerService, serviceService); 
     }
     
     @Test
@@ -89,6 +111,43 @@ public class ServiceServiceTest {
         ServiceOwner retrievedService = serviceOwnerService.get(1L);
 
         assertEquals(serviceOwner, retrievedService);
+    }
+      
+    @Test 
+    public void getServiceOwnerByServiceId() { 
+        when(serviceOwnerRepository.findByServiceId(anyLong())).thenReturn(Optional.of(serviceOwner));
+
+        ServiceOwner retrievedService = serviceOwnerService.getByServiceId(1L); 
+
+        assertEquals(serviceOwner, retrievedService);
+    }
+    
+    @Test 
+    public void saveServiceReservation() { 
+        when(serviceReservationRepository.save(any(ServiceReservation.class))).thenReturn(serviceReservation);
+
+        serviceReservationService.save(serviceReservation); 
+
+        verify(serviceReservationRepository, times(1)).save(serviceReservation);
+    }
+    
+    @Test
+    void checkAvailableServicePlaceFound() { 
+        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
+                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
+                1, 1L, 1L, "123 Main St", "City"); 
+
+        Service service = new Service();        
+        List<Place> relatedPlaces = new ArrayList<>();
+        Place place = new Place();  
+        place.setAddress("123 Main St");
+        place.setCity("City");
+        relatedPlaces.add(place); 
+
+        when(serviceService.getRelatedPlaces(anyLong())).thenReturn(relatedPlaces);
+        when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
+
+        serviceReservationService.checkAvailableService(persistDTO, service);
     }
 
 }

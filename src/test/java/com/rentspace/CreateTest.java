@@ -1,31 +1,49 @@
 package com.rentspace;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
+import com.rentspace.DTO.persist.product.PersistServiceDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.products.ServiceNature;
+import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.PlaceReservation;
+import com.rentspace.model.reservation.ServiceReservation;
+import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.PlaceRepository;
+import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.repository.ServiceRepository;
+import com.rentspace.repository.ServiceReservationRepository;
+import com.rentspace.service.EventOwnerService;
+import com.rentspace.service.PlaceOwnerService;
+import com.rentspace.service.PlaceReservationService;
 import com.rentspace.service.PlaceService;
 import com.rentspace.service.ServiceOwnerService;
+import com.rentspace.service.ServiceReservationService;
 import com.rentspace.service.ServiceService;
 import com.rentspace.util.ModelMapperFuncs;
-import com.rentspace.service.PlaceOwnerService;
-import com.rentspace.DTO.persist.product.PersistPlaceDTO; 
-import com.rentspace.DTO.persist.product.PersistServiceDTO;
-import com.rentspace.DTO.response.product.ResponsePlaceDTO; 
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 public class CreateTest {
 
@@ -41,6 +59,7 @@ public class CreateTest {
 	@Mock
     private PlaceOwnerService placeOwnerService;
 
+	@Mock
 	private ServiceService serviceService; 
 
 	@Mock
@@ -51,6 +70,22 @@ public class CreateTest {
 
 	@Mock
     private PlaceService placeServices;
+	
+	@Mock
+	private EventOwnerService eventOwnerService;
+	
+	@Mock
+	private ServiceReservationRepository serviceReservationRepository;
+	
+	@Mock 
+	private PlaceReservationRepository placeReservationRepository;
+	
+	@InjectMocks
+	private ServiceReservationService serviceReservationService;
+	
+	@InjectMocks
+	private PlaceReservationService placeReservationService;
+	
 
     @BeforeEach
     public void setUp() {
@@ -126,4 +161,77 @@ public class CreateTest {
         verify(serviceRepository, times(1)).save(any());
     }
 
+    @Test
+    void createServiceReservation() {
+        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
+                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
+                1, 1L, 1L, "123 Main St", "City");
+
+        EventOwner eventOwner = new EventOwner();
+        eventOwner.setServices(new ArrayList<>());
+        
+        Service service = new Service();
+        service.setPricePerHour(BigDecimal.valueOf(50));
+        
+        ServiceOwner serviceOwner = new ServiceOwner();
+        serviceOwner.setReservations(new ArrayList<>());
+        
+        ServiceReservation reservation = new ServiceReservation();
+        
+        List<Place> relatedPlaces = new ArrayList<>();
+        Place place = new Place();  
+        place.setAddress("123 Main St");
+        place.setCity("City");
+        relatedPlaces.add(place);
+
+		when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
+        when(serviceService.get(anyLong())).thenReturn(service);
+        when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
+        when(serviceOwnerService.getByServiceId(null)).thenReturn(serviceOwner);
+        when(serviceReservationRepository.save(any())).thenReturn(reservation);
+
+        serviceReservationService.create(persistDTO);
+
+        verify(eventOwnerService, times(1)).get(anyLong());
+        verify(serviceService, times(1)).get(anyLong());
+        verify(serviceReservationRepository, times(1)).save(any());
+    }
+    
+    @Test
+    void createPlaceReservation() {
+        PersistPlaceReservationDTO persistDTO = new PersistPlaceReservationDTO(
+                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
+                1, 1L, 10, Collections.singletonList(1L), 1L);
+
+        EventOwner eventOwner = new EventOwner();
+        eventOwner.setPlaces(new ArrayList<>());
+        
+        Place place = new Place();
+        place.setPricePerHour(BigDecimal.valueOf(50));
+        place.setMaximumCapacity(50);        
+        place.setServices(new ArrayList<>()); 
+        
+        Service service = new Service();
+        service.setPeopleInvolved(2); 
+        service.setPricePerHour(BigDecimal.valueOf(50));
+        place.getServices().add(service);
+        
+        PlaceOwner placeOwner = new PlaceOwner();
+        placeOwner.setReservations(new ArrayList<>());
+         
+        PlaceReservation reservation = new PlaceReservation();
+       
+        when(placeServices.get(anyLong())).thenReturn(place); 
+        when(serviceService.get(anyLong())).thenReturn(service);
+        when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
+        when(placeOwnerService.getByPlaceId(null)).thenReturn(placeOwner);
+        when(placeReservationRepository.save(any())).thenReturn(reservation);
+
+        placeReservationService.create(persistDTO);
+
+        verify(eventOwnerService, times(1)).get(anyLong());
+        verify(placeServices, times(1)).get(anyLong());
+        verify(placeReservationRepository, times(1)).save(any());
+    }
+    
 }

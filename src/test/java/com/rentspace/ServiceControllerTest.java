@@ -8,17 +8,24 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.rentspace.controller.ServiceController;
+import com.rentspace.controller.ServiceReservationController;
 import com.rentspace.service.ServiceService;
 import com.rentspace.service.ServiceOwnerService;
+import com.rentspace.service.ServiceReservationService;
 import com.rentspace.model.products.ServiceNature;
-import com.rentspace.DTO.persist.product.PersistServiceDTO;
+import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.Status;
+import com.rentspace.DTO.persist.product.PersistServiceDTO; 
 import com.rentspace.DTO.response.product.ResponseServiceDTO;
+import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +41,12 @@ public class ServiceControllerTest {
 
     @InjectMocks
     private ServiceController serviceController;
+    
+    @Mock
+    private ServiceReservationService serviceReservationService;
+
+    @InjectMocks
+    private ServiceReservationController serviceReservationController; 
 
     @BeforeEach
     public void setUp() {
@@ -74,6 +87,27 @@ public class ServiceControllerTest {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedServiceNatures, responseEntity.getBody());
+    }
+    
+    @Test
+    void createServiceReservation() {
+        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
+                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
+                1, 1L, 1L, "123 Main St", "City");
+
+        ResponseServiceReservationDTO expectedResponseDTO = new ResponseServiceReservationDTO(
+                1L, LocalDateTime.now(),LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
+                1, new ResponseServiceDTO(), new ResponseUserDTO(), Status.PENDING, BigDecimal.TEN); 
+
+        when(serviceReservationService.create(any())).thenReturn(expectedResponseDTO);
+
+        ResponseEntity<ResponseServiceReservationDTO> responseEntity = serviceReservationController
+        		.create(persistDTO);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(expectedResponseDTO, responseEntity.getBody());
+
+        verify(serviceReservationService, times(1)).create(any());
     }
     
 }
