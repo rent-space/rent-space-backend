@@ -1,5 +1,15 @@
 package com.rentspace;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -7,25 +17,20 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.rentspace.DTO.listed.ListedPlaceDTO;
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.response.ResponseUserDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
+import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.controller.PlaceController;
 import com.rentspace.controller.PlaceReservationController;
 import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.Status;
-import com.rentspace.service.PlaceService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
-import com.rentspace.DTO.persist.product.PersistPlaceDTO;
-import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
-import com.rentspace.DTO.response.product.ResponsePlaceDTO;
-import com.rentspace.DTO.response.ResponseUserDTO;
-import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Collections;
+import com.rentspace.service.PlaceService;
 
 public class PlaceControllerTest {
 
@@ -106,6 +111,23 @@ public class PlaceControllerTest {
         
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
+    }
+    
+    @Test
+    public void viewAllPlaces() { 
+        PlaceService placeService = mock(PlaceService.class);
+        List<ListedPlaceDTO> expectedPlaces = Arrays.asList(
+            new ListedPlaceDTO(1L, "Place 1"),
+            new ListedPlaceDTO(2L, "Place 2")
+        );
+        when(placeService.viewAll()).thenReturn(expectedPlaces);
+
+        PlaceController placeController = new PlaceController(placeService);
+
+        ResponseEntity<List<ListedPlaceDTO>> responseEntity = placeController.viewAll();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedPlaces, responseEntity.getBody());
     }
 
 }
