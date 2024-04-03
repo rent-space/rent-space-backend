@@ -31,6 +31,11 @@ public class PlaceReservationService extends ModelMapperFuncs {
 
     public void save(PlaceReservation model) { this.placeReservationRepository.save(model); }
 
+    public PlaceReservation get(Long id) {
+        return this.placeReservationRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(PLACE_RESERVATION_NOT_FOUND + id));
+    }
+
     public ResponsePlaceReservationDTO create(PersistPlaceReservationDTO persistDTO) {
         validatesFields(persistDTO);
 
@@ -53,7 +58,7 @@ public class PlaceReservationService extends ModelMapperFuncs {
         placeOwnerService.save(placeOwner);
         eventOwnerService.save(eventOwner);
 
-        return buildResponse(reservation, place, placeOwner, eventOwner, servicesRelated);
+        return buildResponse(reservation, placeOwner, eventOwner);
     }
 
     private List<Product> getRelatedServices(PersistPlaceReservationDTO persistDTO, Place place) {
@@ -72,5 +77,14 @@ public class PlaceReservationService extends ModelMapperFuncs {
             throw new ApiRequestException(PEOPLE_INVOLVED_EXCEED_MAXIMUM_CAPACITY);
         }
         return services;
+    }
+
+    public ResponsePlaceReservationDTO view(Long id) {
+        PlaceReservation reservation = get(id);
+        return buildResponse(
+                reservation,
+                placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
+                eventOwnerService.getByPlaceReservation(id)
+        );
     }
 }
