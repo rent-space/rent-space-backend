@@ -33,7 +33,7 @@ public class PlaceReservationService extends ModelMapperFuncs {
 
     public PlaceReservation get(Long id) {
         return this.placeReservationRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(PLACE_RESERVATION_NOT_FOUND + id));
+                .orElseThrow(() -> new ApiRequestException(RESERVATION_NOT_FOUND + id));
     }
 
     public ResponsePlaceReservationDTO create(PersistPlaceReservationDTO persistDTO) {
