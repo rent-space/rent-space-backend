@@ -31,7 +31,7 @@ public class UserService extends ModelMapperFuncs {
         return map(appUser, ResponseUserDTO.class);
     }
 
-    public ResponseUserDTO getByEmail(String userEmail) {
+    public ResponseUserDTO get(String userEmail) {
         AppUser appUser = this.userRepository.findByEmail(userEmail).orElseThrow();
 
         return map(appUser, ResponseUserDTO.class);
