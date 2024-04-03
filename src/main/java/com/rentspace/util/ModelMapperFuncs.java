@@ -98,18 +98,18 @@ public abstract class ModelMapperFuncs {
 
     /************************************* RESPONSE BUILDS *************************************/
 
-    public ResponseServiceReservationDTO buildResponse(ServiceReservation reservation, Service service, EventOwner owner, ServiceOwner serviceOwner, List<Place> places) {
+    public ResponseServiceReservationDTO buildResponse(ServiceReservation reservation, EventOwner owner, ServiceOwner serviceOwner, List<Place> places) {
         ResponseServiceReservationDTO dto = map(reservation, ResponseServiceReservationDTO.class);
-        dto.setProduct(buildResponse(service, serviceOwner, places));
+        dto.setProduct(buildResponse((Service) reservation.getProduct(), serviceOwner, places));
         dto.setEventOwner(map(owner, ResponseUserDTO.class));
         return dto;
     }
 
-    public ResponsePlaceReservationDTO buildResponse(PlaceReservation reservation, Place place, PlaceOwner placeOwner, EventOwner eventOwner, List<Product> services) {
+    public ResponsePlaceReservationDTO buildResponse(PlaceReservation reservation, PlaceOwner placeOwner, EventOwner owner) {
         ResponsePlaceReservationDTO dto = map(reservation, ResponsePlaceReservationDTO.class);
-        dto.setProduct(buildResponse(place, placeOwner));
-        dto.setHiredRelatedServices(mapToList(services, ListedServiceDTO.class));
-        dto.setEventOwner(map(eventOwner, ResponseUserDTO.class));
+        dto.setProduct(buildResponse((Place) reservation.getProduct(), placeOwner));
+        dto.setHiredRelatedServices(mapToList(reservation.getHiredRelatedServices(), ListedServiceDTO.class));
+        dto.setEventOwner(map(owner, ResponseUserDTO.class));
         return dto;
     }
 
