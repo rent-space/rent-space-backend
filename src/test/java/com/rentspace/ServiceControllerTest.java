@@ -56,7 +56,7 @@ public class ServiceControllerTest {
     @Test
     public void createService() { 
         PersistServiceDTO persistServiceDTO = new PersistServiceDTO("Title", "Description",
-                Collections.singletonList("media"), "Address", "City",
+                Collections.singletonList("media"), "Address", "City","Neighborhood",
                 BigDecimal.valueOf(100), 4L, ServiceNature.BARMEN, 20, null);
         
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(0L, "Ricardo Fagundes", "",

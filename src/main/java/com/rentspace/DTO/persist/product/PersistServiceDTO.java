@@ -29,13 +29,14 @@ public class PersistServiceDTO extends PersistProductDTO{
         List<String> media,
         String addess,
         String city,
+        String neighborhood,
         BigDecimal pricePerHour,
         Long serviceOwnerId,
         ServiceNature serviceNature,
         Integer peopleInvolved,
         List<Long> placesIdsRelated
     ) {
-        super(title, description, media, addess, city, pricePerHour, serviceOwnerId);
+        super(title, description, media, addess, city, neighborhood, pricePerHour, serviceOwnerId);
         this.serviceNature = serviceNature;
         this.peopleInvolved = peopleInvolved;
         this.placesIdsRelated = placesIdsRelated;

@@ -16,9 +16,6 @@ public class PersistPlaceDTO extends PersistProductDTO {
     @NotNull
     private Integer maximumCapacity;
 
-    @NotNull
-    private String neighborhood;
-
     private String complement;
 
     @NotNull
@@ -36,9 +33,8 @@ public class PersistPlaceDTO extends PersistProductDTO {
             Integer maximumCapacity,
             Long ownerId
     ) {
-        super(title, description, media, address, city, pricePerHour, ownerId);
+        super(title, description, media, address, neighborhood, city, pricePerHour, ownerId);
         this.maximumCapacity = maximumCapacity;
-        this.neighborhood = neighborhood;
         this.complement = complement;
         this.zipCode = zipCode;
 

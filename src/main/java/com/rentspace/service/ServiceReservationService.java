@@ -31,7 +31,6 @@ public class ServiceReservationService extends ModelMapperFuncs {
     public void save(ServiceReservation model) { serviceReservationRepository.save(model);}
 
     public ResponseServiceReservationDTO create(PersistServiceReservationDTO persistDTO) {
-        // TODO observar se o serviço não é vinculado a um espaço
         validatesFields(persistDTO);
 
         EventOwner eventOwner = eventOwnerService.get(persistDTO.getEventOwnerId());
@@ -51,7 +50,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
         serviceOwnerService.save(serviceOwner);
         eventOwnerService.save(eventOwner);
         List<Place> relatedPlaces = serviceService.getRelatedPlaces(service.getId());
-        return buildResponse(reservation, service, eventOwner, serviceOwner, relatedPlaces);
+        return buildResponse(reservation, eventOwner, serviceOwner, relatedPlaces);
     }
 
     public void checkAvailableService(PersistServiceReservationDTO persistDTO, Service service) {
