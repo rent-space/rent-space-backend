@@ -1,38 +1,47 @@
 package com.rentspace;
 
-import com.rentspace.model.products.Product;
+import static com.rentspace.util.ProductUtil.getFinalPrice;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import com.rentspace.model.products.Place; 
-import com.rentspace.model.products.Service; 
+
+import com.rentspace.DTO.listed.ListedPlaceDTO;
+import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.response.product.ResponsePlaceDTO;
+import com.rentspace.model.products.Place;
+import com.rentspace.model.products.Product;
+import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
-import com.rentspace.model.user.PlaceOwner; 
 import com.rentspace.model.user.EventOwner;
+import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.EventOwnerRepository;
 import com.rentspace.repository.PlaceOwnerRepository;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.repository.PlaceReservationRepository;
-import com.rentspace.service.PlaceService;
-import com.rentspace.util.ModelMapperFuncs;
 import com.rentspace.service.EventOwnerService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
-import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
-import com.rentspace.DTO.response.product.ResponsePlaceDTO;
-
-import static com.rentspace.util.ProductUtil.getFinalPrice;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.time.Duration;
+import com.rentspace.service.PlaceService;
+import com.rentspace.util.ModelMapperFuncs;
 
 public class PlaceServiceTest {
 
@@ -175,6 +184,24 @@ public class PlaceServiceTest {
         placeReservationService.save(placeReservation); 
 
         verify(placeReservationRepository, times(1)).save(placeReservation);
+    }
+    
+    @Test
+    public void testViewAll() {
+        List<Place> mockPlaces = Arrays.asList(
+            new Place(), new Place());
+        
+        when(placeRepository.findAll()).thenReturn(mockPlaces);
+
+        PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
+
+        List<ListedPlaceDTO> result = placeService.viewAll();
+
+        assertEquals(mockPlaces.size(), result.size());
+        assertEquals(mockPlaces.get(0).getId(), result.get(0).getId());
+        assertEquals(mockPlaces.get(0).getTitle(), result.get(0).getTitle());
+        assertEquals(mockPlaces.get(1).getId(), result.get(1).getId());
+        assertEquals(mockPlaces.get(1).getTitle(), result.get(1).getTitle());
     }
     
     @Test
