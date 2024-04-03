@@ -9,7 +9,7 @@ import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.rentspace.exception.ExceptionMessages.EMAIL_ALREADY_EXISTS;
+import static com.rentspace.exception.ExceptionMessages.*;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +19,11 @@ public class UserService extends ModelMapperFuncs {
 
     public void save(AppUser model){
         userRepository.save(model);
+    }
+
+    public AppUser get(String email) {
+        return this.userRepository.findByEmail(email)
+                .orElseThrow(() -> new ApiRequestException(USER_EMAIL_NOT_FOUND + email));
     }
 
     public ResponseUserDTO create(PersistUserDTO persistDTO) {
@@ -31,11 +36,7 @@ public class UserService extends ModelMapperFuncs {
         return map(appUser, ResponseUserDTO.class);
     }
 
-    public ResponseUserDTO get(String userEmail) {
-        AppUser appUser = this.userRepository.findByEmail(userEmail).orElseThrow();
-
-        return map(appUser, ResponseUserDTO.class);
-
-
+    public ResponseUserDTO getByEmail(String email) {
+        return map(get(email), ResponseUserDTO.class);
     }
 }
