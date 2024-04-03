@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.rentspace.exception.ExceptionMessages.RESERVATION_NOT_FOUND;
 import static com.rentspace.exception.ExceptionMessages.SERVICE_IS_EXCLUSIVE;
 import static com.rentspace.util.ProductUtil.*;
 
@@ -27,8 +28,14 @@ public class ServiceReservationService extends ModelMapperFuncs {
     private EventOwnerService eventOwnerService;
     private ServiceOwnerService serviceOwnerService;
     private ServiceService serviceService;
+    private PlaceService placeService;
 
     public void save(ServiceReservation model) { serviceReservationRepository.save(model);}
+
+    public ServiceReservation get(Long id) {
+        return serviceReservationRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(RESERVATION_NOT_FOUND + id));
+    }
 
     public ResponseServiceReservationDTO create(PersistServiceReservationDTO persistDTO) {
         validatesFields(persistDTO);
@@ -54,16 +61,27 @@ public class ServiceReservationService extends ModelMapperFuncs {
     }
 
     public void checkAvailableService(PersistServiceReservationDTO persistDTO, Service service) {
+        List<Place> places = serviceService.getRelatedPlaces(service.getId());
         boolean placeFound = false;
-        for (Place place : serviceService.getRelatedPlaces(service.getId())) {
+        for (Place place : places) {
             if (place.getAddress().equals(persistDTO.getAddress()) &&
                     place.getCity().equals(persistDTO.getCity())) {
                 placeFound = true;
                 break;
             }
         }
-        if (!placeFound) {
+        if (!placeFound && !places.isEmpty()) {
             throw new ApiRequestException(SERVICE_IS_EXCLUSIVE);
         }
+    }
+
+    public ResponseServiceReservationDTO view(Long id) {
+        ServiceReservation reservation = get(id);
+        return buildResponse(
+                reservation,
+                eventOwnerService.getByServiceReservation(id),
+                serviceOwnerService.getByServiceId(reservation.getProduct().getId()),
+                placeService.getByExclusiveService(id)
+        );
     }
 }
