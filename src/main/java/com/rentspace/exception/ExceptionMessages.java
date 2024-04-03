@@ -29,4 +29,6 @@ public class ExceptionMessages {
     public static final String SERVICE_OWNER_SEARCH_ERROR = "Não foi possível encontrar o proprietário do serviço de id: ";
 
     public static final String SERVICE_IS_EXCLUSIVE = "Este serviço é exclusivo de um espaço diferente do endereço informado na solicitação";
+
+    public static final String USER_EMAIL_NOT_FOUND = "Não foi encontrado o usuário com email: ";
 }
