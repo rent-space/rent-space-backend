@@ -2,6 +2,7 @@ package com.rentspace.model.reservation;
 
 import com.rentspace.model.GenericModel;
 import com.rentspace.model.products.Product;
+import com.rentspace.model.user.EventOwner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -25,6 +25,9 @@ public class PersistProductDTO {
     private String address;
 
     @NotNull
+    private String neighborhood;
+
+    @NotNull
     private String city;
 
     @NotNull

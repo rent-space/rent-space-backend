@@ -31,4 +31,8 @@ public class ExceptionMessages {
     public static final String SERVICE_IS_EXCLUSIVE = "Este serviço é exclusivo de um espaço diferente do endereço informado na solicitação";
 
     public static final String USER_EMAIL_NOT_FOUND = "Não foi encontrado o usuário com email: ";
+
+    public static final String RESERVATION_NOT_FOUND = "Não foi encontrada uma reserva com o id: ";
+
+    public static final String RESERVATION_USER_NOT_FOUND = "Não foi encontrado um usuário que possua uma reserva de id: ";
 }

@@ -42,21 +42,17 @@ public class PlaceService extends ModelMapperFuncs {
     }
 
     public ResponsePlaceDTO view(Long id) {
-
         Place place = this.placeRepository.findById(id).orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + id));
-
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
-
         return buildResponse(place, owner);
     }
 
     public List<ListedPlaceDTO> viewAll() {
-
         List<Place> places = this.placeRepository.findAll();
-
         return mapToList(places, ListedPlaceDTO.class);
-
     }
 
-
+    public List<Place> getByExclusiveService(Long serviceId) {
+        return placeRepository.getByExclusiveService(serviceId);
+    }
 }

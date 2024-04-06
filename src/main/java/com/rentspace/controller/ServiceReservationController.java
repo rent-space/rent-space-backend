@@ -6,10 +6,7 @@ import com.rentspace.service.ServiceReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/solicitacao/servico")
@@ -21,6 +18,11 @@ public class ServiceReservationController {
     @PostMapping
     public ResponseEntity<ResponseServiceReservationDTO> create(@RequestBody PersistServiceReservationDTO persistDTO) {
         return new ResponseEntity<>(serviceReservationService.create(persistDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseServiceReservationDTO> view(@PathVariable Long id) {
+        return new ResponseEntity<>(serviceReservationService.view(id), HttpStatus.OK);
     }
 
 }
