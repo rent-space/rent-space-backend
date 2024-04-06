@@ -92,12 +92,8 @@ public class PlaceReservationService extends ModelMapperFuncs {
 
     public ResponsePlaceReservationDTO updateStatus(Long id, Status status) {
         PlaceReservation reservation = get(id);
+        updateReservationStatus(reservation, status);
 
-        if (status == Status.PENDING || reservation.getStatus() != Status.PENDING){
-            throw new ApiRequestException(INVALID_STATUS_UPDATE + id);
-        }
-
-        reservation.setStatus(status);
         save(reservation);
         return buildResponse(
                 reservation,
