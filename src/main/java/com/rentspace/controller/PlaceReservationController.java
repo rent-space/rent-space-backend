@@ -2,6 +2,7 @@ package com.rentspace.controller;
 
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
+import com.rentspace.model.reservation.Status;
 import com.rentspace.service.PlaceReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,11 @@ public class PlaceReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponsePlaceReservationDTO> view(@PathVariable Long id) {
         return new ResponseEntity<>(placeReservationService.view(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponsePlaceReservationDTO> updateStatus(@PathVariable Long id, @RequestBody Status status) {
+        return new ResponseEntity<>(placeReservationService.updateStatus(id, status), HttpStatus.OK);
     }
 
 }

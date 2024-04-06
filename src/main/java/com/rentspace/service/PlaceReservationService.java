@@ -7,11 +7,13 @@ import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
+import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,6 +83,22 @@ public class PlaceReservationService extends ModelMapperFuncs {
 
     public ResponsePlaceReservationDTO view(Long id) {
         PlaceReservation reservation = get(id);
+        return buildResponse(
+                reservation,
+                placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
+                eventOwnerService.getByPlaceReservation(id)
+        );
+    }
+
+    public ResponsePlaceReservationDTO updateStatus(Long id, Status status) {
+        PlaceReservation reservation = get(id);
+
+        if (status == Status.PENDING || reservation.getStatus() != Status.PENDING){
+            throw new ApiRequestException(INVALID_STATUS_UPDATE + id);
+        }
+
+        reservation.setStatus(status);
+        save(reservation);
         return buildResponse(
                 reservation,
                 placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
