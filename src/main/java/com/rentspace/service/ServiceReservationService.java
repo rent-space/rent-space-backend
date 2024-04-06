@@ -1,11 +1,14 @@
 package com.rentspace.service;
 
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
+import com.rentspace.model.reservation.PlaceReservation;
 import com.rentspace.model.reservation.ServiceReservation;
+import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceReservationRepository;
@@ -77,6 +80,19 @@ public class ServiceReservationService extends ModelMapperFuncs {
 
     public ResponseServiceReservationDTO view(Long id) {
         ServiceReservation reservation = get(id);
+        return buildResponse(
+                reservation,
+                eventOwnerService.getByServiceReservation(id),
+                serviceOwnerService.getByServiceId(reservation.getProduct().getId()),
+                placeService.getByExclusiveService(id)
+        );
+    }
+
+    public ResponseServiceReservationDTO updateStatus(Long id, Status status) {
+        ServiceReservation reservation = get(id);
+        updateReservationStatus(reservation, status);
+
+        save(reservation);
         return buildResponse(
                 reservation,
                 eventOwnerService.getByServiceReservation(id),

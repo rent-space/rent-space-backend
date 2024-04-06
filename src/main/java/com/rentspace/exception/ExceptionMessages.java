@@ -35,4 +35,6 @@ public class ExceptionMessages {
     public static final String RESERVATION_NOT_FOUND = "Não foi encontrada uma reserva com o id: ";
 
     public static final String RESERVATION_USER_NOT_FOUND = "Não foi encontrado um usuário que possua uma reserva de id: ";
+
+    public static final String INVALID_STATUS_UPDATE = "A atualização de status é inválida para a reserva de id: ";
 }
