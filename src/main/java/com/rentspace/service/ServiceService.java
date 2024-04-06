@@ -60,4 +60,13 @@ public class ServiceService extends ModelMapperFuncs {
     public List<Place> getRelatedPlaces(Long serviceId) {
         return this.serviceRepository.findRelatedPlaces(serviceId);
     }
+
+    public ResponseServiceDTO view(Long id) {
+        Service service = get(id);
+        return buildResponse(
+                service,
+                serviceOwnerService.getByServiceId(id),
+                placeService.getByExclusiveService(id)
+        );
+    }
 }
