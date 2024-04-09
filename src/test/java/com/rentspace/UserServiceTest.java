@@ -1,20 +1,25 @@
 package com.rentspace;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.rentspace.DTO.persist.PersistUserDTO;
+import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.model.user.AppUser;
 import com.rentspace.model.user.UserType;
 import com.rentspace.repository.UserRepository;
 import com.rentspace.service.UserService;
 import com.rentspace.util.ModelMapperFuncs;
-import com.rentspace.DTO.persist.PersistUserDTO; 
-import com.rentspace.DTO.response.ResponseUserDTO;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
 
 public class UserServiceTest {
 
@@ -27,8 +32,8 @@ public class UserServiceTest {
 	@Mock
     private ModelMapperFuncs modelMapperFuncs;
 
-	@InjectMocks
-    private UserService userServiceIM;
+	@Mock
+    private UserService serviceUser; 
 
     @BeforeEach
     public void setUp() {
@@ -68,6 +73,38 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).findByEmail("RonaldoFe@example.com");
         verify(userRepository, times(1)).save(any());
+    }
+    
+    @Test
+    public void findUserByEmail() {
+        String email = "test@example.com";
+        AppUser appUser = new AppUser();
+        appUser.setEmail(email);
+ 
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(appUser));
+
+        UserService serviceUser = new UserService(userRepository);
+
+        AppUser result = serviceUser.get(email);
+
+        assertEquals(appUser, result); 
+    }
+    
+    @Test
+    public void getUserByEmail() {
+        String email = "test@example.com";
+        AppUser mockUser = new AppUser();
+        mockUser.setEmail(email);
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+
+        UserService serviceUser = new UserService(userRepository);
+
+        ResponseUserDTO result = serviceUser.getByEmail(email);
+
+        assertEquals(mockUser.getId(), result.getId());
+        assertEquals(mockUser.getName(), result.getName());
+        assertEquals(mockUser.getEmail(), result.getEmail());
     }
 
 }

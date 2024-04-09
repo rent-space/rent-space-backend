@@ -1,35 +1,41 @@
 package com.rentspace;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-
-import com.rentspace.model.user.ServiceOwner;
-import com.rentspace.model.products.Service;
-import com.rentspace.model.products.Place;
-import com.rentspace.model.products.ServiceNature;
-import com.rentspace.model.reservation.PaymentMethod;
-import com.rentspace.model.reservation.ServiceReservation; 
-import com.rentspace.repository.ServiceOwnerRepository;
-import com.rentspace.repository.ServiceRepository;
-import com.rentspace.repository.ServiceReservationRepository;
-import com.rentspace.service.ServiceService;
-import com.rentspace.service.ServiceOwnerService;
-import com.rentspace.service.ServiceReservationService;
-import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO; 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.product.ResponseServiceDTO;
+import com.rentspace.model.products.Place;
+import com.rentspace.model.products.Service;
+import com.rentspace.model.products.ServiceNature;
+import com.rentspace.model.reservation.PaymentMethod;
+import com.rentspace.model.reservation.ServiceReservation;
+import com.rentspace.model.user.ServiceOwner;
+import com.rentspace.repository.ServiceOwnerRepository;
+import com.rentspace.repository.ServiceRepository;
+import com.rentspace.repository.ServiceReservationRepository;
+import com.rentspace.service.PlaceService;
+import com.rentspace.service.ServiceOwnerService;
+import com.rentspace.service.ServiceReservationService;
+import com.rentspace.service.ServiceService;
 
 public class ServiceServiceTest {
 
@@ -66,7 +72,7 @@ public class ServiceServiceTest {
     	serviceOwner = new ServiceOwner(); 
     	serviceReservation = new ServiceReservation();
     	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null, 
-    			serviceOwnerService, serviceService); 
+    			serviceOwnerService, serviceService, null); 
     }
     
     @Test
@@ -148,6 +154,48 @@ public class ServiceServiceTest {
         when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
 
         serviceReservationService.checkAvailableService(persistDTO, service);
+    }
+    
+    @Test
+    public void viewService() {
+        Long serviceId = 1L;
+        Service mockService = new Service();
+        mockService.setTitle("Test Service");
+        
+        ServiceRepository serviceRepository = mock(ServiceRepository.class);
+        when(serviceRepository.findById(serviceId)).thenReturn(Optional.of(mockService));
+
+        ServiceOwnerService serviceOwnerService = mock(ServiceOwnerService.class);
+        ServiceOwner mockOwner = new ServiceOwner();
+        when(serviceOwnerService.getByServiceId(serviceId)).thenReturn(mockOwner);
+
+        PlaceService placeService = mock(PlaceService.class);
+        List<Place> mockPlaces = Arrays.asList(new Place(), new Place());
+        when(placeService.getByExclusiveService(serviceId)).thenReturn(mockPlaces);
+
+        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, placeService);
+
+        ResponseServiceDTO result = serviceService.view(serviceId);
+
+        assertEquals(mockService.getId(), result.getId());
+        assertEquals(mockService.getTitle(), result.getTitle()); 
+        assertEquals(mockPlaces.size(), result.getPlacesRelated().size());
+    }
+    
+    @Test
+    public void getServiceReservationById() {
+        Long reservationId = 1L;
+        ServiceReservation mockReservation = new ServiceReservation();
+
+        ServiceReservationRepository serviceReservationRepository = mock(ServiceReservationRepository.class);
+        when(serviceReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
+
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        		null, serviceOwnerService, serviceService, null);
+
+        ServiceReservation result = serviceReservationService.get(reservationId);
+
+        assertNotNull(result);
     }
 
 }

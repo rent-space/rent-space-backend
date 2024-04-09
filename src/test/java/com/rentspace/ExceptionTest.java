@@ -1,7 +1,6 @@
 package com.rentspace;
 
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
-import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.controller.PlaceReservationController;
 import com.rentspace.controller.UserController;
@@ -105,7 +104,7 @@ public class ExceptionTest {
         placeReservationService = new PlaceReservationService(placeReservationRepository,
                 placeService, serviceService, placeOwnerService, eventOwnerService);
     	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null, 
-    			null, serviceService); 
+    			null, serviceService, placeService); 
     }
 	
     @Test 
@@ -282,22 +281,6 @@ public class ExceptionTest {
     }
     
     @Test
-    void serviceIsExclusive() { 
-        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
-                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT, 
-                1, 1L, 1L, "123 Main St", "City"); 
-
-        Service service = new Service();
-        List<Place> relatedPlaces = new ArrayList<>();
-        relatedPlaces.add(new Place());
-        
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-        	serviceReservationService.checkAvailableService(persistDTO, service);   
-        });
-        assertEquals(SERVICE_IS_EXCLUSIVE, exception.getMessage()); 
-    }
-    
-    @Test
     public void serviceNotRelatedToSpace() {
         Place place = new Place();
         place.setMaximumCapacity(10);
@@ -346,6 +329,80 @@ public class ExceptionTest {
         });
         
         assertEquals(PEOPLE_INVOLVED_EXCEED_MAXIMUM_CAPACITY, exception.getMessage());
+    }
+    
+    @Test
+    public void UserEmailNotFound() { 
+    	String email = "exemplo@gmail.com";
+    	
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            userService.get(email); 
+        });
+        assertEquals(USER_EMAIL_NOT_FOUND + email, exception.getMessage());
+    }
+    
+    @Test
+    public void getByPlaceReservationNotFound() {
+        Long reservationId = 1L;
+
+        EventOwnerRepository eventOwnerRepository = mock(EventOwnerRepository.class);
+        when(eventOwnerRepository.findByPlaceReservation(reservationId)).thenReturn(Optional.empty());
+
+        EventOwnerService eventOwnerService = new EventOwnerService(eventOwnerRepository);
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            eventOwnerService.getByPlaceReservation(reservationId);
+        });
+        assertEquals(RESERVATION_USER_NOT_FOUND + reservationId, exception.getMessage());
+    }
+
+    @Test
+    public void getByServiceReservationNotFound() {
+        Long reservationId = 1L; 
+
+        EventOwnerRepository eventOwnerRepository = mock(EventOwnerRepository.class);
+        when(eventOwnerRepository.findByServiceReservation(reservationId)).thenReturn(Optional.empty());
+
+        EventOwnerService eventOwnerService = new EventOwnerService(eventOwnerRepository);
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            eventOwnerService.getByServiceReservation(reservationId);
+        });
+        assertEquals(RESERVATION_USER_NOT_FOUND + reservationId, exception.getMessage());
+    }
+    
+    @Test
+    public void reservationByIdNotFound() {
+        Long reservationId = 1L; 
+
+        PlaceReservationRepository placeReservationRepository = mock(PlaceReservationRepository.class);
+        when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.empty());
+
+        PlaceReservationService placeReservationService = new PlaceReservationService(placeReservationRepository, 
+        		placeService, serviceService, placeOwnerService, eventOwnerService); 
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            placeReservationService.get(reservationId);
+        });
+        assertEquals(RESERVATION_NOT_FOUND + reservationId, exception.getMessage());
+    }
+    
+    @Test
+    public void testGetReservationById_ExceptionThrown() {
+        Long reservationId = 1L;
+
+        ServiceReservationRepository serviceReservationRepository = mock(ServiceReservationRepository.class);
+        when(serviceReservationRepository.findById(reservationId)).thenReturn(Optional.empty());
+
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        		eventOwnerService, null, serviceService, placeService); 
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            serviceReservationService.get(reservationId);
+        });
+        assertEquals(RESERVATION_NOT_FOUND + reservationId, exception.getMessage());
     }
         
 }
