@@ -34,6 +34,7 @@ import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
+import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.EventOwnerRepository;
@@ -44,6 +45,7 @@ import com.rentspace.service.EventOwnerService;
 import com.rentspace.service.PlaceOwnerService;
 import com.rentspace.service.PlaceReservationService;
 import com.rentspace.service.PlaceService;
+import com.rentspace.service.ServiceService;
 import com.rentspace.util.ModelMapperFuncs;
 
 public class PlaceServiceTest {
@@ -342,4 +344,36 @@ public class PlaceServiceTest {
         assertNotNull(result);
     }
     
+    @Test
+    public void updateStatusPlaceReservation() {
+        PlaceReservationRepository placeReservationRepository = mock(PlaceReservationRepository.class);
+        PlaceService placeService = mock(PlaceService.class);
+        ServiceService serviceService = mock(ServiceService.class);
+        PlaceOwnerService placeOwnerService = mock(PlaceOwnerService.class);
+        EventOwnerService eventOwnerService = mock(EventOwnerService.class);
+
+        PlaceReservationService placeReservationService = new PlaceReservationService(placeReservationRepository, 
+        		placeService, serviceService, placeOwnerService, eventOwnerService);
+
+        Long reservationId = 1L;
+        Status status = Status.ACCEPTED;
+
+        PlaceReservation mockReservation = new PlaceReservation();
+        mockReservation.setProduct(new Place());
+        mockReservation.setHiredRelatedServices(new ArrayList<>());
+        mockReservation.setNumOfParticipants(10);
+        mockReservation.setStatus(Status.PENDING); 
+
+        when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
+
+        EventOwner mockEventOwner = new EventOwner();
+        when(eventOwnerService.getByPlaceReservation(reservationId)).thenReturn(mockEventOwner);
+
+        when(placeReservationRepository.save(any(PlaceReservation.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
+
+        ResponsePlaceReservationDTO result = placeReservationService.updateStatus(reservationId, status);
+
+        assertEquals(mockReservation.getId(), result.getId());
+        assertEquals(mockReservation.getStatus(), status);
+    }
 }
