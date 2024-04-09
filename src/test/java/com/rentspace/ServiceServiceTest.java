@@ -30,6 +30,7 @@ import com.rentspace.model.products.Service;
 import com.rentspace.model.products.ServiceNature;
 import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.ServiceReservation;
+import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceOwnerRepository;
@@ -234,4 +235,38 @@ public class ServiceServiceTest {
         assertNotNull(result);
     
     }
+    
+    @Test
+    public void updateStatusServiceReservation() {
+        ServiceReservationRepository serviceReservationRepository = mock(ServiceReservationRepository.class);
+        ServiceOwnerService serviceOwnerService = mock(ServiceOwnerService.class);
+        PlaceService placeService = mock(PlaceService.class);
+        EventOwnerService eventOwnerService = mock(EventOwnerService.class);
+
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        		eventOwnerService, serviceOwnerService, serviceService, placeService);
+
+        Long reservationId = 1L;
+        Status status = Status.ACCEPTED; 
+
+        ServiceReservation mockReservation = new ServiceReservation();
+        mockReservation.setProduct(new Service());
+        mockReservation.setStatus(Status.PENDING); 
+
+        when(serviceReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
+
+        EventOwner mockEventOwner = new EventOwner();
+        when(eventOwnerService.getByServiceReservation(reservationId)).thenReturn(mockEventOwner);
+
+        List<Place> mockPlaces = new ArrayList<>(); 
+        when(placeService.getByExclusiveService(reservationId)).thenReturn((mockPlaces));
+
+        when(serviceReservationRepository.save(any(ServiceReservation.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
+
+        ResponseServiceReservationDTO result = serviceReservationService.updateStatus(reservationId, status);
+
+        assertEquals(mockReservation.getId(), result.getId());
+        assertEquals(mockReservation.getStatus(), status);
+    }
+    
 }
