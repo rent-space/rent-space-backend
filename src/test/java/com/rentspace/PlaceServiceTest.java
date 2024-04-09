@@ -29,6 +29,7 @@ import org.mockito.MockitoAnnotations;
 import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
+import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
@@ -310,6 +311,33 @@ public class PlaceServiceTest {
         		placeService, null, placeOwnerService, eventOwnerService); 
 
         PlaceReservation result = placeReservation.get(reservationId);
+
+        assertNotNull(result);
+    }
+    
+    @Test
+    public void viewReservation() {
+        Long reservationId = 1L;
+        PlaceReservation mockReservation = new PlaceReservation();
+
+        mockReservation.setProduct(new Place());
+        mockReservation.setHiredRelatedServices(new ArrayList<>());
+
+        PlaceReservationRepository placeReservationRepository = mock(PlaceReservationRepository.class);
+        when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
+
+        PlaceOwnerService placeOwnerService = mock(PlaceOwnerService.class);
+        PlaceOwner mockPlaceOwner = new PlaceOwner();
+        when(placeOwnerService.getByPlaceId(mockReservation.getProduct().getId())).thenReturn(mockPlaceOwner);
+
+        EventOwnerService eventOwnerService = mock(EventOwnerService.class);
+        EventOwner mockEventOwner = new EventOwner();
+        when(eventOwnerService.getByPlaceReservation(reservationId)).thenReturn(mockEventOwner);
+
+        PlaceReservationService placeReservationService = new PlaceReservationService(
+            placeReservationRepository, null, null, placeOwnerService, eventOwnerService);
+
+        ResponsePlaceReservationDTO result = placeReservationService.view(reservationId);
 
         assertNotNull(result);
     }
