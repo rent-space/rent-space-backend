@@ -2,8 +2,10 @@ package com.rentspace;
 
 import static com.rentspace.util.ProductUtil.getFinalPrice;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -251,4 +253,65 @@ public class PlaceServiceTest {
 
         assertEquals(expectedPrice, servicesFinalPrice);
     }
+    
+    @Test
+    public void getPlacesByExclusiveService() {
+        List<Place> expectedPlaces = Arrays.asList(new Place(), new Place());
+
+        PlaceRepository placeRepository = mock(PlaceRepository.class);
+        when(placeRepository.getByExclusiveService(1L)).thenReturn(expectedPlaces);
+
+        PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
+
+        List<Place> result = placeService.getByExclusiveService(1L);
+
+        assertEquals(expectedPlaces.size(), result.size());
+    }
+    
+    @Test
+    public void getByPlaceReservation() {
+        Long reservationId = 1L;
+        EventOwner mockOwner = new EventOwner();
+
+        EventOwnerRepository eventOwnerRepository = mock(EventOwnerRepository.class);
+        when(eventOwnerRepository.findByPlaceReservation(reservationId)).thenReturn(Optional.of(mockOwner));
+
+        EventOwnerService eventOwnerService = new EventOwnerService(eventOwnerRepository);
+
+        EventOwner result = eventOwnerService.getByPlaceReservation(reservationId);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void getPlaceReservationById() { 
+        Long reservationId = 1L;
+        EventOwner mockOwner = new EventOwner();
+
+        EventOwnerRepository eventOwnerRepository = mock(EventOwnerRepository.class);
+        when(eventOwnerRepository.findByServiceReservation(reservationId)).thenReturn(Optional.of(mockOwner));
+
+        EventOwnerService eventOwnerService = new EventOwnerService(eventOwnerRepository);
+
+        EventOwner result = eventOwnerService.getByServiceReservation(reservationId);
+
+        assertNotNull(result);
+    }
+    
+    @Test
+    public void getReservationById() {
+        Long reservationId = 1L; 
+        PlaceReservation mockReservation = new PlaceReservation();
+        
+        PlaceReservationRepository placeReservationRepository = mock(PlaceReservationRepository.class);
+        when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
+
+        PlaceReservationService placeReservation = new PlaceReservationService(placeReservationRepository, 
+        		placeService, null, placeOwnerService, eventOwnerService); 
+
+        PlaceReservation result = placeReservation.get(reservationId);
+
+        assertNotNull(result);
+    }
+    
 }
