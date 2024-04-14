@@ -36,7 +36,7 @@ public class PlaceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         placeService.delete(id);
-        return new ResponseEntity<>("Espaço deletado com sucesso", HttpStatus.OK);
+        return new ResponseEntity<>("Espaço removido com sucesso", HttpStatus.OK);
     }
 
 }

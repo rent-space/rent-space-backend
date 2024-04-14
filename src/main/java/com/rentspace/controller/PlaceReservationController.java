@@ -31,4 +31,10 @@ public class PlaceReservationController {
         return new ResponseEntity<>(placeReservationService.updateStatus(id, status), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        placeReservationService.delete(id);
+        return new ResponseEntity<>("Reserva de espaço removida com sucesso", HttpStatus.OK);
+    }
+
 }

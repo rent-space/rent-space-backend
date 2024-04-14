@@ -35,7 +35,7 @@ public class ServiceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         serviceService.delete(id);
-        return new ResponseEntity<>("Serviço deletado com sucesso", HttpStatus.OK);
+        return new ResponseEntity<>("Serviço removido com sucesso", HttpStatus.OK);
     }
 
 }

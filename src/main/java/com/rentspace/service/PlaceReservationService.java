@@ -106,4 +106,11 @@ public class PlaceReservationService extends ModelMapperFuncs {
                 eventOwnerService.getByPlaceReservation(id)
         );
     }
+
+    public void delete(Long id) {
+
+        PlaceReservation placeReservation= placeReservationRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(RESERVATION_NOT_FOUND + id));
+        placeReservationRepository.delete(placeReservation);
+    }
 }
