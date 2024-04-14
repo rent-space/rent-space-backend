@@ -5,6 +5,7 @@ import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.service.ServiceReservationService;
+import com.rentspace.service.ServiceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class ServiceReservationController {
 
+    private final ServiceService serviceService;
     private ServiceReservationService serviceReservationService;
 
     @PostMapping
@@ -30,6 +32,12 @@ public class ServiceReservationController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseServiceReservationDTO> updateStatus(@PathVariable Long id, @RequestBody Status status) {
         return new ResponseEntity<>(serviceReservationService.updateStatus(id, status), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        serviceReservationService.delete(id);
+        return new ResponseEntity<>("Reserva de serviço deletada com sucesso", HttpStatus.OK);
     }
 
 }
