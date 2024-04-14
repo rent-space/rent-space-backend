@@ -3,11 +3,15 @@ package com.rentspace.service;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.exception.ApiRequestException;
+import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.user.AppUser;
 import com.rentspace.repository.UserRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.*;
 
@@ -26,6 +30,11 @@ public class UserService extends ModelMapperFuncs {
                 .orElseThrow(() -> new ApiRequestException(USER_EMAIL_NOT_FOUND + email));
     }
 
+    public AppUser get(Long id) {
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(USER_EMAIL_NOT_FOUND + id));
+    }
+
     public ResponseUserDTO create(PersistUserDTO persistDTO) {
         if (this.userRepository.findByEmail(persistDTO.getEmail()).isPresent()) {
             throw new ApiRequestException(EMAIL_ALREADY_EXISTS);
@@ -40,10 +49,14 @@ public class UserService extends ModelMapperFuncs {
         return map(get(email), ResponseUserDTO.class);
     }
 
-    public ResponseUserDTO update(PersistUserDTO persistUserDTO) {
-        AppUser appUser = map(persistUserDTO, persistUserDTO.getUserType().toClass());
+    public ResponseUserDTO update(Long id, PersistUserDTO persistUserDTO) {
 
-        userRepository.save(appUser);
-        return  map(appUser, ResponseUserDTO.class);
+        AppUser user = userRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(USER_NOT_FOUND + id));
+        user = buildUser(user, persistUserDTO);
+
+        userRepository.save(user);
+
+        return map(user, ResponseUserDTO.class);
     }
 }

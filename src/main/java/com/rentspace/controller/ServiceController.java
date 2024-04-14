@@ -31,6 +31,7 @@ public class ServiceController {
     public ResponseEntity<ResponseServiceDTO> view(@PathVariable Long id) {
         return new ResponseEntity<>(serviceService.view(id), HttpStatus.OK);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         serviceService.delete(id);

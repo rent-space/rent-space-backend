@@ -25,8 +25,8 @@ public class UserController {
         return new ResponseEntity<>(userService.getByEmail(userEmail), HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<ResponseUserDTO> update(@RequestBody PersistUserDTO persistUserDTO ) {
-        return new ResponseEntity<>(userService.update(persistUserDTO), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseUserDTO> update(@PathVariable Long id, @RequestBody PersistUserDTO persistUserDTO ) {
+        return new ResponseEntity<>(userService.update(id, persistUserDTO), HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package com.rentspace.util;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.listed.ListedServiceDTO;
+import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistReservationDTO;
@@ -24,6 +25,7 @@ import com.rentspace.model.user.AppUser;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
@@ -109,6 +111,17 @@ public abstract class ModelMapperFuncs {
         reservation.setCity(placeReservation.getProduct().getCity());
         reservation.setFinalPrice(getFinalPrice(reservation.getStartsAt(), reservation.getEndsAt(), new ArrayList<>(Collections.singletonList(service))));
         return reservation;
+    }
+
+    public AppUser buildUser(AppUser appUser, PersistUserDTO dto) {
+        appUser.setName(dto.getName());
+        appUser.setEmail(dto.getEmail());
+        appUser.setProfilePhoto(dto.getProfilePhoto());
+        appUser.setEmail(dto.getTelephone());
+        appUser.setWebSite(dto.getWebSite());
+
+        return appUser;
+
     }
 
     /************************************* RESPONSE BUILDS *************************************/
