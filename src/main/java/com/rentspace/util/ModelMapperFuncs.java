@@ -153,4 +153,18 @@ public abstract class ModelMapperFuncs {
         return dto;
     }
 
+    public List<ListedServiceDTO> buildResponse(List<Service> services) {
+        List<ListedServiceDTO> dtos = new ArrayList<>();
+        for (Service service : services) {
+            ListedServiceDTO dto = map(service, ListedServiceDTO.class);
+            dto.setFirstMedia(
+                    !service.getMedia().isEmpty() ?
+                            service.getMedia().get(0) :
+                            ""
+            );
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
 }

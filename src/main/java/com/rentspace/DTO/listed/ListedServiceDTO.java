@@ -11,4 +11,6 @@ public class ListedServiceDTO {
 
     private Long id;
     private String title;
+    private String firstMedia;
+
 }
