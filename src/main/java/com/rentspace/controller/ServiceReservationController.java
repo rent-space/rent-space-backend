@@ -1,11 +1,9 @@
 package com.rentspace.controller;
 
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
-import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.service.ServiceReservationService;
-import com.rentspace.service.ServiceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class ServiceReservationController {
 
-    private final ServiceService serviceService;
     private ServiceReservationService serviceReservationService;
 
     @PostMapping
