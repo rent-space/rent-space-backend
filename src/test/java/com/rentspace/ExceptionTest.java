@@ -102,7 +102,7 @@ public class ExceptionTest {
         MockitoAnnotations.openMocks(this);
         userService = new UserService(userRepository);
         placeReservationService = new PlaceReservationService(placeReservationRepository,
-                placeService, serviceService, placeOwnerService, eventOwnerService);
+                placeService, serviceService, placeOwnerService, eventOwnerService, serviceReservationService );
     	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null, 
     			null, serviceService, placeService); 
     }
@@ -223,7 +223,7 @@ public class ExceptionTest {
     @Test
     public void invalidReservationOverlappingPeriodOfTime() {
         PlaceReservationService placeReservationService = new PlaceReservationService(placeReservationRepository,
-                placeService, serviceService, placeOwnerService, eventOwnerService);
+                placeService, serviceService, placeOwnerService, eventOwnerService, serviceReservationService);
 
         when(placeReservationRepository.getReservationInProgress(any(), any(), any()))
         	.thenReturn(Optional.of(new PlaceReservation()));
@@ -381,7 +381,7 @@ public class ExceptionTest {
         when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.empty());
 
         PlaceReservationService placeReservationService = new PlaceReservationService(placeReservationRepository, 
-        		placeService, serviceService, placeOwnerService, eventOwnerService); 
+        		placeService, serviceService, placeOwnerService, eventOwnerService, serviceReservationService);
 
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             placeReservationService.get(reservationId);

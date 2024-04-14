@@ -30,10 +30,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+
+import static com.rentspace.util.ProductUtil.getFinalPrice;
 
 /**
  * ModelMapper is a library used to make objects translation easier. It can be really helpful in terms
@@ -93,6 +97,17 @@ public abstract class ModelMapperFuncs {
         reservation.setAddress(dto.getAddress());
         reservation.setCity(dto.getCity());
         reservation.setFinalPrice(finalPrice);
+        return reservation;
+    }
+
+
+    public ServiceReservation buildModel(PlaceReservation placeReservation, Product service) {
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        ServiceReservation reservation = map(placeReservation, ServiceReservation.class);
+        reservation.setProduct(service);
+        reservation.setAddress(placeReservation.getProduct().getAddress());
+        reservation.setCity(placeReservation.getProduct().getCity());
+        reservation.setFinalPrice(getFinalPrice(reservation.getStartsAt(), reservation.getEndsAt(), new ArrayList<>(Collections.singletonList(service))));
         return reservation;
     }
 

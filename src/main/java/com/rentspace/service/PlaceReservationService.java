@@ -7,6 +7,7 @@ import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
+import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
@@ -30,6 +31,7 @@ public class PlaceReservationService extends ModelMapperFuncs {
     private ServiceService serviceService;
     private PlaceOwnerService placeOwnerService;
     private EventOwnerService eventOwnerService;
+    private ServiceReservationService serviceReservationService;
 
     public void save(PlaceReservation model) { this.placeReservationRepository.save(model); }
 
@@ -50,8 +52,8 @@ public class PlaceReservationService extends ModelMapperFuncs {
         PlaceReservation reservation = buildModel(
                 persistDTO,
                 place,
-                getFinalPrice(persistDTO, new ArrayList<>(Collections.singletonList(place))),
-                getFinalPrice(persistDTO, servicesRelated));
+                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), new ArrayList<>(Collections.singletonList(place))),
+                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), servicesRelated));
 
         PlaceOwner placeOwner = placeOwnerService.getByPlaceId(place.getId());
         placeOwner.getReservations().add(reservation);
@@ -59,6 +61,9 @@ public class PlaceReservationService extends ModelMapperFuncs {
         save(reservation);
         placeOwnerService.save(placeOwner);
         eventOwnerService.save(eventOwner);
+        servicesRelated.forEach(
+                service -> serviceReservationService.save(buildModel(reservation, service))
+        );
 
         return buildResponse(reservation, placeOwner, eventOwner);
     }

@@ -11,16 +11,17 @@ import com.rentspace.repository.ReservationRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.rentspace.exception.ExceptionMessages.*;
 
 public abstract class ProductUtil {
 
-    public static BigDecimal getFinalPrice(PersistReservationDTO persistDTO, List<Product> services) {
-        long duration = Duration.between(persistDTO.getStartsAt(), persistDTO.getEndsAt()).toMinutes();
+    public static BigDecimal getFinalPrice(LocalDateTime startsAt, LocalDateTime endsAt, List<Product> products) {
+        long duration = Duration.between(startsAt, endsAt).toMinutes();
         BigDecimal finalPrice = new BigDecimal(0);
-        for (Product product : services) {
+        for (Product product : products) {
             BigDecimal pricePerMinute = product.getPricePerHour().divide(new BigDecimal(60), RoundingMode.HALF_UP);
             finalPrice = finalPrice.add(pricePerMinute.multiply(new BigDecimal(duration)));
         }

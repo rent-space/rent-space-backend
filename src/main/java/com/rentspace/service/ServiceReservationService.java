@@ -50,7 +50,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
         ServiceReservation reservation = buildModel(
                 persistDTO,
                 service,
-                getFinalPrice(persistDTO, new ArrayList<>(Collections.singletonList(service)))
+                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), new ArrayList<>(Collections.singletonList(service)))
         );
 
         ServiceOwner serviceOwner = serviceOwnerService.getByServiceId(service.getId());
