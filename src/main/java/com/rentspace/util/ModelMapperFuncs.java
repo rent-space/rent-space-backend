@@ -104,7 +104,7 @@ public abstract class ModelMapperFuncs {
         return reservation;
     }
 
-    public AppUser buildUser(AppUser appUser, PersistUserDTO dto) {
+    public AppUser buildModel(AppUser appUser, PersistUserDTO dto) {
         appUser.setName(dto.getName());
         appUser.setEmail(dto.getEmail());
         appUser.setProfilePhoto(dto.getProfilePhoto());

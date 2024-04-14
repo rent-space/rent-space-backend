@@ -28,7 +28,7 @@ public class UserService extends ModelMapperFuncs {
 
     public AppUser get(Long id) {
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(USER_EMAIL_NOT_FOUND + id));
+                .orElseThrow(() -> new ApiRequestException(USER_NOT_FOUND + id));
     }
 
     public ResponseUserDTO create(PersistUserDTO persistDTO) {
@@ -47,9 +47,8 @@ public class UserService extends ModelMapperFuncs {
 
     public ResponseUserDTO update(Long id, PersistUserDTO persistUserDTO) {
 
-        AppUser user = userRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(USER_NOT_FOUND + id));
-        user = buildUser(user, persistUserDTO);
+        AppUser user = get(id);
+        user = buildModel(user, persistUserDTO);
 
         userRepository.save(user);
 
