@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Data
 public class ServiceReservation extends Reservation {
 
-    private String address; // TODO vamos relacionar serviços a lugares caso o lugar já esteja cadastrado no sistema?
+    private String address;
     private String city;
     private BigDecimal finalPrice;
 

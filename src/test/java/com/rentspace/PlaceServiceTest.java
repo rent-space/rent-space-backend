@@ -220,7 +220,7 @@ public class PlaceServiceTest {
         persistDTO.setStartsAt(startsAt);
         persistDTO.setEndsAt(endsAt);
 
-        BigDecimal placeFinalPrice = getFinalPrice(persistDTO, new ArrayList<>(Collections.singletonList(place)));
+        BigDecimal placeFinalPrice = getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), new ArrayList<>(Collections.singletonList(place)));
 
         long duration = Duration.between(startsAt, endsAt).toMinutes();
         BigDecimal pricePerHour = place.getPricePerHour();
@@ -244,7 +244,7 @@ public class PlaceServiceTest {
         persistDTO.setStartsAt(startsAt);
         persistDTO.setEndsAt(endsAt);
 
-        BigDecimal servicesFinalPrice = getFinalPrice(persistDTO, services);
+        BigDecimal servicesFinalPrice = getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), services);
 
         long duration = Duration.between(startsAt, endsAt).toMinutes();
         BigDecimal expectedPrice = BigDecimal.ZERO;
