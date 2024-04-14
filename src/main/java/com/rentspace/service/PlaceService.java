@@ -55,4 +55,11 @@ public class PlaceService extends ModelMapperFuncs {
     public List<Place> getByExclusiveService(Long serviceId) {
         return placeRepository.getByExclusiveService(serviceId);
     }
+
+
+    public void delete(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + placeId));
+        placeRepository.delete(place);
+    }
 }
