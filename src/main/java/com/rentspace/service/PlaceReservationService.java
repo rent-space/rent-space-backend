@@ -47,13 +47,15 @@ public class PlaceReservationService extends ModelMapperFuncs {
         Place place = placeService.get(persistDTO.getProductId());
         checkProductAvailability(persistDTO, place, placeReservationRepository);
 
-        List<Product> servicesRelated = getRelatedServices(persistDTO, place);
+        List<Service> servicesRelated = getRelatedServices(persistDTO, place);
 
         PlaceReservation reservation = buildModel(
                 persistDTO,
                 place,
                 getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), new ArrayList<>(Collections.singletonList(place))),
-                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), servicesRelated));
+                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), mapToList(servicesRelated, Product.class)),
+                servicesRelated
+        );
 
         PlaceOwner placeOwner = placeOwnerService.getByPlaceId(place.getId());
         placeOwner.getReservations().add(reservation);
@@ -68,8 +70,8 @@ public class PlaceReservationService extends ModelMapperFuncs {
         return buildResponse(reservation, placeOwner, eventOwner);
     }
 
-    private List<Product> getRelatedServices(PersistPlaceReservationDTO persistDTO, Place place) {
-        List<Product> services = new ArrayList<>();
+    private List<Service> getRelatedServices(PersistPlaceReservationDTO persistDTO, Place place) {
+        List<Service> services = new ArrayList<>();
         int servicesPeopleInvolved = 0;
         for (Long id : persistDTO.getHiredRelatedServicesIds()) {
             Service service = serviceService.get(id);
