@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 import static com.rentspace.exception.ExceptionMessages.INVALID_SERVICE_ID;
 
 @org.springframework.stereotype.Service
@@ -68,5 +69,11 @@ public class ServiceService extends ModelMapperFuncs {
                 serviceOwnerService.getByServiceId(id),
                 placeService.getByExclusiveService(id)
         );
+    }
+
+    public void delete(Long id) {
+        Service service = serviceRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
+        serviceRepository.delete(service);
     }
 }
