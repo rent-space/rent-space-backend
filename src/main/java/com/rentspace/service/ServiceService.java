@@ -71,9 +71,11 @@ public class ServiceService extends ModelMapperFuncs {
         );
     }
 
-    public void delete(Long id) {
+    public ResponseServiceDTO delete(Long id) {
         Service service = serviceRepository.findById(id)
                 .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
+
         serviceRepository.delete(service);
+        return map(service, ResponseServiceDTO.class);
     }
 }

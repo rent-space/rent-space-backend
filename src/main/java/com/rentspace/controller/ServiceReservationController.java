@@ -32,9 +32,8 @@ public class ServiceReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        serviceReservationService.delete(id);
-        return new ResponseEntity<>("Reserva de serviço removido com sucesso", HttpStatus.OK);
+    public ResponseEntity<ResponseServiceReservationDTO> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(serviceReservationService.delete(id), HttpStatus.OK);
     }
 
 }

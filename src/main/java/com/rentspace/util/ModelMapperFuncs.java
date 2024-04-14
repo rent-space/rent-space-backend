@@ -46,6 +46,7 @@ import static com.rentspace.util.ProductUtil.getFinalPrice;
 @Component
 public abstract class ModelMapperFuncs {
 
+
     /************************************* MODELMAPPER UTILITIES *************************************/
 
 	private final ModelMapper modelMapper;
