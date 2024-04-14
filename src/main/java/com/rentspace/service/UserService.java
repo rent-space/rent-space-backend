@@ -39,4 +39,11 @@ public class UserService extends ModelMapperFuncs {
     public ResponseUserDTO getByEmail(String email) {
         return map(get(email), ResponseUserDTO.class);
     }
+
+    public ResponseUserDTO update(PersistUserDTO persistUserDTO) {
+        AppUser appUser = map(persistUserDTO, persistUserDTO.getUserType().toClass());
+
+        userRepository.save(appUser);
+        return  map(appUser, ResponseUserDTO.class);
+    }
 }
