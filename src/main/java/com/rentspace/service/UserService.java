@@ -3,15 +3,11 @@ package com.rentspace.service;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.exception.ApiRequestException;
-import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.user.AppUser;
 import com.rentspace.repository.UserRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.*;
 
