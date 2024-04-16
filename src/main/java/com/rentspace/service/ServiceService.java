@@ -30,7 +30,7 @@ public class ServiceService extends ModelMapperFuncs {
 
     public Service get(Long id) {
         return this.serviceRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
+                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID  + id));
     }
 
     public ResponseServiceDTO create(PersistServiceDTO persistDTO) {
@@ -72,9 +72,7 @@ public class ServiceService extends ModelMapperFuncs {
     }
 
     public ResponseServiceDTO delete(Long id) {
-        Service service = serviceRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
-
+        Service service = get(id);
         serviceRepository.delete(service);
         return map(service, ResponseServiceDTO.class);
     }
