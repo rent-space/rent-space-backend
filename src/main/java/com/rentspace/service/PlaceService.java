@@ -55,4 +55,11 @@ public class PlaceService extends ModelMapperFuncs {
     public List<Place> getByExclusiveService(Long serviceId) {
         return placeRepository.getByExclusiveService(serviceId);
     }
+
+    public ResponsePlaceDTO update(Long id, PersistPlaceDTO persistDTO) {
+        Place place = map(persistDTO, Place.class);
+        place.setId(id);
+        save(place);
+        return buildResponse(place, placeOwnerService.getByPlaceId(id));
+    }
 }
