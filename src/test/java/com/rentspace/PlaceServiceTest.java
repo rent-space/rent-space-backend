@@ -99,7 +99,7 @@ public class PlaceServiceTest {
     	eventOwnerService = new EventOwnerService(eventOwnerRepository); 
     	placeReservation = new PlaceReservation();
     	placeReservationService = new PlaceReservationService(placeReservationRepository, 
-    			placeService, null, placeOwnerService, null);  
+    			placeService, null, placeOwnerService, null, null);  
     }
     
     @Test
@@ -310,7 +310,7 @@ public class PlaceServiceTest {
         when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
 
         PlaceReservationService placeReservation = new PlaceReservationService(placeReservationRepository, 
-        		placeService, null, placeOwnerService, eventOwnerService); 
+        		placeService, null, placeOwnerService, eventOwnerService, null); 
 
         PlaceReservation result = placeReservation.get(reservationId);
 
@@ -337,7 +337,7 @@ public class PlaceServiceTest {
         when(eventOwnerService.getByPlaceReservation(reservationId)).thenReturn(mockEventOwner);
 
         PlaceReservationService placeReservationService = new PlaceReservationService(
-            placeReservationRepository, null, null, placeOwnerService, eventOwnerService);
+            placeReservationRepository, null, null, placeOwnerService, eventOwnerService, null);
 
         ResponsePlaceReservationDTO result = placeReservationService.view(reservationId);
 
@@ -353,7 +353,7 @@ public class PlaceServiceTest {
         EventOwnerService eventOwnerService = mock(EventOwnerService.class);
 
         PlaceReservationService placeReservationService = new PlaceReservationService(placeReservationRepository, 
-        		placeService, serviceService, placeOwnerService, eventOwnerService);
+        		placeService, serviceService, placeOwnerService, eventOwnerService, null);
 
         Long reservationId = 1L;
         Status status = Status.ACCEPTED;
