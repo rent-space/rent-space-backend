@@ -33,9 +33,10 @@ public class PlaceController {
         return new ResponseEntity<>(placeService.viewAll(), HttpStatus.OK);
     }
 
-
-
-
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponsePlaceDTO> update(@PathVariable Long id, @RequestBody PersistPlaceDTO persistDTO) {
+        return new ResponseEntity<>(placeService.update(id, persistDTO), HttpStatus.OK);
+    }
 
 
 }
