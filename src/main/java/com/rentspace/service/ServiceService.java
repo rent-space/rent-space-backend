@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 import static com.rentspace.exception.ExceptionMessages.INVALID_SERVICE_ID;
 
 @org.springframework.stereotype.Service
@@ -30,7 +31,7 @@ public class ServiceService extends ModelMapperFuncs {
 
     public Service get(Long id) {
         return this.serviceRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID + id));
+                .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID  + id));
     }
 
     public ResponseServiceDTO create(PersistServiceDTO persistDTO) {
@@ -71,6 +72,12 @@ public class ServiceService extends ModelMapperFuncs {
                 serviceOwnerService.getByServiceId(id),
                 placeService.getByExclusiveService(id)
         );
+    }
+
+    public ResponseServiceDTO delete(Long id) {
+        Service service = get(id);
+        serviceRepository.delete(service);
+        return map(service, ResponseServiceDTO.class);
     }
 
     public List<ListedServiceDTO> viewAll() {

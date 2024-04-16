@@ -7,15 +7,12 @@ import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
-import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatusCode;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,5 +104,11 @@ public class PlaceReservationService extends ModelMapperFuncs {
                 placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
                 eventOwnerService.getByPlaceReservation(id)
         );
+    }
+
+    public ResponsePlaceReservationDTO delete(Long id) {
+        PlaceReservation placeReservation = get(id);
+        placeReservationRepository.delete(placeReservation);
+        return map(placeReservation, ResponsePlaceReservationDTO.class);
     }
 }

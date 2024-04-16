@@ -1,7 +1,6 @@
 package com.rentspace.controller;
 
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
-import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.service.ServiceReservationService;
@@ -30,6 +29,11 @@ public class ServiceReservationController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseServiceReservationDTO> updateStatus(@PathVariable Long id, @RequestBody Status status) {
         return new ResponseEntity<>(serviceReservationService.updateStatus(id, status), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseServiceReservationDTO> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(serviceReservationService.delete(id), HttpStatus.OK);
     }
 
 }

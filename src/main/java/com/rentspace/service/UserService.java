@@ -26,6 +26,11 @@ public class UserService extends ModelMapperFuncs {
                 .orElseThrow(() -> new ApiRequestException(USER_EMAIL_NOT_FOUND + email));
     }
 
+    public AppUser get(Long id) {
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new ApiRequestException(USER_NOT_FOUND + id));
+    }
+
     public ResponseUserDTO create(PersistUserDTO persistDTO) {
         if (this.userRepository.findByEmail(persistDTO.getEmail()).isPresent()) {
             throw new ApiRequestException(EMAIL_ALREADY_EXISTS);
@@ -38,5 +43,14 @@ public class UserService extends ModelMapperFuncs {
 
     public ResponseUserDTO getByEmail(String email) {
         return map(get(email), ResponseUserDTO.class);
+    }
+
+    public ResponseUserDTO update(Long id, PersistUserDTO persistUserDTO) {
+
+        AppUser user = get(id);
+        user = buildModel(user, persistUserDTO);
+
+        userRepository.save(user);
+        return map(user, ResponseUserDTO.class);
     }
 }

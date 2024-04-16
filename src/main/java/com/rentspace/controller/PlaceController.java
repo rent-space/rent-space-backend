@@ -33,10 +33,13 @@ public class PlaceController {
         return new ResponseEntity<>(placeService.viewAll(), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponsePlaceDTO> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(placeService.delete(id), HttpStatus.OK);
+    }
+  
     @PutMapping("/{id}")
     public ResponseEntity<ResponsePlaceDTO> update(@PathVariable Long id, @RequestBody PersistPlaceDTO persistDTO) {
         return new ResponseEntity<>(placeService.update(id, persistDTO), HttpStatus.OK);
     }
-
-
 }

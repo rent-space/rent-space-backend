@@ -35,6 +35,11 @@ public class ServiceController {
         return new ResponseEntity<>(serviceService.view(id), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseServiceDTO> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(serviceService.delete(id), HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<ListedServiceDTO>> viewAll() {
         return new ResponseEntity<>(serviceService.viewAll(), HttpStatus.OK);

@@ -2,22 +2,18 @@ package com.rentspace.util;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.listed.ListedServiceDTO;
-import com.rentspace.DTO.persist.product.PersistPlaceDTO;
+import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
-import com.rentspace.DTO.persist.reservation.PersistReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
-import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
-import com.rentspace.DTO.response.reservation.ResponseReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
-import com.rentspace.model.reservation.Reservation;
 import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.AppUser;
@@ -33,9 +29,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 import static com.rentspace.util.ProductUtil.getFinalPrice;
 
@@ -52,6 +45,7 @@ import static com.rentspace.util.ProductUtil.getFinalPrice;
  */
 @Component
 public abstract class ModelMapperFuncs {
+
 
     /************************************* MODELMAPPER UTILITIES *************************************/
 
@@ -116,6 +110,17 @@ public abstract class ModelMapperFuncs {
         reservation.setCity(placeReservation.getProduct().getCity());
         reservation.setFinalPrice(getFinalPrice(reservation.getStartsAt(), reservation.getEndsAt(), new ArrayList<>(Collections.singletonList(service))));
         return reservation;
+    }
+
+    public AppUser buildModel(AppUser appUser, PersistUserDTO dto) {
+        appUser.setName(dto.getName());
+        appUser.setEmail(dto.getEmail());
+        appUser.setProfilePhoto(dto.getProfilePhoto());
+        appUser.setEmail(dto.getEmail());
+        appUser.setTelephone(dto.getTelephone());
+        appUser.setWebSite(dto.getWebSite());
+        return appUser;
+
     }
 
     /************************************* RESPONSE BUILDS *************************************/

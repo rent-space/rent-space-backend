@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.rentspace.exception.ExceptionMessages.RESERVATION_NOT_FOUND;
-import static com.rentspace.exception.ExceptionMessages.SERVICE_IS_EXCLUSIVE;
+import static com.rentspace.exception.ExceptionMessages.*;
 import static com.rentspace.util.ProductUtil.*;
 
 @org.springframework.stereotype.Service
@@ -99,5 +98,12 @@ public class ServiceReservationService extends ModelMapperFuncs {
                 serviceOwnerService.getByServiceId(reservation.getProduct().getId()),
                 placeService.getByExclusiveService(id)
         );
+    }
+
+    public ResponseServiceReservationDTO delete(Long id) {
+        ServiceReservation serviceReservation = get(id);
+
+        serviceReservationRepository.delete(serviceReservation);
+        return map(serviceReservation, ResponseServiceReservationDTO.class);
     }
 }
