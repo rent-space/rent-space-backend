@@ -110,6 +110,7 @@ public abstract class ModelMapperFuncs {
         appUser.setEmail(dto.getEmail());
         appUser.setProfilePhoto(dto.getProfilePhoto());
         appUser.setEmail(dto.getEmail());
+        appUser.setTelephone(dto.getTelephone());
         appUser.setWebSite(dto.getWebSite());
         return appUser;
 
