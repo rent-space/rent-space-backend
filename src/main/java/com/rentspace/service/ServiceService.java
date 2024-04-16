@@ -78,6 +78,7 @@ public class ServiceService extends ModelMapperFuncs {
         Service service = get(id);
         serviceRepository.delete(service);
         return map(service, ResponseServiceDTO.class);
+    }
 
     public List<ListedServiceDTO> viewAll() {
         return buildResponse(this.serviceRepository.findAll());

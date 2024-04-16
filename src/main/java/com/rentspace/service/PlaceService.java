@@ -60,6 +60,7 @@ public class PlaceService extends ModelMapperFuncs {
         Place place = get(id);
         placeRepository.delete(place);
         return map(place, ResponsePlaceDTO.class);
+    }
 
     public ResponsePlaceDTO update(Long id, PersistPlaceDTO persistDTO) {
         Place place = map(persistDTO, Place.class);
