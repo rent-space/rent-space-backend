@@ -2,6 +2,7 @@ package com.rentspace;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,6 +83,9 @@ public class CreateTest {
 	
 	@InjectMocks
 	private ServiceReservationService serviceReservationService;
+	
+	@Mock
+    private ServiceReservationService serviceReservation;
 	
 	@InjectMocks
 	private PlaceReservationService placeReservationService;
@@ -226,6 +230,12 @@ public class CreateTest {
         when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
         when(placeOwnerService.getByPlaceId(null)).thenReturn(placeOwner);
         when(placeReservationRepository.save(any())).thenReturn(reservation);
+        
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            ServiceReservation serviceReservation = (ServiceReservation) args[0];
+            return null;  
+        }).when(serviceReservation).save(any(ServiceReservation.class));
 
         placeReservationService.create(persistDTO);
 
@@ -233,5 +243,5 @@ public class CreateTest {
         verify(placeServices, times(1)).get(anyLong());
         verify(placeReservationRepository, times(1)).save(any());
     }
-    
+
 }
