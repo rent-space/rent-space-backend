@@ -57,6 +57,7 @@ public class PlaceService extends ModelMapperFuncs {
     }
 
     public ResponsePlaceDTO update(Long id, PersistPlaceDTO persistDTO) {
+        get(id);
         Place place = map(persistDTO, Place.class);
         place.setId(id);
         save(place);
