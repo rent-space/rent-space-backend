@@ -101,8 +101,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
     }
 
     public ResponseServiceReservationDTO delete(Long id) {
-        ServiceReservation serviceReservation = serviceReservationRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(RESERVATION_NOT_FOUND + id));
+        ServiceReservation serviceReservation = get(id);
 
         serviceReservationRepository.delete(serviceReservation);
         return map(serviceReservation, ResponseServiceReservationDTO.class);

@@ -105,12 +105,8 @@ public class PlaceReservationService extends ModelMapperFuncs {
     }
 
     public ResponsePlaceReservationDTO delete(Long id) {
-
-        PlaceReservation placeReservation= placeReservationRepository.findById(id)
-                .orElseThrow(() -> new ApiRequestException(RESERVATION_NOT_FOUND + id));
-
+        PlaceReservation placeReservation = get(id);
         placeReservationRepository.delete(placeReservation);
-
         return map(placeReservation, ResponsePlaceReservationDTO.class);
     }
 }

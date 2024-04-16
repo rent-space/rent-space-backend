@@ -51,7 +51,6 @@ public class UserService extends ModelMapperFuncs {
         user = buildModel(user, persistUserDTO);
 
         userRepository.save(user);
-
         return map(user, ResponseUserDTO.class);
     }
 }

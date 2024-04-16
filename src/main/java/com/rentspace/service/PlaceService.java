@@ -57,10 +57,8 @@ public class PlaceService extends ModelMapperFuncs {
     }
 
 
-    public ResponsePlaceDTO delete(Long placeId) {
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + placeId));
-
+    public ResponsePlaceDTO delete(Long id) {
+        Place place = get(id);
         placeRepository.delete(place);
         return map(place, ResponsePlaceDTO.class);
     }
