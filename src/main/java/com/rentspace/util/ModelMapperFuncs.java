@@ -75,8 +75,15 @@ public abstract class ModelMapperFuncs {
 
     /************************************* MODEL BUILDS *************************************/
 
-    public PlaceReservation buildModel(PersistPlaceReservationDTO dto, Place place, BigDecimal placeFinalPrice, BigDecimal servicesFinalPrice) {
+    public PlaceReservation buildModel(
+            PersistPlaceReservationDTO dto,
+            Place place,
+            BigDecimal placeFinalPrice,
+            BigDecimal servicesFinalPrice,
+            List<Service> services
+    ) {
         PlaceReservation reservation = map(dto, PlaceReservation.class);
+        reservation.setHiredRelatedServices(services);
         reservation.setStatus(Status.PENDING);
         reservation.setProduct(place);
         reservation.setPlaceFinalPrice(placeFinalPrice);
@@ -118,7 +125,12 @@ public abstract class ModelMapperFuncs {
 
     /************************************* RESPONSE BUILDS *************************************/
 
-    public ResponseServiceReservationDTO buildResponse(ServiceReservation reservation, EventOwner owner, ServiceOwner serviceOwner, List<Place> places) {
+    public ResponseServiceReservationDTO buildResponse(
+            ServiceReservation reservation,
+            EventOwner owner,
+            ServiceOwner serviceOwner,
+            List<Place> places
+    ) {
         ResponseServiceReservationDTO dto = map(reservation, ResponseServiceReservationDTO.class);
         dto.setProduct(buildResponse((Service) reservation.getProduct(), serviceOwner, places));
         dto.setEventOwner(map(owner, ResponseUserDTO.class));
@@ -144,6 +156,20 @@ public abstract class ModelMapperFuncs {
         ResponsePlaceDTO dto = map(place, ResponsePlaceDTO.class);
         dto.setOwner(map(owner, ResponseUserDTO.class));
         return dto;
+    }
+
+    public List<ListedServiceDTO> buildResponse(List<Service> services) {
+        List<ListedServiceDTO> dtos = new ArrayList<>();
+        for (Service service : services) {
+            ListedServiceDTO dto = map(service, ListedServiceDTO.class);
+            dto.setFirstMedia(
+                    !service.getMedia().isEmpty() ?
+                            service.getMedia().get(0) :
+                            ""
+            );
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
 }

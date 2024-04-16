@@ -1,6 +1,7 @@
 package com.rentspace.service;
 
 
+import com.rentspace.DTO.listed.ListedServiceDTO;
 import com.rentspace.DTO.persist.product.PersistServiceDTO;
 import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.exception.ApiRequestException;
@@ -40,7 +41,9 @@ public class ServiceService extends ModelMapperFuncs {
         persistDTO.getPlacesIdsRelated().forEach(
                 id -> places.add(this.placeService.get(id))
         );
-
+        if (persistDTO.getMedia() == null) {
+            persistDTO.setMedia(new ArrayList<>());
+        }
         Service service = map(persistDTO, Service.class);
 
         this.save(service);
@@ -75,5 +78,8 @@ public class ServiceService extends ModelMapperFuncs {
         Service service = get(id);
         serviceRepository.delete(service);
         return map(service, ResponseServiceDTO.class);
+
+    public List<ListedServiceDTO> viewAll() {
+        return buildResponse(this.serviceRepository.findAll());
     }
 }
