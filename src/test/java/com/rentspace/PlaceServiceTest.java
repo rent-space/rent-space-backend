@@ -24,15 +24,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
+import com.rentspace.DTO.listed.ListedServiceDTO;
+import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
+import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
 import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
+import com.rentspace.model.reservation.PaymentMethod;
 import com.rentspace.model.reservation.PlaceReservation;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
@@ -376,4 +382,191 @@ public class PlaceServiceTest {
         assertEquals(mockReservation.getId(), result.getId());
         assertEquals(mockReservation.getStatus(), status);
     }
+    
+    @Test
+    public void deletePlace() {
+        Long placeId = 1L;
+
+        Place place = new Place();
+        place.setId(placeId);
+        place.setTitle("Test Place");
+        place.setDescription("Test description");
+        place.setAddress("Test address");
+        place.setCity("Test city");
+        place.setPricePerHour(BigDecimal.TEN);
+        place.setMaximumCapacity(100);
+        place.setNeighborhood("Test neighborhood");
+        place.setComplement("Test complement");
+        place.setZipCode("12345");
+
+        ResponseUserDTO owner = new ResponseUserDTO();
+        owner.setId(1L);
+        owner.setName("John Doe");
+        owner.setEmail("john.doe@example.com");
+
+        ResponsePlaceDTO expectedResponse = new ResponsePlaceDTO();
+        expectedResponse.setId(placeId);
+        expectedResponse.setTitle(place.getTitle());
+        expectedResponse.setDescription(place.getDescription());
+        expectedResponse.setAddress(place.getAddress());
+        expectedResponse.setCity(place.getCity());
+        expectedResponse.setPricePerHour(place.getPricePerHour());
+        expectedResponse.setOwner(owner);
+        expectedResponse.setMaximumCapacity(place.getMaximumCapacity());
+        expectedResponse.setNeighborhood(place.getNeighborhood());
+        expectedResponse.setComplement(place.getComplement());
+        expectedResponse.setZipCode(place.getZipCode());
+
+        PlaceRepository placeRepository = Mockito.mock(PlaceRepository.class);
+        when(placeRepository.findById(placeId)).thenReturn(Optional.of(place));
+
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+        when(modelMapper.map(place, ResponsePlaceDTO.class)).thenReturn(expectedResponse);
+
+        PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
+
+        ResponsePlaceDTO actualResponse = placeService.delete(placeId);
+
+        verify(placeRepository, Mockito.times(1)).findById(placeId);
+        verify(placeRepository, Mockito.times(1)).delete(place);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+    
+    @Test
+    public void updatePlace() {
+        Long placeId = 1L; 
+        PersistPlaceDTO persistDTO = new PersistPlaceDTO();
+        persistDTO.setTitle("Updated Place");
+        persistDTO.setDescription("Updated description");
+        persistDTO.setMedia(new ArrayList<>());
+        persistDTO.setAddress("Updated address");
+        persistDTO.setCity("Updated city");
+        persistDTO.setNeighborhood("Updated neighborhood");
+        persistDTO.setPricePerHour(BigDecimal.valueOf(20));
+        persistDTO.setMaximumCapacity(200);
+        persistDTO.setComplement("Updated complement");
+        persistDTO.setZipCode("54321");
+        persistDTO.setOwnerId(1L);
+
+        Place place = new Place();
+        place.setId(placeId);
+        place.setTitle("Test Place");
+        place.setDescription("Test description");
+        place.setMedia(new ArrayList<>());
+        place.setAddress("Test address");
+        place.setCity("Test city");
+        place.setNeighborhood("Test neighborhood");
+        place.setPricePerHour(BigDecimal.TEN);
+        place.setMaximumCapacity(100);
+        place.setComplement("Test complement");
+        place.setZipCode("12345");
+
+        PlaceOwner owner = new PlaceOwner();
+        owner.setId(1L);
+        owner.setName("John Doe");
+        owner.setEmail("john.doe@example.com");
+
+        ResponseUserDTO ownerDTO = new ResponseUserDTO();
+        ownerDTO.setId(owner.getId());
+        ownerDTO.setName(owner.getName());
+        ownerDTO.setEmail(owner.getEmail());
+
+        ResponsePlaceDTO expectedResponse = new ResponsePlaceDTO();
+        expectedResponse.setId(placeId);
+        expectedResponse.setTitle(persistDTO.getTitle());
+        expectedResponse.setDescription(persistDTO.getDescription());
+        expectedResponse.setAddress(persistDTO.getAddress());
+        expectedResponse.setCity(persistDTO.getCity());
+        expectedResponse.setNeighborhood(persistDTO.getNeighborhood());
+        expectedResponse.setPricePerHour(persistDTO.getPricePerHour());
+        expectedResponse.setOwner(ownerDTO);
+        expectedResponse.setMaximumCapacity(persistDTO.getMaximumCapacity());
+        expectedResponse.setComplement(persistDTO.getComplement());
+        expectedResponse.setZipCode(persistDTO.getZipCode());
+
+        PlaceOwnerService placeOwnerService = Mockito.mock(PlaceOwnerService.class);
+        when(placeOwnerService.getByPlaceId(placeId)).thenReturn(owner);
+
+        PlaceRepository placeRepository = Mockito.mock(PlaceRepository.class);
+        when(placeRepository.findById(placeId)).thenReturn(Optional.of(place));
+
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+        when(modelMapper.map(persistDTO, Place.class)).thenReturn(place);
+        when(modelMapper.map(place, ResponsePlaceDTO.class)).thenReturn(expectedResponse);
+
+        PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
+
+        ResponsePlaceDTO actualResponse = placeService.update(placeId, persistDTO);
+
+        verify(placeRepository, Mockito.times(1)).findById(placeId);
+        verify(placeOwnerService, Mockito.times(1)).getByPlaceId(placeId);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+    
+    @Test
+    public void deletePlaceReservation() {
+        Long reservationId = 1L; 
+
+        PlaceReservation placeReservation = new PlaceReservation();
+        placeReservation.setId(reservationId);
+        placeReservation.setStartsAt(LocalDateTime.now());
+        placeReservation.setEndsAt(LocalDateTime.now().plusHours(1));
+        placeReservation.setPaymentMethod(PaymentMethod.CREDIT);
+        placeReservation.setNumOfInstallments(1);
+        placeReservation.setStatus(Status.ACCEPTED);
+        placeReservation.setNumOfParticipants(10);
+        placeReservation.setHiredRelatedServices(new ArrayList<>());
+        placeReservation.setPlaceFinalPrice(BigDecimal.TEN);
+        placeReservation.setServicesFinalPrice(BigDecimal.ZERO);
+
+        ResponsePlaceDTO placeDTO = new ResponsePlaceDTO();
+        placeDTO.setId(1L);
+        placeDTO.setTitle("Test Place");
+        placeDTO.setDescription("Test description");
+        placeDTO.setAddress("Test address");
+        placeDTO.setCity("Test city");
+        placeDTO.setPricePerHour(BigDecimal.TEN);
+        placeDTO.setOwner(new ResponseUserDTO());
+
+        List<ListedServiceDTO> hiredRelatedServices = new ArrayList<>();
+
+        ResponseUserDTO eventOwner = new ResponseUserDTO();
+        eventOwner.setId(1L);
+        eventOwner.setName("John Doe");
+        eventOwner.setEmail("john.doe@example.com");
+
+        ResponsePlaceReservationDTO expectedResponse = new ResponsePlaceReservationDTO(
+            reservationId,
+            placeReservation.getStartsAt(),
+            placeReservation.getEndsAt(),
+            placeReservation.getPaymentMethod(),
+            placeReservation.getNumOfInstallments(),
+            placeDTO,
+            placeReservation.getNumOfParticipants(),
+            placeReservation.getStatus(),
+            hiredRelatedServices,
+            eventOwner,
+            placeReservation.getPlaceFinalPrice(),
+            placeReservation.getServicesFinalPrice()
+        );
+
+        PlaceReservationRepository placeReservationRepository = Mockito.mock(PlaceReservationRepository.class);
+        when(placeReservationRepository.findById(reservationId)).thenReturn(Optional.of(placeReservation));
+
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+        when(modelMapper.map(placeReservation, ResponsePlaceReservationDTO.class)).thenReturn(expectedResponse);
+
+        PlaceReservationService placeReservationService = new PlaceReservationService(placeReservationRepository, 
+        		placeService, null, placeOwnerService, eventOwnerService, null);
+
+        ResponsePlaceReservationDTO actualResponse = placeReservationService.delete(reservationId);
+
+        verify(placeReservationRepository, Mockito.times(1)).findById(reservationId);
+        verify(placeReservationRepository, Mockito.times(1)).delete(placeReservation);
+ 
+        assertEquals(expectedResponse, actualResponse);
+    }
+    
 }

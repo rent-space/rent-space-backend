@@ -344,6 +344,16 @@ public class ExceptionTest {
     }
     
     @Test
+    public void UserNotFound() {     	
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            userService.get(1L); 
+        });
+        assertEquals(USER_NOT_FOUND + 1L, exception.getMessage());
+    }
+    
+    @Test
     public void getByPlaceReservationNotFound() {
         Long reservationId = 1L;
 

@@ -2,6 +2,7 @@ package com.rentspace;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,7 +12,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
@@ -91,6 +94,19 @@ public class UserServiceTest {
     }
     
     @Test
+    public void findUserById() {
+        AppUser appUser = new AppUser();
+ 
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(appUser));
+
+        UserService serviceUser = new UserService(userRepository);
+
+        AppUser result = serviceUser.get(anyLong());
+
+        assertEquals(appUser, result); 
+    }
+    
+    @Test
     public void getUserByEmail() {
         String email = "test@example.com";
         AppUser mockUser = new AppUser();
@@ -106,5 +122,36 @@ public class UserServiceTest {
         assertEquals(mockUser.getName(), result.getName());
         assertEquals(mockUser.getEmail(), result.getEmail());
     }
+    
+    @Test
+    public void updateUser() {
+        Long userId = 1L;
+        PersistUserDTO persistUserDTO = new PersistUserDTO();
+        persistUserDTO.setName("John Doe");
+        persistUserDTO.setEmail("john.doe@example.com");
+        persistUserDTO.setTelephone("123456789");
 
+        AppUser existingUser = new AppUser();
+        existingUser.setId(userId);
+        existingUser.setName("Old Name");
+        existingUser.setEmail("old.email@example.com");
+
+        ResponseUserDTO expectedResponse = new ResponseUserDTO();
+        expectedResponse.setId(userId);
+        expectedResponse.setName(persistUserDTO.getName());
+        expectedResponse.setEmail(persistUserDTO.getEmail());
+        expectedResponse.setTelephone(persistUserDTO.getTelephone());
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(Mockito.any(AppUser.class))).thenReturn(existingUser);
+
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+        when(modelMapper.map(existingUser, ResponseUserDTO.class)).thenReturn(expectedResponse);
+
+        ResponseUserDTO actualResponse = userService.update(userId, persistUserDTO);
+
+        verify(userRepository, Mockito.times(1)).save(existingUser);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
 }

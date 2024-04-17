@@ -20,9 +20,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
+import com.rentspace.DTO.listed.ListedServiceDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.ResponseUserDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.products.Place;
@@ -267,6 +272,154 @@ public class ServiceServiceTest {
 
         assertEquals(mockReservation.getId(), result.getId());
         assertEquals(mockReservation.getStatus(), status);
+    }
+    
+    @Test
+    public void deleteService() {
+        Long serviceId = 1L;
+
+        Service service = new Service();
+        service.setId(serviceId);
+        service.setTitle("Test Service");
+        service.setDescription("Test description");
+        service.setAddress("Test address");
+        service.setCity("Test city");
+        service.setPricePerHour(BigDecimal.TEN);
+        service.setServiceNature(ServiceNature.BAR);
+        service.setPeopleInvolved(5);
+
+        ResponseUserDTO owner = new ResponseUserDTO();
+        owner.setId(1L);
+        owner.setName("John Doe");
+        owner.setEmail("john.doe@example.com");
+
+        ResponseServiceDTO expectedResponse = new ResponseServiceDTO();
+        expectedResponse.setId(serviceId);
+        expectedResponse.setTitle(service.getTitle());
+        expectedResponse.setDescription(service.getDescription());
+        expectedResponse.setAddress(service.getAddress());
+        expectedResponse.setCity(service.getCity());
+        expectedResponse.setPricePerHour(service.getPricePerHour());
+        expectedResponse.setOwner(owner);
+        expectedResponse.setServiceNature(service.getServiceNature());
+        expectedResponse.setPeopleInvolved(service.getPeopleInvolved());
+
+        ServiceRepository serviceRepository = Mockito.mock(ServiceRepository.class);
+        Mockito.when(serviceRepository.findById(serviceId)).thenReturn(Optional.of(service));
+
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+        when(modelMapper.map(service, ResponseServiceDTO.class)).thenReturn(expectedResponse);
+
+        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, null);
+
+        ResponseServiceDTO actualResponse = serviceService.delete(serviceId);
+
+        verify(serviceRepository, Mockito.times(1)).findById(serviceId);
+        verify(serviceRepository, Mockito.times(1)).delete(service);
+        assertEquals(expectedResponse, actualResponse);
+    }
+    
+    @Test
+    public void viewAllServices() { 
+        ServiceRepository serviceRepository = Mockito.mock(ServiceRepository.class);
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+
+        List<Service> services = new ArrayList<>();
+        Service service1 = new Service();
+        service1.setId(1L);
+        service1.setTitle("Service 1");
+        service1.setMedia(new ArrayList<>());
+        services.add(service1);
+
+        Service service2 = new Service();
+        service2.setId(2L);
+        service2.setTitle("Service 2");
+        List<String> mediaList = new ArrayList<>();
+        mediaList.add("media1.jpg");
+        mediaList.add("media2.jpg");
+        service2.setMedia(mediaList);
+        services.add(service2);
+
+        when(serviceRepository.findAll()).thenReturn(services);
+        when(modelMapper.map(service1, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(1L, "Service 1", ""));
+        when(modelMapper.map(service2, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(2L, "Service 2", "media1.jpg"));
+
+        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, null);
+
+        List<ListedServiceDTO> result = serviceService.viewAll();
+
+        verify(serviceRepository, Mockito.times(1)).findAll();
+
+        assertEquals(2, result.size());
+        assertEquals("Service 1", result.get(0).getTitle());
+        assertEquals("", result.get(0).getFirstMedia());
+        assertEquals("Service 2", result.get(1).getTitle());
+        assertEquals("media1.jpg", result.get(1).getFirstMedia());
+    }
+    
+    @Test
+    public void deleteServiceReservation() {
+        Long reservationId = 1L;
+ 
+        ServiceReservation serviceReservation = new ServiceReservation();
+        serviceReservation.setId(reservationId);
+        serviceReservation.setStartsAt(LocalDateTime.now());
+        serviceReservation.setEndsAt(LocalDateTime.now().plusHours(1));
+        serviceReservation.setPaymentMethod(PaymentMethod.CREDIT);
+        serviceReservation.setNumOfInstallments(1);
+        serviceReservation.setAddress("Test address");
+        serviceReservation.setCity("Test city");
+        serviceReservation.setFinalPrice(BigDecimal.TEN);
+
+        ResponseUserDTO eventOwner = new ResponseUserDTO();
+        eventOwner.setId(1L);
+        eventOwner.setName("John Doe");
+        eventOwner.setEmail("john.doe@example.com");
+
+        ResponseProductDTO productDTO = new ResponseProductDTO();
+        productDTO.setId(1L);
+        productDTO.setTitle("Test Service");
+        productDTO.setDescription("Test description");
+        productDTO.setAddress("Test address");
+        productDTO.setCity("Test city");
+        productDTO.setPricePerHour(BigDecimal.TEN);
+        productDTO.setOwner(eventOwner);
+
+        ResponseServiceDTO serviceDTO = new ResponseServiceDTO();
+        serviceDTO.setId(1L);
+        serviceDTO.setTitle("Test Service");
+        serviceDTO.setDescription("Test description");
+        serviceDTO.setAddress("Test address");
+        serviceDTO.setCity("Test city");
+        serviceDTO.setPricePerHour(BigDecimal.TEN);
+        serviceDTO.setOwner(eventOwner);
+
+        ResponseServiceReservationDTO expectedResponse = new ResponseServiceReservationDTO();
+        expectedResponse.setId(reservationId);
+        expectedResponse.setStartsAt(serviceReservation.getStartsAt());
+        expectedResponse.setEndsAt(serviceReservation.getEndsAt());
+        expectedResponse.setPaymentMethod(serviceReservation.getPaymentMethod());
+        expectedResponse.setNumOfInstallments(serviceReservation.getNumOfInstallments());
+        expectedResponse.setProduct(serviceDTO);
+        expectedResponse.setEventOwner(eventOwner);
+        expectedResponse.setStatus(serviceReservation.getStatus());
+        expectedResponse.setFinalPrice(serviceReservation.getFinalPrice());
+
+        ServiceReservationRepository serviceReservationRepository = Mockito.mock(ServiceReservationRepository.class);
+        when(serviceReservationRepository.findById(reservationId)).thenReturn(java.util.Optional.ofNullable(serviceReservation));
+
+        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
+        when(modelMapper.map(serviceReservation, ResponseServiceReservationDTO.class)).thenReturn(expectedResponse);
+
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        		null, serviceOwnerService, serviceService, null);
+
+        ResponseServiceReservationDTO actualResponse = serviceReservationService.delete(reservationId);
+
+        verify(serviceReservationRepository, Mockito.times(1)).findById(reservationId);
+        verify(serviceReservationRepository, Mockito.times(1)).delete(serviceReservation);
+
+        assertEquals(expectedResponse, actualResponse);
     }
     
 }
