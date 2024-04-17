@@ -506,7 +506,7 @@ public class PlaceServiceTest {
     }
     
     @Test
-    public void deleteServiceReservation() {
+    public void deletePlaceReservation() {
         Long reservationId = 1L; 
 
         PlaceReservation placeReservation = new PlaceReservation();
