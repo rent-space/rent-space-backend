@@ -45,4 +45,9 @@ public class ServiceController {
         return new ResponseEntity<>(serviceService.viewAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/prestador/{id}")
+    public ResponseEntity<List<ListedServiceDTO>> viewByOwner(@PathVariable Long id) {
+        return new ResponseEntity<>(serviceService.viewByOwner(id), HttpStatus.OK);
+    }
+
 }
