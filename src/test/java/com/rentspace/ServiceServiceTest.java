@@ -181,7 +181,7 @@ public class ServiceServiceTest {
 
         PlaceService placeService = mock(PlaceService.class);
         List<Place> mockPlaces = Arrays.asList(new Place(), new Place());
-        when(placeService.getByExclusiveService(serviceId)).thenReturn(mockPlaces);
+        when(placeService.getAllByExclusiveService(serviceId)).thenReturn(mockPlaces);
 
         ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, placeService);
 
@@ -230,7 +230,7 @@ public class ServiceServiceTest {
 
         PlaceService placeService = mock(PlaceService.class);
         List<Place> mockPlaces = new ArrayList<>();
-        when(placeService.getByExclusiveService(anyLong())).thenReturn(mockPlaces);
+        when(placeService.getAllByExclusiveService(anyLong())).thenReturn(mockPlaces);
 
         ServiceReservationService serviceReservationService = new ServiceReservationService(
             serviceReservationRepository, eventOwnerService, serviceOwnerService, serviceService, placeService);
@@ -264,7 +264,7 @@ public class ServiceServiceTest {
         when(eventOwnerService.getByServiceReservation(reservationId)).thenReturn(mockEventOwner);
 
         List<Place> mockPlaces = new ArrayList<>(); 
-        when(placeService.getByExclusiveService(reservationId)).thenReturn((mockPlaces));
+        when(placeService.getAllByExclusiveService(reservationId)).thenReturn((mockPlaces));
 
         when(serviceReservationRepository.save(any(ServiceReservation.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
 

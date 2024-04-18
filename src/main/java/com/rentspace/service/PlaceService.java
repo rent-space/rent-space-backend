@@ -52,8 +52,8 @@ public class PlaceService extends ModelMapperFuncs {
         return mapToList(places, ListedPlaceDTO.class);
     }
 
-    public List<Place> getByExclusiveService(Long serviceId) {
-        return placeRepository.getByExclusiveService(serviceId);
+    public List<Place> getAllByExclusiveService(Long serviceId) {
+        return placeRepository.getAllByExclusiveService(serviceId);
     }
 
     public ResponsePlaceDTO delete(Long id) {

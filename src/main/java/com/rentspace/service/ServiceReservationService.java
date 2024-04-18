@@ -1,12 +1,10 @@
 package com.rentspace.service;
 
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
-import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Service;
-import com.rentspace.model.reservation.PlaceReservation;
 import com.rentspace.model.reservation.ServiceReservation;
 import com.rentspace.model.reservation.Status;
 import com.rentspace.model.user.EventOwner;
@@ -83,7 +81,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
                 reservation,
                 eventOwnerService.getByServiceReservation(id),
                 serviceOwnerService.getByServiceId(reservation.getProduct().getId()),
-                placeService.getByExclusiveService(id)
+                placeService.getAllByExclusiveService(id)
         );
     }
 
@@ -96,7 +94,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
                 reservation,
                 eventOwnerService.getByServiceReservation(id),
                 serviceOwnerService.getByServiceId(reservation.getProduct().getId()),
-                placeService.getByExclusiveService(id)
+                placeService.getAllByExclusiveService(id)
         );
     }
 
