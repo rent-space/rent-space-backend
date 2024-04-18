@@ -22,6 +22,7 @@ import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
 import org.modelmapper.ModelMapper;
 import com.google.gson.reflect.TypeToken;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.lang.reflect.Type;
@@ -53,11 +54,15 @@ public abstract class ModelMapperFuncs {
 	
 	@Autowired
 	public ModelMapperFuncs(ModelMapper modelMapper) {
-	    this.modelMapper = modelMapper;
+        this.modelMapper = modelMapper;
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setAmbiguityIgnored(true);
 	}
 
+
 	public ModelMapperFuncs() {
-	    this.modelMapper = new ModelMapper(); 
+        this(new ModelMapper());
 	}
 
     public <E, T> E map(T source, Class<E> typeDestination) {
@@ -103,7 +108,6 @@ public abstract class ModelMapperFuncs {
 
 
     public ServiceReservation buildModel(PlaceReservation placeReservation, Product service) {
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
         ServiceReservation reservation = map(placeReservation, ServiceReservation.class);
         reservation.setProduct(service);
         reservation.setAddress(placeReservation.getProduct().getAddress());
@@ -163,13 +167,12 @@ public abstract class ModelMapperFuncs {
         for (Service service : services) {
             ListedServiceDTO dto = map(service, ListedServiceDTO.class);
             dto.setFirstMedia(
-                    !service.getMedia().isEmpty() ?
-                            service.getMedia().get(0) :
-                            ""
+                    service.getMedia().isEmpty() ?
+                            "" :
+                            service.getMedia().get(0)
             );
             dtos.add(dto);
         }
         return dtos;
     }
-
 }
