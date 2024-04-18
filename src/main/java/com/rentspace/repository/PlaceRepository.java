@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
@@ -15,6 +14,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
             "JOIN p.services s " +
             "WHERE s.id = :serviceId"
     )
-    List<Place> getByExclusiveService(Long serviceId);
+    List<Place> getAllByExclusiveService(Long serviceId);
 
 }

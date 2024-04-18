@@ -11,9 +11,4 @@ import java.util.List;
 @Repository
 public interface ServiceRepository extends JpaRepository<Service, Long> {
 
-    @Query(value =
-            "SELECT p FROM Place p " +
-                    "JOIN p.services s WHERE s.id = :serviceId"
-    )
-    List<Place> findRelatedPlaces(Long serviceId);
 }

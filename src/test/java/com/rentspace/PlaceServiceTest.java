@@ -268,11 +268,11 @@ public class PlaceServiceTest {
         List<Place> expectedPlaces = Arrays.asList(new Place(), new Place());
 
         PlaceRepository placeRepository = mock(PlaceRepository.class);
-        when(placeRepository.getByExclusiveService(1L)).thenReturn(expectedPlaces);
+        when(placeRepository.getAllByExclusiveService(1L)).thenReturn(expectedPlaces);
 
         PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
 
-        List<Place> result = placeService.getByExclusiveService(1L);
+        List<Place> result = placeService.getAllByExclusiveService(1L);
 
         assertEquals(expectedPlaces.size(), result.size());
     }
