@@ -86,4 +86,12 @@ public class ServiceService extends ModelMapperFuncs {
     public List<ListedServiceDTO> viewByOwner(Long ownerId) {
         return buildResponse(serviceOwnerService.get(ownerId).getServices());
     }
+
+    public ResponseServiceDTO update(Long id, PersistServiceDTO persistDTO) {
+        get(id);
+        Service service = map(persistDTO, Service.class);
+        service.setId(id);
+        save(service);
+        return map(service, ResponseServiceDTO.class);
+    }
 }
