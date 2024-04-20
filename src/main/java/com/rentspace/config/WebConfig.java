@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("domínio da origem aqui");
+                .allowedOrigins("https://rent-space-br.vercel.app", "http://localhost");
     }
 }
 
