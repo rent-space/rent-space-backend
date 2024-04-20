@@ -341,8 +341,8 @@ public class ServiceServiceTest {
         services.add(service2);
 
         when(serviceRepository.findAll()).thenReturn(services);
-        when(modelMapper.map(service1, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(1L, "Service 1", ""));
-        when(modelMapper.map(service2, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(2L, "Service 2", "media1.jpg"));
+        when(modelMapper.map(service1, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(1L, "Service 1", "", ServiceNature.BAR, new BigDecimal(50)));
+        when(modelMapper.map(service2, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(2L, "Service 2", "media1.jpg", ServiceNature.BARMEN, new BigDecimal("50.3")));
 
         ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, null);
 
