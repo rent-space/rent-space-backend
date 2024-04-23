@@ -30,9 +30,10 @@ public class ResponseServiceDTO extends ResponseProductDTO {
             ResponseUserDTO owner,
             ServiceNature serviceNature,
             Integer peopleInvolved,
-            List<ListedPlaceDTO> placesRelated
+            List<ListedPlaceDTO> placesRelated,
+            List<String> media
     ) {
-        super(id, title, description, address, city, pricePerHour, owner);
+        super(id, title, description, address, city, pricePerHour, owner, media);
         this.serviceNature = serviceNature;
         this.peopleInvolved = peopleInvolved;
         this.placesRelated = placesRelated;

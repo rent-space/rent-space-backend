@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,9 +32,10 @@ public class ResponsePlaceDTO extends ResponseProductDTO {
         String zipCode,
         BigDecimal pricePerHour,
         Integer maximumCapacity,
-        ResponseUserDTO owner
+        ResponseUserDTO owner,
+        List<String> media
     ) {
-        super(id, title, description, address, city, pricePerHour, owner);
+        super(id, title, description, address, city, pricePerHour, owner, media);
         this.maximumCapacity = maximumCapacity;
         this.neighborhood = neighborhood;
         this.complement = complement;

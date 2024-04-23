@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +69,8 @@ public class PlaceControllerTest {
         
         ResponsePlaceDTO responsePlaceDTO = new ResponsePlaceDTO(2L, "Place", "Description",
                 "Address", "City", "neighborhood",
-                "complement", "zipCode", BigDecimal.valueOf(100), 50, responseUserDTO);
+                "complement", "zipCode", BigDecimal.valueOf(100), 50, responseUserDTO,
+                new ArrayList<>());
         
         when(placeService.create(persistPlaceDTO)).thenReturn(responsePlaceDTO);
 

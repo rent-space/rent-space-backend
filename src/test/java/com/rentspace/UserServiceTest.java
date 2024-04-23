@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.ServiceOwner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,7 +111,7 @@ public class UserServiceTest {
     @Test
     public void getUserByEmail() {
         String email = "test@example.com";
-        AppUser mockUser = new AppUser();
+        AppUser mockUser = new EventOwner();
         mockUser.setEmail(email);
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));

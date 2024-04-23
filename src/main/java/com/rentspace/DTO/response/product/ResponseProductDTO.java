@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,5 +20,6 @@ public class ResponseProductDTO {
     private String city;
     private BigDecimal pricePerHour;
     private ResponseUserDTO owner;
+    private List<String> media;
 
 }

@@ -27,6 +27,7 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -64,7 +65,8 @@ public class ServiceControllerTest {
                 "rfagundes@gmail.com", "83911111111", null, UserType.SERVICE_OWNER);
         
         ResponseServiceDTO responseServiceDTO = new ResponseServiceDTO(3L, "Title", "Description", 
-        		"Address", "City", BigDecimal.valueOf(100), responseUserDTO, ServiceNature.BARMEN, 20, null);
+        		"Address", "City", BigDecimal.valueOf(100), responseUserDTO, ServiceNature.BARMEN, 20, null,
+                new ArrayList<>());
                 
         when(serviceService.create(persistServiceDTO)).thenReturn(responseServiceDTO);
 
