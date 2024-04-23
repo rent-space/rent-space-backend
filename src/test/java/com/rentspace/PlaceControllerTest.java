@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.rentspace.model.user.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -63,7 +64,7 @@ public class PlaceControllerTest {
                 BigDecimal.valueOf(100), 50, 1L);
    
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Rosane Fortuna", "",
-                "rosanefortuna@gmail.com", "83911111111", "");
+                "rosanefortuna@gmail.com", "83911111111", "", UserType.PLACE_OWNER);
         
         ResponsePlaceDTO responsePlaceDTO = new ResponsePlaceDTO(2L, "Place", "Description",
                 "Address", "City", "neighborhood",

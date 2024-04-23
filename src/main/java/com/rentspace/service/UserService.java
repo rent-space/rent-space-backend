@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import static com.rentspace.exception.ExceptionMessages.*;
+import static com.rentspace.util.UserTypeConverter.toClass;
 
 @Service
 @AllArgsConstructor
@@ -36,9 +37,9 @@ public class UserService extends ModelMapperFuncs {
             throw new ApiRequestException(EMAIL_ALREADY_EXISTS);
         }
 
-        AppUser appUser = map(persistDTO, persistDTO.getUserType().toClass());
+        AppUser appUser = map(persistDTO, toClass(persistDTO.getUserType()));
         save(appUser);
-        return map(appUser, ResponseUserDTO.class);
+        return buildResponse(appUser);
     }
 
     public ResponseUserDTO getByEmail(String email) {
@@ -51,6 +52,12 @@ public class UserService extends ModelMapperFuncs {
         user = buildModel(user, persistUserDTO);
 
         userRepository.save(user);
-        return map(user, ResponseUserDTO.class);
+        return buildResponse(user);
+    }
+
+    public ResponseUserDTO delete(Long id) {
+        AppUser user = get(id);
+        userRepository.delete(user);
+        return buildResponse(user);
     }
 }
