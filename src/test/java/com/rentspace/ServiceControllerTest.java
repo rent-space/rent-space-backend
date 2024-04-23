@@ -1,5 +1,6 @@
 package com.rentspace;
 
+import com.rentspace.model.user.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -60,7 +61,7 @@ public class ServiceControllerTest {
                 BigDecimal.valueOf(100), 4L, ServiceNature.BARMEN, 20, null);
         
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(0L, "Ricardo Fagundes", "",
-                "rfagundes@gmail.com", "83911111111", null); 
+                "rfagundes@gmail.com", "83911111111", null, UserType.SERVICE_OWNER);
         
         ResponseServiceDTO responseServiceDTO = new ResponseServiceDTO(3L, "Title", "Description", 
         		"Address", "City", BigDecimal.valueOf(100), responseUserDTO, ServiceNature.BARMEN, 20, null);

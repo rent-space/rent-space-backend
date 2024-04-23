@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.rentspace.util.ProductUtil.getFinalPrice;
+import static com.rentspace.util.UserTypeConverter.toEnum;
 
 /**
  * ModelMapper is a library used to make objects translation easier. It can be really helpful in terms
@@ -128,6 +129,12 @@ public abstract class ModelMapperFuncs {
     }
 
     /************************************* RESPONSE BUILDS *************************************/
+
+    public ResponseUserDTO buildResponse(AppUser user) {
+        ResponseUserDTO dto = map(user, ResponseUserDTO.class);
+        dto.setUserType(toEnum(user.getClass()));
+        return dto;
+    }
 
     public ResponseServiceReservationDTO buildResponse(
             ServiceReservation reservation,
