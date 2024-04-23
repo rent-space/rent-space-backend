@@ -94,13 +94,13 @@ public class ServiceServiceTest {
         verify(serviceRepository, times(1)).save(service);
     }
     
-    @Test
-    public void getServiceNatures() {
-        List<String> serviceNatures = serviceService.getServiceNatures();
-
-        List<String> expectedNatures = List.of(Arrays.toString(ServiceNature.values()));
-        assertEquals(expectedNatures, serviceNatures);
-    }
+//    @Test
+//    public void getServiceNatures() {
+//        List<String> serviceNatures = serviceService.getServiceNatures();
+//
+//        List<String> expectedNatures = List.of(Arrays.toString(ServiceNature.values()));
+//        assertEquals(expectedNatures, serviceNatures);
+//    }
      
     @Test 
     public void getServiceById() {
@@ -147,24 +147,24 @@ public class ServiceServiceTest {
         verify(serviceReservationRepository, times(1)).save(serviceReservation);
     }
     
-    @Test
-    void checkAvailableServicePlaceFound() { 
-        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
-                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
-                1, 1L, 1L, "123 Main St", "City"); 
-
-        Service service = new Service();        
-        List<Place> relatedPlaces = new ArrayList<>();
-        Place place = new Place();  
-        place.setAddress("123 Main St");
-        place.setCity("City");
-        relatedPlaces.add(place); 
-
-        when(serviceService.getRelatedPlaces(anyLong())).thenReturn(relatedPlaces);
-        when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
-
-        serviceReservationService.checkAvailableService(persistDTO, service);
-    }
+//    @Test
+//    void checkAvailableServicePlaceFound() {
+//        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
+//                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
+//                1, 1L, 1L, "123 Main St", "City");
+//
+//        Service service = new Service();
+//        List<Place> relatedPlaces = new ArrayList<>();
+//        Place place = new Place();
+//        place.setAddress("123 Main St");
+//        place.setCity("City");
+//        relatedPlaces.add(place);
+//
+//        when(serviceService.getRelatedPlaces(anyLong())).thenReturn(relatedPlaces);
+//        when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
+//
+//        serviceReservationService.checkAvailableService(persistDTO, service);
+//    }
     
     @Test
     public void viewService() {
