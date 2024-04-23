@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.rentspace.model.user.ServiceOwner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -130,8 +131,9 @@ public class UserServiceTest {
         persistUserDTO.setName("John Doe");
         persistUserDTO.setEmail("john.doe@example.com");
         persistUserDTO.setTelephone("123456789");
+        persistUserDTO.setUserType(UserType.SERVICE_OWNER);
 
-        AppUser existingUser = new AppUser();
+        AppUser existingUser = new ServiceOwner();
         existingUser.setId(userId);
         existingUser.setName("Old Name");
         existingUser.setEmail("old.email@example.com");
@@ -141,6 +143,7 @@ public class UserServiceTest {
         expectedResponse.setName(persistUserDTO.getName());
         expectedResponse.setEmail(persistUserDTO.getEmail());
         expectedResponse.setTelephone(persistUserDTO.getTelephone());
+        expectedResponse.setUserType(UserType.SERVICE_OWNER);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
         when(userRepository.save(Mockito.any(AppUser.class))).thenReturn(existingUser);
