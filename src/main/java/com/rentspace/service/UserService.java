@@ -43,7 +43,7 @@ public class UserService extends ModelMapperFuncs {
     }
 
     public ResponseUserDTO getByEmail(String email) {
-        return map(get(email), ResponseUserDTO.class);
+        return buildResponse(get(email));
     }
 
     public ResponseUserDTO update(Long id, PersistUserDTO persistUserDTO) {
