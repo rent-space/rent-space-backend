@@ -29,4 +29,9 @@ public class UserController {
     public ResponseEntity<ResponseUserDTO> update(@PathVariable Long id, @RequestBody PersistUserDTO persistUserDTO ) {
         return new ResponseEntity<>(userService.update(id, persistUserDTO), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseUserDTO> delete(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.delete(id), HttpStatus.OK);
+    }
 }

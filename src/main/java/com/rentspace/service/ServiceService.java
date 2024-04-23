@@ -76,7 +76,11 @@ public class ServiceService extends ModelMapperFuncs {
     public ResponseServiceDTO delete(Long id) {
         Service service = get(id);
         serviceRepository.delete(service);
-        return map(service, ResponseServiceDTO.class);
+        return buildResponse(
+                service,
+                serviceOwnerService.getByServiceId(id),
+                placeService.getAllByExclusiveService(id)
+        );
     }
 
     public List<ListedServiceDTO> viewAll() {
@@ -92,6 +96,10 @@ public class ServiceService extends ModelMapperFuncs {
         Service service = map(persistDTO, Service.class);
         service.setId(id);
         save(service);
-        return map(service, ResponseServiceDTO.class);
+        return buildResponse(
+                service,
+                serviceOwnerService.getByServiceId(id),
+                placeService.getAllByExclusiveService(id)
+        );
     }
 }

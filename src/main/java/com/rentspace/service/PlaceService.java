@@ -58,8 +58,8 @@ public class PlaceService extends ModelMapperFuncs {
 
     public ResponsePlaceDTO delete(Long id) {
         Place place = get(id);
-        placeRepository.delete(place);
-        return map(place, ResponsePlaceDTO.class);
+        PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
+        return buildResponse(place, owner);
     }
 
     public ResponsePlaceDTO update(Long id, PersistPlaceDTO persistDTO) {
