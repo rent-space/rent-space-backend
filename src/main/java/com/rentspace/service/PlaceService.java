@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
@@ -59,6 +60,12 @@ public class PlaceService extends ModelMapperFuncs {
     public ResponsePlaceDTO delete(Long id) {
         Place place = get(id);
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
+        if (Objects.nonNull(place)) {
+            owner.getPlaces().remove(place);
+            this.placeOwnerService.save(owner);
+        }
+        this.placeRepository.delete(place);
+
         return buildResponse(place, owner);
     }
 

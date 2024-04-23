@@ -21,6 +21,8 @@ public class ResponsePlaceDTO extends ResponseProductDTO {
 
     private String zipCode;
 
+    private List<String> media;
+
     public ResponsePlaceDTO(
         Long id,
         String title,

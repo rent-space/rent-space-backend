@@ -19,6 +19,8 @@ public class Place extends Product {
 
     private String zipCode;
 
+    private List<String> media;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @NotNull
     private List<Service> services;
