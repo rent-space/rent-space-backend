@@ -94,13 +94,13 @@ public class ServiceServiceTest {
         verify(serviceRepository, times(1)).save(service);
     }
     
-//    @Test
-//    public void getServiceNatures() {
-//        List<String> serviceNatures = serviceService.getServiceNatures();
-//
-//        List<String> expectedNatures = List.of(Arrays.toString(ServiceNature.values()));
-//        assertEquals(expectedNatures, serviceNatures);
-//    } FIXME
+    @Test
+    public void getServiceNatures() {
+        List<String> serviceNatures = serviceService.getServiceNatures();
+
+        List<String> expectedNatures = List.of(Arrays.toString(ServiceNature.values()));
+        assertEquals(expectedNatures, serviceNatures);
+    } 
      
     @Test 
     public void getServiceById() {
@@ -146,25 +146,6 @@ public class ServiceServiceTest {
 
         verify(serviceReservationRepository, times(1)).save(serviceReservation);
     }
-    
-//    @Test
-//    void checkAvailableServicePlaceFound() {
-//        PersistServiceReservationDTO persistDTO = new PersistServiceReservationDTO(
-//                LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
-//                1, 1L, 1L, "123 Main St", "City");
-//
-//        Service service = new Service();
-//        List<Place> relatedPlaces = new ArrayList<>();
-//        Place place = new Place();
-//        place.setAddress("123 Main St");
-//        place.setCity("City");
-//        relatedPlaces.add(place);
-//
-//        when(serviceService.getRelatedPlaces(anyLong())).thenReturn(relatedPlaces);
-//        when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
-//
-//        serviceReservationService.checkAvailableService(persistDTO, service);
-//    } FIXME
     
     @Test
     public void viewService() {
@@ -274,50 +255,31 @@ public class ServiceServiceTest {
         assertEquals(mockReservation.getStatus(), status);
     }
     
-//    @Test
-//    public void deleteService() {
-//        Long serviceId = 1L;
-//
-//        Service service = new Service();
-//        service.setId(serviceId);
-//        service.setTitle("Test Service");
-//        service.setDescription("Test description");
-//        service.setAddress("Test address");
-//        service.setCity("Test city");
-//        service.setPricePerHour(BigDecimal.TEN);
-//        service.setServiceNature(ServiceNature.BAR);
-//        service.setPeopleInvolved(5);
-//
-//        ResponseUserDTO owner = new ResponseUserDTO();
-//        owner.setId(1L);
-//        owner.setName("John Doe");
-//        owner.setEmail("john.doe@example.com");
-//
-//        ResponseServiceDTO expectedResponse = new ResponseServiceDTO();
-//        expectedResponse.setId(serviceId);
-//        expectedResponse.setTitle(service.getTitle());
-//        expectedResponse.setDescription(service.getDescription());
-//        expectedResponse.setAddress(service.getAddress());
-//        expectedResponse.setCity(service.getCity());
-//        expectedResponse.setPricePerHour(service.getPricePerHour());
-//        expectedResponse.setOwner(owner);
-//        expectedResponse.setServiceNature(service.getServiceNature());
-//        expectedResponse.setPeopleInvolved(service.getPeopleInvolved());
-//
-//        ServiceRepository serviceRepository = Mockito.mock(ServiceRepository.class);
-//        Mockito.when(serviceRepository.findById(serviceId)).thenReturn(Optional.of(service));
-//
-//        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
-//        when(modelMapper.map(service, ResponseServiceDTO.class)).thenReturn(expectedResponse);
-//
-//        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, null);
-//
-//        ResponseServiceDTO actualResponse = serviceService.delete(serviceId);
-//
-//        verify(serviceRepository, Mockito.times(1)).findById(serviceId);
-//        verify(serviceRepository, Mockito.times(1)).delete(service);
-//        assertEquals(expectedResponse, actualResponse);
-//    } FIXME
+    @Test
+    public void deleteService() {
+        ServiceRepository serviceRepository = mock(ServiceRepository.class);
+        ServiceOwnerService serviceOwnerService = mock(ServiceOwnerService.class);
+        PlaceService placeService = mock(PlaceService.class);
+        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, placeService);
+
+        Long serviceId = 1L;
+        Service service = new Service();
+        service.setId(serviceId);
+
+        ServiceOwner owner = new ServiceOwner();
+        List<Place> places = new ArrayList<>();
+        List<String> media = new ArrayList<>();
+
+        when(serviceRepository.findById(serviceId)).thenReturn(java.util.Optional.ofNullable(service));
+        when(placeService.getAllByExclusiveService(serviceId)).thenReturn(places);
+        when(serviceOwnerService.getByServiceId(serviceId)).thenReturn(owner);
+
+        ResponseServiceDTO response = serviceService.delete(serviceId);
+
+        verify(serviceRepository, times(1)).delete(service);
+        assertEquals(response.getId(), serviceId);
+        assertEquals(response.getPlacesRelated(), places);
+    }
     
     @Test
     public void viewAllServices() { 

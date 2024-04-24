@@ -3,14 +3,13 @@ package com.rentspace;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import com.rentspace.model.user.EventOwner;
-import com.rentspace.model.user.ServiceOwner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,6 +20,9 @@ import org.modelmapper.ModelMapper;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
 import com.rentspace.model.user.AppUser;
+import com.rentspace.model.user.EventOwner;
+import com.rentspace.model.user.PlaceOwner;
+import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.model.user.UserType;
 import com.rentspace.repository.UserRepository;
 import com.rentspace.service.UserService;
@@ -157,5 +159,19 @@ public class UserServiceTest {
         verify(userRepository, Mockito.times(1)).save(existingUser);
 
         assertEquals(expectedResponse, actualResponse);
+    }
+    
+    @Test
+    public void deleteUser() {
+        Long userId = 1L;
+        PlaceOwner user = new PlaceOwner(); 
+        user.setId(userId);
+        
+        when(userRepository.findById(userId)).thenReturn(java.util.Optional.ofNullable(user));
+
+        ResponseUserDTO response = userService.delete(userId);
+
+        verify(userRepository, times(1)).delete(user);
+        assertEquals(response.getId(), userId);
     }
 }
