@@ -18,6 +18,8 @@ public class PersistPlaceDTO extends PersistProductDTO {
 
     private String complement;
 
+    private List<String> media;
+
     @NotNull
     private String zipCode;
     public PersistPlaceDTO(
