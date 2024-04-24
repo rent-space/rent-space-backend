@@ -3,6 +3,7 @@ package com.rentspace.model.products;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.util.List;
@@ -18,8 +19,6 @@ public class Place extends Product {
     private String complement;
 
     private String zipCode;
-
-    private List<String> media;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @NotNull
