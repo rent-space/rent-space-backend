@@ -383,57 +383,31 @@ public class PlaceServiceTest {
         assertEquals(mockReservation.getStatus(), status);
     }
     
-//    @Test
-//    public void deletePlace() {
-//        Long placeId = 1L;
-//
-//        Place place = new Place();
-//        place.setId(placeId);
-//        place.setTitle("Test Place");
-//        place.setDescription("Test description");
-//        place.setAddress("Test address");
-//        place.setCity("Test city");
-//        place.setPricePerHour(BigDecimal.TEN);
-//        place.setMaximumCapacity(100);
-//        place.setNeighborhood("Test neighborhood");
-//        place.setComplement("Test complement");
-//        place.setZipCode("12345");
-//
-//        ResponseUserDTO owner = new ResponseUserDTO();
-//        owner.setId(1L);
-//        owner.setName("John Doe");
-//        owner.setEmail("john.doe@example.com");
-//
-//        ResponsePlaceDTO expectedResponse = new ResponsePlaceDTO();
-//        expectedResponse.setId(placeId);
-//        expectedResponse.setTitle(place.getTitle());
-//        expectedResponse.setDescription(place.getDescription());
-//        expectedResponse.setAddress(place.getAddress());
-//        expectedResponse.setCity(place.getCity());
-//        expectedResponse.setPricePerHour(place.getPricePerHour());
-//        expectedResponse.setOwner(owner);
-//        expectedResponse.setMaximumCapacity(place.getMaximumCapacity());
-//        expectedResponse.setNeighborhood(place.getNeighborhood());
-//        expectedResponse.setComplement(place.getComplement());
-//        expectedResponse.setZipCode(place.getZipCode());
-//
-//        PlaceRepository placeRepository = Mockito.mock(PlaceRepository.class);
-//        when(placeRepository.findById(placeId)).thenReturn(Optional.of(place));
-//
-//        ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
-//        when(modelMapper.map(place, ResponsePlaceDTO.class)).thenReturn(expectedResponse);
-//
-//        PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
-//
-//        ResponsePlaceDTO actualResponse = placeService.delete(placeId);
-//
-//        verify(placeRepository, Mockito.times(1)).findById(placeId);
-//        verify(placeRepository, Mockito.times(1)).delete(place);
-//
-//        assertEquals(expectedResponse, actualResponse);
-//    } FIXME
+    @Test
+    public void deletePlace() {
+        PlaceRepository placeRepository = mock(PlaceRepository.class);
+        PlaceOwnerService placeOwnerService = mock(PlaceOwnerService.class);
+        PlaceService placeService = new PlaceService(placeRepository, placeOwnerService);
+
+        Long placeId = 1L;
+        Place place = new Place();
+        place.setId(placeId);
+
+        PlaceOwner owner = new PlaceOwner();
+        List<Place> places = new ArrayList<>();
+        places.add(place);
+        owner.setPlaces(places);
+
+        when(placeOwnerService.getByPlaceId(placeId)).thenReturn(owner);
+        when(placeRepository.findById(placeId)).thenReturn(java.util.Optional.ofNullable(place));
+
+        ResponsePlaceDTO response = placeService.delete(placeId);
+
+        verify(placeOwnerService, times(1)).getByPlaceId(placeId);
+        verify(placeRepository, times(1)).delete(place);
+        assertEquals(response.getId(), placeId);
+    }
     
-    /**
     @Test
     public void updatePlace() {
         Long placeId = 1L; 
@@ -504,7 +478,7 @@ public class PlaceServiceTest {
         verify(placeOwnerService, Mockito.times(1)).getByPlaceId(placeId);
 
         assertEquals(expectedResponse, actualResponse);
-    }FIXME**/
+    }
     
     @Test
     public void deletePlaceReservation() {
