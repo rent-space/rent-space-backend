@@ -10,6 +10,7 @@ import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,13 +61,12 @@ public class PlaceService extends ModelMapperFuncs {
     public ResponsePlaceDTO delete(Long id) {
         Place place = get(id);
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
-        if (Objects.nonNull(place)) {
-            owner.getPlaces().remove(place);
-            this.placeOwnerService.save(owner);
-        }
+        ResponsePlaceDTO dto = buildResponse(place, owner);
+        owner.getPlaces().remove(place);
+        this.placeOwnerService.save(owner);
         this.placeRepository.delete(place);
 
-        return buildResponse(place, owner);
+        return dto;
     }
 
     public ResponsePlaceDTO update(Long id, PersistPlaceDTO persistDTO) {
