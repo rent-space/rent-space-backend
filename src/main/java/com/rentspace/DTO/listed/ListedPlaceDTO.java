@@ -13,7 +13,6 @@ public class ListedPlaceDTO {
 
     private Long id;
     private String title;
-    private List<String> media;
     private Integer maximumCapacity;
     private Double pricePerHour;
     private String description;

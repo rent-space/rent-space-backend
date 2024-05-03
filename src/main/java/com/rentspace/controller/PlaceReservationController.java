@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/solicitacao/espaco")
 @AllArgsConstructor
@@ -34,6 +36,11 @@ public class PlaceReservationController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponsePlaceReservationDTO> delete(@PathVariable Long id) {
         return new ResponseEntity<>(placeReservationService.delete(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponsePlaceReservationDTO> update(@PathVariable Long id, @RequestBody PersistPlaceReservationDTO persistDTO) {
+        return new ResponseEntity<>(placeReservationService.update(id, persistDTO), HttpStatus.OK);
     }
 
 }
