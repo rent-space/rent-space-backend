@@ -97,6 +97,7 @@ public abstract class ModelMapperFuncs {
         return reservation;
     }
 
+
     public ServiceReservation buildModel(PersistServiceReservationDTO dto, Service service, BigDecimal finalPrice) {
         ServiceReservation reservation = map(dto, ServiceReservation.class);
         reservation.setStatus(Status.PENDING);

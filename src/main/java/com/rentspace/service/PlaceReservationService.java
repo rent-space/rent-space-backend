@@ -7,7 +7,9 @@ import com.rentspace.model.products.Place;
 import com.rentspace.model.products.Product;
 import com.rentspace.model.products.Service;
 import com.rentspace.model.reservation.PlaceReservation;
+import com.rentspace.model.reservation.Reservation;
 import com.rentspace.model.reservation.Status;
+import com.rentspace.model.user.AppUser;
 import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.PlaceReservationRepository;
@@ -61,7 +63,9 @@ public class PlaceReservationService extends ModelMapperFuncs {
         placeOwnerService.save(placeOwner);
         eventOwnerService.save(eventOwner);
         servicesRelated.forEach(
-                service -> serviceReservationService.save(buildModel(reservation, service))
+                service -> {
+                    serviceReservationService.save(buildModel(reservation, service));
+                }
         );
 
         return buildResponse(reservation, placeOwner, eventOwner);
@@ -108,7 +112,40 @@ public class PlaceReservationService extends ModelMapperFuncs {
 
     public ResponsePlaceReservationDTO delete(Long id) {
         PlaceReservation placeReservation = get(id);
+
         placeReservationRepository.delete(placeReservation);
         return map(placeReservation, ResponsePlaceReservationDTO.class);
     }
+
+    public ResponsePlaceReservationDTO update(Long id, PersistPlaceReservationDTO persistDTO) {
+        validatesFields(persistDTO);
+
+        EventOwner eventOwner = eventOwnerService.get(persistDTO.getEventOwnerId());
+        Place place = placeService.get(persistDTO.getProductId());
+        checkProductAvailability(persistDTO, place, placeReservationRepository);
+
+        List<Service> servicesRelated = getRelatedServices(persistDTO, place);
+
+        PlaceReservation reservation = get(id);
+        reservation = buildModel(
+                persistDTO,
+                place,
+                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), new ArrayList<>(Collections.singletonList(place))),
+                getFinalPrice(persistDTO.getStartsAt(), persistDTO.getEndsAt(), mapToList(servicesRelated, Product.class)),
+                servicesRelated
+        );
+
+        List<Service> existingServices = reservation.getHiredRelatedServices();
+
+        if (!existingServices.equals(servicesRelated)) {
+            reservation.setHiredRelatedServices(servicesRelated);
+        }
+
+        save(reservation);
+
+        PlaceOwner placeOwner = placeOwnerService.getByPlaceId(place.getId());
+
+        return buildResponse(reservation, placeOwner, eventOwner);
+    }
+
 }
