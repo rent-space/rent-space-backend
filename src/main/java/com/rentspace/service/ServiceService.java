@@ -53,7 +53,7 @@ public class ServiceService extends ModelMapperFuncs {
         }
         serviceOwnerService.save(owner);
 
-        return buildResponse(service, owner, places);
+        return buildListServiceDTO(service, owner, places);
     }
 
     public List<String> getServiceNatures() {
@@ -66,7 +66,7 @@ public class ServiceService extends ModelMapperFuncs {
 
     public ResponseServiceDTO view(Long id) {
         Service service = get(id);
-        return buildResponse(
+        return buildListServiceDTO(
                 service,
                 serviceOwnerService.getByServiceId(id),
                 placeService.getAllByExclusiveService(id)
@@ -76,7 +76,7 @@ public class ServiceService extends ModelMapperFuncs {
     public ResponseServiceDTO delete(Long id) {
         Service service = get(id);
         serviceRepository.delete(service);
-        return buildResponse(
+        return buildListServiceDTO(
                 service,
                 serviceOwnerService.getByServiceId(id),
                 placeService.getAllByExclusiveService(id)
@@ -84,11 +84,11 @@ public class ServiceService extends ModelMapperFuncs {
     }
 
     public List<ListedServiceDTO> viewAll() {
-        return buildResponse(this.serviceRepository.findAll());
+        return this.buildListServiceDTO(this.serviceRepository.findAll());
     }
 
     public List<ListedServiceDTO> viewByOwner(Long ownerId) {
-        return buildResponse(serviceOwnerService.get(ownerId).getServices());
+        return this.buildListServiceDTO(serviceOwnerService.get(ownerId).getServices());
     }
 
     public ResponseServiceDTO update(Long id, PersistServiceDTO persistDTO) {
@@ -96,7 +96,7 @@ public class ServiceService extends ModelMapperFuncs {
         Service service = map(persistDTO, Service.class);
         service.setId(id);
         save(service);
-        return buildResponse(
+        return buildListServiceDTO(
                 service,
                 serviceOwnerService.getByServiceId(id),
                 placeService.getAllByExclusiveService(id)

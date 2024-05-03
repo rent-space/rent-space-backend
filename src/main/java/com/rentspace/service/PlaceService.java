@@ -10,11 +10,9 @@ import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
@@ -35,7 +33,7 @@ public class PlaceService extends ModelMapperFuncs {
 
         this.save(place);
         placeOwnerService.save(owner); 
-        return buildResponse(place, owner);
+        return buildListServiceDTO(place, owner);
     }
 
     public Place get(Long id) {
@@ -46,7 +44,7 @@ public class PlaceService extends ModelMapperFuncs {
     public ResponsePlaceDTO view(Long id) {
         Place place = this.placeRepository.findById(id).orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + id));
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
-        return buildResponse(place, owner);
+        return buildListServiceDTO(place, owner);
     }
 
     public List<ListedPlaceDTO> viewAll() {
@@ -61,7 +59,7 @@ public class PlaceService extends ModelMapperFuncs {
     public ResponsePlaceDTO delete(Long id) {
         Place place = get(id);
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
-        ResponsePlaceDTO dto = buildResponse(place, owner);
+        ResponsePlaceDTO dto = buildListServiceDTO(place, owner);
         owner.getPlaces().remove(place);
         this.placeOwnerService.save(owner);
         this.placeRepository.delete(place);
@@ -74,6 +72,6 @@ public class PlaceService extends ModelMapperFuncs {
         Place place = map(persistDTO, Place.class);
         place.setId(id);
         save(place);
-        return buildResponse(place, placeOwnerService.getByPlaceId(id));
+        return buildListServiceDTO(place, placeOwnerService.getByPlaceId(id));
     }
 }

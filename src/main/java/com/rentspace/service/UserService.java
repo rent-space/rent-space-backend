@@ -39,11 +39,11 @@ public class UserService extends ModelMapperFuncs {
 
         AppUser appUser = map(persistDTO, toClass(persistDTO.getUserType()));
         save(appUser);
-        return buildResponse(appUser);
+        return buildListServiceDTO(appUser);
     }
 
     public ResponseUserDTO getByEmail(String email) {
-        return buildResponse(get(email));
+        return buildListServiceDTO(get(email));
     }
 
     public ResponseUserDTO update(Long id, PersistUserDTO persistUserDTO) {
@@ -52,12 +52,12 @@ public class UserService extends ModelMapperFuncs {
         user = buildModel(user, persistUserDTO);
 
         userRepository.save(user);
-        return buildResponse(user);
+        return buildListServiceDTO(user);
     }
 
     public ResponseUserDTO delete(Long id) {
         AppUser user = get(id);
         userRepository.delete(user);
-        return buildResponse(user);
+        return buildListServiceDTO(user);
     }
 }
