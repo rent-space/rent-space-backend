@@ -1,6 +1,5 @@
 package com.rentspace.service;
 
-import com.rentspace.DTO.listed.ListedPlaceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.exception.ApiRequestException;
@@ -65,7 +64,7 @@ public class PlaceReservationService extends ModelMapperFuncs {
                 service -> serviceReservationService.save(buildModel(reservation, service))
         );
 
-        return buildListServiceDTO(reservation, placeOwner, eventOwner);
+        return buildResponse(reservation, placeOwner, eventOwner);
     }
 
     private List<Service> getRelatedServices(PersistPlaceReservationDTO persistDTO, Place place) {
@@ -88,7 +87,7 @@ public class PlaceReservationService extends ModelMapperFuncs {
 
     public ResponsePlaceReservationDTO view(Long id) {
         PlaceReservation reservation = get(id);
-        return buildListServiceDTO(
+        return buildResponse(
                 reservation,
                 placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
                 eventOwnerService.getByPlaceReservation(id)
@@ -100,7 +99,7 @@ public class PlaceReservationService extends ModelMapperFuncs {
         updateReservationStatus(reservation, status);
 
         save(reservation);
-        return buildListServiceDTO(
+        return buildResponse(
                 reservation,
                 placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
                 eventOwnerService.getByPlaceReservation(id)
@@ -113,7 +112,17 @@ public class PlaceReservationService extends ModelMapperFuncs {
         return map(placeReservation, ResponsePlaceReservationDTO.class);
     }
 
-    public List<ListedPlaceReservationDTO> viewAll() {
-        return buildListPlaceReservationDTO(placeReservationRepository.findAll());
+    public List<ResponsePlaceReservationDTO> viewAll() {
+        List<ResponsePlaceReservationDTO> dtos = new ArrayList<>();
+        for (PlaceReservation reservation : placeReservationRepository.findAll()) {
+            dtos.add(
+                    buildResponse(
+                            reservation,
+                            placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
+                            eventOwnerService.getByPlaceReservation(reservation.getId())
+                    )
+            );
+        }
+        return dtos;
     }
 }

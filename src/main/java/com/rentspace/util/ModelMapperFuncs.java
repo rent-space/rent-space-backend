@@ -1,7 +1,6 @@
 package com.rentspace.util;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
-import com.rentspace.DTO.listed.ListedPlaceReservationDTO;
 import com.rentspace.DTO.listed.ListedServiceDTO;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
@@ -131,46 +130,46 @@ public abstract class ModelMapperFuncs {
 
     /************************************* RESPONSE BUILDS *************************************/
 
-    public ResponseUserDTO buildListServiceDTO(AppUser user) {
+    public ResponseUserDTO buildResponse(AppUser user) {
         ResponseUserDTO dto = map(user, ResponseUserDTO.class);
         dto.setUserType(toEnum(user.getClass()));
         return dto;
     }
 
-    public ResponseServiceReservationDTO buildListServiceDTO(
+    public ResponseServiceReservationDTO buildResponse(
             ServiceReservation reservation,
             EventOwner owner,
             ServiceOwner serviceOwner,
             List<Place> places
     ) {
         ResponseServiceReservationDTO dto = map(reservation, ResponseServiceReservationDTO.class);
-        dto.setProduct(buildListServiceDTO((Service) reservation.getProduct(), serviceOwner, places));
+        dto.setProduct(buildResponse((Service) reservation.getProduct(), serviceOwner, places));
         dto.setEventOwner(map(owner, ResponseUserDTO.class));
         return dto;
     }
 
-    public ResponsePlaceReservationDTO buildListServiceDTO(PlaceReservation reservation, PlaceOwner placeOwner, EventOwner owner) {
+    public ResponsePlaceReservationDTO buildResponse(PlaceReservation reservation, PlaceOwner placeOwner, EventOwner owner) {
         ResponsePlaceReservationDTO dto = map(reservation, ResponsePlaceReservationDTO.class);
-        dto.setProduct(buildListServiceDTO((Place) reservation.getProduct(), placeOwner));
+        dto.setProduct(buildResponse((Place) reservation.getProduct(), placeOwner));
         dto.setHiredRelatedServices(mapToList(reservation.getHiredRelatedServices(), ListedServiceDTO.class));
         dto.setEventOwner(map(owner, ResponseUserDTO.class));
         return dto;
     }
 
-    public ResponseServiceDTO buildListServiceDTO(Service service, ServiceOwner owner, List<Place> places) {
+    public ResponseServiceDTO buildResponse(Service service, ServiceOwner owner, List<Place> places) {
         ResponseServiceDTO dto = map(service, ResponseServiceDTO.class);
         dto.setOwner(map(owner, ResponseUserDTO.class));
         dto.setPlacesRelated(mapToList(places, ListedPlaceDTO.class));
         return dto;
     }
 
-    public ResponsePlaceDTO buildListServiceDTO(Place place, PlaceOwner owner) {
+    public ResponsePlaceDTO buildResponse(Place place, PlaceOwner owner) {
         ResponsePlaceDTO dto = map(place, ResponsePlaceDTO.class);
         dto.setOwner(map(owner, ResponseUserDTO.class));
         return dto;
     }
 
-    public List<ListedServiceDTO> buildListServiceDTO(List<Service> services) {
+    public List<ListedServiceDTO> buildResponse(List<Service> services) {
         List<ListedServiceDTO> dtos = new ArrayList<>();
         for (Service service : services) {
             ListedServiceDTO dto = map(service, ListedServiceDTO.class);
@@ -179,17 +178,6 @@ public abstract class ModelMapperFuncs {
                             "" :
                             service.getMedia().get(0)
             );
-            dtos.add(dto);
-        }
-        return dtos;
-    }
-
-    public List<ListedPlaceReservationDTO> buildListPlaceReservationDTO(List<PlaceReservation> reservations) {
-        List<ListedPlaceReservationDTO> dtos = new ArrayList<>();
-        for (PlaceReservation reservation : reservations) {
-            ListedPlaceReservationDTO dto = map(reservation, ListedPlaceReservationDTO.class);
-            dto.setTitle(reservation.getProduct().getTitle());
-            dto.setMedia(reservation.getProduct().getMedia());
             dtos.add(dto);
         }
         return dtos;

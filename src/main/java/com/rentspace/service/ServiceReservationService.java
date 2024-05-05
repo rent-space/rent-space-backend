@@ -57,7 +57,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
         serviceOwnerService.save(serviceOwner);
         eventOwnerService.save(eventOwner);
         List<Place> relatedPlaces = serviceService.getRelatedPlaces(service.getId());
-        return buildListServiceDTO(reservation, eventOwner, serviceOwner, relatedPlaces);
+        return buildResponse(reservation, eventOwner, serviceOwner, relatedPlaces);
     }
 
     public void checkAvailableService(PersistServiceReservationDTO persistDTO, Service service) {
@@ -77,7 +77,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
 
     public ResponseServiceReservationDTO view(Long id) {
         ServiceReservation reservation = get(id);
-        return buildListServiceDTO(
+        return buildResponse(
                 reservation,
                 eventOwnerService.getByServiceReservation(id),
                 serviceOwnerService.getByServiceId(reservation.getProduct().getId()),
@@ -90,7 +90,7 @@ public class ServiceReservationService extends ModelMapperFuncs {
         updateReservationStatus(reservation, status);
 
         save(reservation);
-        return buildListServiceDTO(
+        return buildResponse(
                 reservation,
                 eventOwnerService.getByServiceReservation(id),
                 serviceOwnerService.getByServiceId(reservation.getProduct().getId()),

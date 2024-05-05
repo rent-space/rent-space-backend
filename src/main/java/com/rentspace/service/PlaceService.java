@@ -33,7 +33,7 @@ public class PlaceService extends ModelMapperFuncs {
 
         this.save(place);
         placeOwnerService.save(owner); 
-        return buildListServiceDTO(place, owner);
+        return buildResponse(place, owner);
     }
 
     public Place get(Long id) {
@@ -44,7 +44,7 @@ public class PlaceService extends ModelMapperFuncs {
     public ResponsePlaceDTO view(Long id) {
         Place place = this.placeRepository.findById(id).orElseThrow(() -> new ApiRequestException(INVALID_PLACE_ID + id));
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
-        return buildListServiceDTO(place, owner);
+        return buildResponse(place, owner);
     }
 
     public List<ListedPlaceDTO> viewAll() {
@@ -59,7 +59,7 @@ public class PlaceService extends ModelMapperFuncs {
     public ResponsePlaceDTO delete(Long id) {
         Place place = get(id);
         PlaceOwner owner = this.placeOwnerService.getByPlaceId(id);
-        ResponsePlaceDTO dto = buildListServiceDTO(place, owner);
+        ResponsePlaceDTO dto = buildResponse(place, owner);
         owner.getPlaces().remove(place);
         this.placeOwnerService.save(owner);
         this.placeRepository.delete(place);
@@ -72,6 +72,6 @@ public class PlaceService extends ModelMapperFuncs {
         Place place = map(persistDTO, Place.class);
         place.setId(id);
         save(place);
-        return buildListServiceDTO(place, placeOwnerService.getByPlaceId(id));
+        return buildResponse(place, placeOwnerService.getByPlaceId(id));
     }
 }
