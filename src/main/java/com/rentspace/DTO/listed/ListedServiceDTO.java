@@ -17,5 +17,6 @@ public class ListedServiceDTO {
     private String firstMedia;
     private ServiceNature serviceNature;
     private BigDecimal pricePerHour;
+    private String description;
 
 }
