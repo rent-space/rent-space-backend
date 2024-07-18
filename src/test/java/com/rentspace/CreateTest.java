@@ -2,11 +2,9 @@ package com.rentspace;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rentspace.DTO.persist.product.PersistPlaceDTO;
 import com.rentspace.DTO.persist.product.PersistServiceDTO;
@@ -48,52 +47,51 @@ import com.rentspace.util.ModelMapperFuncs;
 
 public class CreateTest {
 
-	@Mock
+    @Mock
     private PlaceRepository placeRepository;
 
-	@Mock
+    @Mock
     private ModelMapperFuncs modelMapperFuncs;
 
-	@InjectMocks 
-	private PlaceService placeService;
+    @InjectMocks
+    private PlaceService placeService;
 
-	@Mock
+    @Mock
     private PlaceOwnerService placeOwnerService;
 
-	@Mock
-	private ServiceService serviceService; 
+    @Mock
+    private ServiceService serviceService;
 
-	@Mock
+    @Mock
     private ServiceRepository serviceRepository;
 
-	@Mock
+    @Mock
     private ServiceOwnerService serviceOwnerService;
 
-	@Mock
+    @Mock
     private PlaceService placeServices;
-	
-	@Mock
-	private EventOwnerService eventOwnerService;
-	
-	@Mock
-	private ServiceReservationRepository serviceReservationRepository;
-	
-	@Mock 
-	private PlaceReservationRepository placeReservationRepository;
-	
-	@InjectMocks
-	private ServiceReservationService serviceReservationService;
-	
-	@Mock
+
+    @Mock
+    private EventOwnerService eventOwnerService;
+
+    @Mock
+    private ServiceReservationRepository serviceReservationRepository;
+
+    @Mock
+    private PlaceReservationRepository placeReservationRepository;
+
+    @InjectMocks
+    private ServiceReservationService serviceReservationService;
+
+    @Mock
     private ServiceReservationService serviceReservation;
-	
-	@InjectMocks
-	private PlaceReservationService placeReservationService;
-	
+
+    @InjectMocks
+    private PlaceReservationService placeReservationService;
 
     @BeforeEach
     public void setUp() {
-    	MockitoAnnotations.openMocks(this);  
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -123,15 +121,15 @@ public class CreateTest {
         when(placeRepository.save(any())).thenReturn(new Place());
         when(modelMapperFuncs.map(any(), any())).thenReturn(responsePlaceDTO);
 
-        placeService.create(persistPlaceDTO);  
+        placeService.create(persistPlaceDTO);
 
         verify(placeOwnerService, times(1)).get(any());
         verify(placeRepository, times(1)).save(any());
     }
 
     @Test
-    public void createService() {
-        serviceService = new ServiceService(serviceRepository, serviceOwnerService, placeServices);
+    public void createService() throws IOException {
+        MultipartFile mockFile = mock(MultipartFile.class);
 
         PersistServiceDTO persistServiceDTO = new PersistServiceDTO();
         persistServiceDTO.setTitle("Test Service");
@@ -157,9 +155,9 @@ public class CreateTest {
         when(placeServices.get(2L)).thenReturn(place2);
         when(serviceRepository.save(any())).thenReturn(new Service());
 
-        serviceService.create(persistServiceDTO);
+        serviceService.create(persistServiceDTO, mockFile);
 
-        verify(serviceOwnerService, times(1)).get(any()); 
+        verify(serviceOwnerService, times(1)).get(any());
         verify(placeServices, times(1)).get(1L);
         verify(placeServices, times(1)).get(2L);
         verify(serviceRepository, times(1)).save(any());
@@ -173,25 +171,25 @@ public class CreateTest {
 
         EventOwner eventOwner = new EventOwner();
         eventOwner.setServices(new ArrayList<>());
-        
+
         Service service = new Service();
         service.setPricePerHour(BigDecimal.valueOf(50));
-        
+
         ServiceOwner serviceOwner = new ServiceOwner();
         serviceOwner.setReservations(new ArrayList<>());
-        
+
         ServiceReservation reservation = new ServiceReservation();
-        
+
         List<Place> relatedPlaces = new ArrayList<>();
-        Place place = new Place();  
+        Place place = new Place();
         place.setAddress("123 Main St");
         place.setCity("City");
         relatedPlaces.add(place);
 
-		when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
+        when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
         when(serviceService.get(anyLong())).thenReturn(service);
-        when(serviceService.getRelatedPlaces(null)).thenReturn(relatedPlaces);
-        when(serviceOwnerService.getByServiceId(null)).thenReturn(serviceOwner);
+        when(serviceService.getRelatedPlaces(anyLong())).thenReturn(relatedPlaces);
+        when(serviceOwnerService.getByServiceId(anyLong())).thenReturn(serviceOwner);
         when(serviceReservationRepository.save(any())).thenReturn(reservation);
 
         serviceReservationService.create(persistDTO);
@@ -200,7 +198,7 @@ public class CreateTest {
         verify(serviceService, times(1)).get(anyLong());
         verify(serviceReservationRepository, times(1)).save(any());
     }
-    
+
     @Test
     void createPlaceReservation() {
         PersistPlaceReservationDTO persistDTO = new PersistPlaceReservationDTO(
@@ -209,32 +207,32 @@ public class CreateTest {
 
         EventOwner eventOwner = new EventOwner();
         eventOwner.setPlaces(new ArrayList<>());
-        
+
         Place place = new Place();
         place.setPricePerHour(BigDecimal.valueOf(50));
-        place.setMaximumCapacity(50);        
-        place.setServices(new ArrayList<>()); 
-        
+        place.setMaximumCapacity(50);
+        place.setServices(new ArrayList<>());
+
         Service service = new Service();
-        service.setPeopleInvolved(2); 
+        service.setPeopleInvolved(2);
         service.setPricePerHour(BigDecimal.valueOf(50));
         place.getServices().add(service);
-        
+
         PlaceOwner placeOwner = new PlaceOwner();
         placeOwner.setReservations(new ArrayList<>());
-         
+
         PlaceReservation reservation = new PlaceReservation();
-       
-        when(placeServices.get(anyLong())).thenReturn(place); 
+
+        when(placeServices.get(anyLong())).thenReturn(place);
         when(serviceService.get(anyLong())).thenReturn(service);
         when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
-        when(placeOwnerService.getByPlaceId(null)).thenReturn(placeOwner);
+        when(placeOwnerService.getByPlaceId(anyLong())).thenReturn(placeOwner);
         when(placeReservationRepository.save(any())).thenReturn(reservation);
-        
+
         doAnswer(invocation -> {
             Object[] args = invocation.getArguments();
             ServiceReservation serviceReservation = (ServiceReservation) args[0];
-            return null;  
+            return null;
         }).when(serviceReservation).save(any(ServiceReservation.class));
 
         placeReservationService.create(persistDTO);
@@ -243,5 +241,4 @@ public class CreateTest {
         verify(placeServices, times(1)).get(anyLong());
         verify(placeReservationRepository, times(1)).save(any());
     }
-
 }
