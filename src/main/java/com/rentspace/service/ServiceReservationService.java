@@ -1,5 +1,6 @@
 package com.rentspace.service;
 
+import com.rentspace.DTO.listed.ListedServiceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.exception.ApiRequestException;
@@ -103,5 +104,10 @@ public class ServiceReservationService extends ModelMapperFuncs {
 
         serviceReservationRepository.delete(serviceReservation);
         return map(serviceReservation, ResponseServiceReservationDTO.class);
+    }
+
+    public List<ListedServiceReservationDTO> viewAll() {
+        List<ServiceReservation> reservations = serviceReservationRepository.findAll();
+        return mapToList(reservations, ListedServiceReservationDTO.class);
     }
 }

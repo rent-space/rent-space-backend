@@ -1,5 +1,6 @@
 package com.rentspace.controller;
 
+import com.rentspace.DTO.listed.ListedServiceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.model.reservation.Status;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/solicitacao/servico")
@@ -24,6 +27,11 @@ public class ServiceReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseServiceReservationDTO> view(@PathVariable Long id) {
         return new ResponseEntity<>(serviceReservationService.view(id), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ListedServiceReservationDTO>> viewAll() {
+        return new ResponseEntity<>(serviceReservationService.viewAll(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
