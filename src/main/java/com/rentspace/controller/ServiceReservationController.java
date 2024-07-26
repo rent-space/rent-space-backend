@@ -29,7 +29,7 @@ public class ServiceReservationController {
         return new ResponseEntity<>(serviceReservationService.view(id), HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ListedServiceReservationDTO>> viewAll() {
         return new ResponseEntity<>(serviceReservationService.viewAll(), HttpStatus.OK);
     }
