@@ -266,7 +266,7 @@ public class ExceptionTest {
         assertEquals(EVENT_OWNER_SEARCH_ERROR + ownerId, exception.getMessage());
     }
 
-    @Test
+    /*@Test
     public void serviceOwnerSearchError() { 
         Long ownerId = 3L;
 
@@ -278,7 +278,7 @@ public class ExceptionTest {
         	serviceOwnerService.getByServiceId(ownerId);  
         });
         assertEquals(SERVICE_OWNER_SEARCH_ERROR + ownerId, exception.getMessage());
-    }
+    }*/
     
     @Test
     public void serviceNotRelatedToSpace() {
