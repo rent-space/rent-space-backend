@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.rentspace.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,13 +38,6 @@ import com.rentspace.repository.PlaceRepository;
 import com.rentspace.repository.PlaceReservationRepository;
 import com.rentspace.repository.ServiceRepository;
 import com.rentspace.repository.ServiceReservationRepository;
-import com.rentspace.service.EventOwnerService;
-import com.rentspace.service.PlaceOwnerService;
-import com.rentspace.service.PlaceReservationService;
-import com.rentspace.service.PlaceService;
-import com.rentspace.service.ServiceOwnerService;
-import com.rentspace.service.ServiceReservationService;
-import com.rentspace.service.ServiceService;
 import com.rentspace.util.ModelMapperFuncs;
 
 public class CreateTest {
@@ -59,8 +54,11 @@ public class CreateTest {
     @Mock
     private PlaceOwnerService placeOwnerService;
 
-    @Mock
+    @InjectMocks
     private ServiceService serviceService;
+
+    @Mock
+    private ServiceService serviceServices;
 
     @Mock
     private ServiceRepository serviceRepository;
@@ -88,6 +86,9 @@ public class CreateTest {
 
     @InjectMocks
     private PlaceReservationService placeReservationService;
+
+    @Mock
+    private ImageService imageService;
 
     @BeforeEach
     public void setUp() {
@@ -137,12 +138,14 @@ public class CreateTest {
         persistServiceDTO.setPricePerHour(BigDecimal.TEN);
         persistServiceDTO.setServiceNature(ServiceNature.BAR);
         persistServiceDTO.setPeopleInvolved(5);
+        persistServiceDTO.setOwnerId(1L);
         List<Long> placesIdsRelated = new ArrayList<>();
         placesIdsRelated.add(1L);
         placesIdsRelated.add(2L);
         persistServiceDTO.setPlacesIdsRelated(placesIdsRelated);
 
         ServiceOwner owner = new ServiceOwner();
+        owner.setId(1L);
         owner.setServices(new ArrayList<>());
 
         Place place1 = new Place();
@@ -150,14 +153,15 @@ public class CreateTest {
         place1.setServices(new ArrayList<>());
         place2.setServices(new ArrayList<>());
 
-        when(serviceOwnerService.get(any())).thenReturn(owner);
+        when(serviceOwnerService.get(anyLong())).thenReturn(owner);
         when(placeServices.get(1L)).thenReturn(place1);
         when(placeServices.get(2L)).thenReturn(place2);
         when(serviceRepository.save(any())).thenReturn(new Service());
+        when(imageService.uploadMultipleFiles(anyList())).thenReturn(new ArrayList<>());
 
         serviceService.create(persistServiceDTO, mockFile);
 
-        verify(serviceOwnerService, times(1)).get(any());
+        verify(serviceOwnerService, times(1)).get(anyLong());
         verify(placeServices, times(1)).get(1L);
         verify(placeServices, times(1)).get(2L);
         verify(serviceRepository, times(1)).save(any());
@@ -173,6 +177,7 @@ public class CreateTest {
         eventOwner.setServices(new ArrayList<>());
 
         Service service = new Service();
+        service.setId(1L);
         service.setPricePerHour(BigDecimal.valueOf(50));
 
         ServiceOwner serviceOwner = new ServiceOwner();
@@ -187,7 +192,7 @@ public class CreateTest {
         relatedPlaces.add(place);
 
         when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
-        when(serviceService.get(anyLong())).thenReturn(service);
+        when(serviceServices.get(anyLong())).thenReturn(service);
         when(serviceService.getRelatedPlaces(anyLong())).thenReturn(relatedPlaces);
         when(serviceOwnerService.getByServiceId(anyLong())).thenReturn(serviceOwner);
         when(serviceReservationRepository.save(any())).thenReturn(reservation);
@@ -195,7 +200,7 @@ public class CreateTest {
         serviceReservationService.create(persistDTO);
 
         verify(eventOwnerService, times(1)).get(anyLong());
-        verify(serviceService, times(1)).get(anyLong());
+        verify(serviceServices, times(1)).get(anyLong());
         verify(serviceReservationRepository, times(1)).save(any());
     }
 
@@ -205,10 +210,12 @@ public class CreateTest {
                 LocalDateTime.now(), LocalDateTime.now().plusHours(1), PaymentMethod.CREDIT,
                 1, 1L, 10, Collections.singletonList(1L), 1L);
 
+        persistDTO.setHiredRelatedServicesIds(new ArrayList<>());
         EventOwner eventOwner = new EventOwner();
         eventOwner.setPlaces(new ArrayList<>());
 
         Place place = new Place();
+        place.setId(1L);
         place.setPricePerHour(BigDecimal.valueOf(50));
         place.setMaximumCapacity(50);
         place.setServices(new ArrayList<>());
@@ -224,7 +231,7 @@ public class CreateTest {
         PlaceReservation reservation = new PlaceReservation();
 
         when(placeServices.get(anyLong())).thenReturn(place);
-        when(serviceService.get(anyLong())).thenReturn(service);
+        when(serviceServices.get(anyLong())).thenReturn(service);
         when(eventOwnerService.get(anyLong())).thenReturn(eventOwner);
         when(placeOwnerService.getByPlaceId(anyLong())).thenReturn(placeOwner);
         when(placeReservationRepository.save(any())).thenReturn(reservation);
