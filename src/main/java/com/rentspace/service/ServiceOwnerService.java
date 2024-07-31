@@ -1,6 +1,7 @@
 package com.rentspace.service;
 
 import com.rentspace.exception.ApiRequestException;
+import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceOwnerRepository;
@@ -23,7 +24,12 @@ public class ServiceOwnerService {
     }
 
     public ServiceOwner getByServiceId(Long id) {
-        return serviceOwnerRepository.findByServiceId(id)
-                .orElseThrow(() -> new ApiRequestException(SERVICE_OWNER_SEARCH_ERROR + id));
+        ServiceOwner serviceOwner = serviceOwnerRepository.findByServiceId(id).get();
+
+        if(serviceOwner == null){
+            return new ServiceOwner();
+        }else{
+            return serviceOwner;
+        }
     }
 }
