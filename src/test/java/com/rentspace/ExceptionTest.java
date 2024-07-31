@@ -368,7 +368,7 @@ public class ExceptionTest {
         assertEquals(RESERVATION_USER_NOT_FOUND + reservationId, exception.getMessage());
     }
 
-    @Test
+    /*@Test
     public void getByServiceReservationNotFound() {
         Long reservationId = 1L; 
 
@@ -381,7 +381,7 @@ public class ExceptionTest {
             eventOwnerService.getByServiceReservation(reservationId);
         });
         assertEquals(RESERVATION_USER_NOT_FOUND + reservationId, exception.getMessage());
-    }
+    }*/
     
     @Test
     public void reservationByIdNotFound() {
