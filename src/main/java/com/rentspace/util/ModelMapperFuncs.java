@@ -189,13 +189,20 @@ public abstract class ModelMapperFuncs {
         List<ListedServiceReservationDTO> responseServiceReservationDTOS = new ArrayList<>();
         serviceReservations.forEach(serviceReservation -> {
             ListedServiceReservationDTO listedServiceReservationDTO = new ListedServiceReservationDTO();
+            listedServiceReservationDTO.setId(serviceReservation.getId());
             listedServiceReservationDTO.setAddress(serviceReservation.getAddress());
             listedServiceReservationDTO.setCity(serviceReservation.getCity());
             listedServiceReservationDTO.setFinalPrice(serviceReservation.getFinalPrice());
+            listedServiceReservationDTO.setProduct(serviceReservation.getProduct());
+            listedServiceReservationDTO.setNumOfInstallments(serviceReservation.getNumOfInstallments());
+            listedServiceReservationDTO.setStartsAt(serviceReservation.getStartsAt());
+            listedServiceReservationDTO.setEndsAt(serviceReservation.getEndsAt());
+            listedServiceReservationDTO.setStatus(serviceReservation.getStatus());
             responseServiceReservationDTOS.add(listedServiceReservationDTO);
 
         });
-
         return responseServiceReservationDTOS;
     }
+
+
 }
