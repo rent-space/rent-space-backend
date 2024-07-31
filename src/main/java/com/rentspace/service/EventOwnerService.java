@@ -23,8 +23,12 @@ public class EventOwnerService extends ModelMapperFuncs {
     }
 
     public EventOwner getByPlaceReservation(Long reservationId) {
-        return eventOwnerRepository.findByPlaceReservation(reservationId)
-                .orElseThrow(() -> new ApiRequestException(RESERVATION_USER_NOT_FOUND + reservationId));
+        EventOwner eventOwner = eventOwnerRepository.findByServiceReservation(reservationId).get();
+        if(eventOwner == null){
+            return new EventOwner();
+        }else{
+            return eventOwner;
+        }
     }
 
     public EventOwner getByServiceReservation(Long reservationId) {
