@@ -6,6 +6,7 @@ import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
@@ -181,5 +182,36 @@ public abstract class ModelMapperFuncs {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+
+    //Gambiarra!
+    public List<ResponseServiceReservationDTO> buildServiceReservationList(List<ServiceReservation> serviceReservations) {
+        List<ResponseServiceReservationDTO> responseServiceReservationDTOS = new ArrayList<>();
+        serviceReservations.forEach(serviceReservation -> {
+            ResponseServiceReservationDTO responseServiceReservationDTO = new ResponseServiceReservationDTO();
+            responseServiceReservationDTO.setId(serviceReservation.getId());
+            responseServiceReservationDTO.setFinalPrice(serviceReservation.getFinalPrice());
+            responseServiceReservationDTO.setProduct(
+                    new ResponseProductDTO(
+                            serviceReservation.getProduct().getId(),
+                            serviceReservation.getProduct().getTitle(),
+                            serviceReservation.getProduct().getDescription(),
+                            serviceReservation.getProduct().getAddress(),
+                            serviceReservation.getProduct().getCity(),
+                            serviceReservation.getProduct().getPricePerHour(),
+                            null,  null
+                    )
+            );
+            responseServiceReservationDTO.setNumOfInstallments(serviceReservation.getNumOfInstallments());
+            responseServiceReservationDTO.setStartsAt(serviceReservation.getStartsAt());
+            responseServiceReservationDTO.setEndsAt(serviceReservation.getEndsAt());
+            responseServiceReservationDTO.setStatus(serviceReservation.getStatus());
+
+            responseServiceReservationDTOS.add(responseServiceReservationDTO);
+
+        });
+
+        return responseServiceReservationDTOS;
     }
 }

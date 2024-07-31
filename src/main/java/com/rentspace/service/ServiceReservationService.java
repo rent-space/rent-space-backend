@@ -1,6 +1,7 @@
 package com.rentspace.service;
 
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.DTO.response.reservation.ResponseServiceReservationDTO;
 import com.rentspace.exception.ApiRequestException;
 import com.rentspace.model.products.Place;
@@ -12,6 +13,7 @@ import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceReservationRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,4 +106,11 @@ public class ServiceReservationService extends ModelMapperFuncs {
         serviceReservationRepository.delete(serviceReservation);
         return map(serviceReservation, ResponseServiceReservationDTO.class);
     }
+
+    public List<ResponseServiceReservationDTO> viewAll() {
+        List<ServiceReservation>  serviceReservations = serviceReservationRepository.findAll();
+        return buildServiceReservationList(serviceReservations);
+    }
+
+
 }
