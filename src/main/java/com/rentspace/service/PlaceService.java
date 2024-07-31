@@ -10,11 +10,9 @@ import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.repository.PlaceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.INVALID_PLACE_ID;
 
