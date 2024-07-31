@@ -24,12 +24,10 @@ public class ServiceOwnerService {
     }
 
     public ServiceOwner getByServiceId(Long id) {
-        ServiceOwner serviceOwner = serviceOwnerRepository.findByServiceId(id).get();
-
-        if(serviceOwner == null){
-            return new ServiceOwner();
+        if(serviceOwnerRepository.findByServiceId(id).isPresent()){
+            return serviceOwnerRepository.findByServiceId(id).get();
         }else{
-            return serviceOwner;
+            return new ServiceOwner();
         }
     }
 }
