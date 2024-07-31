@@ -51,40 +51,40 @@ public class ServiceServiceTest {
 
 	@Mock
 	private ServiceRepository serviceRepository;
-	
+
 	@Mock
-	private ServiceOwnerRepository serviceOwnerRepository; 
-	
+	private ServiceOwnerRepository serviceOwnerRepository;
+
 	@Mock
 	private ServiceReservationRepository serviceReservationRepository;
-	
+
 	@Mock
     private ServiceService serviceService;
-	
+
 	@Mock
-	private ServiceOwnerService serviceOwnerService; 
-	
+	private ServiceOwnerService serviceOwnerService;
+
 	private ServiceReservation serviceReservation;
-	
+
 	private Service service;
-	
-	private ServiceOwner serviceOwner;  
+
+	private ServiceOwner serviceOwner;
 
     @InjectMocks
-	private ServiceReservationService serviceReservationService; 
+	private ServiceReservationService serviceReservationService;
 
     @BeforeEach
     public void setUp() {
     	MockitoAnnotations.openMocks(this);
     	serviceService = new ServiceService(serviceRepository, null, null);
-    	serviceOwnerService = new ServiceOwnerService(serviceOwnerRepository); 
-    	service = new Service(); 
-    	serviceOwner = new ServiceOwner(); 
+    	serviceOwnerService = new ServiceOwnerService(serviceOwnerRepository);
+    	service = new Service();
+    	serviceOwner = new ServiceOwner();
     	serviceReservation = new ServiceReservation();
-    	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null, 
-    			serviceOwnerService, serviceService, null); 
+    	serviceReservationService = new ServiceReservationService(serviceReservationRepository, null,
+    			serviceOwnerService, serviceService, null);
     }
-    
+
     @Test
     public void saveService() {
         when(serviceRepository.save(any(Service.class))).thenReturn(service);
@@ -93,16 +93,16 @@ public class ServiceServiceTest {
 
         verify(serviceRepository, times(1)).save(service);
     }
-    
+
     @Test
     public void getServiceNatures() {
         List<String> serviceNatures = serviceService.getServiceNatures();
 
         List<String> expectedNatures = List.of(Arrays.toString(ServiceNature.values()));
         assertEquals(expectedNatures, serviceNatures);
-    } 
-     
-    @Test 
+    }
+
+    @Test
     public void getServiceById() {
         when(serviceRepository.findById(anyLong())).thenReturn(Optional.of(service));
 
@@ -110,7 +110,7 @@ public class ServiceServiceTest {
 
         assertEquals(service, retrievedService);
     }
-    
+
     @Test
     public void saveServiceOwner() {
         when(serviceOwnerRepository.save(any(ServiceOwner.class))).thenReturn(serviceOwner);
@@ -119,8 +119,8 @@ public class ServiceServiceTest {
 
         verify(serviceOwnerRepository, times(1)).save(serviceOwner);
     }
-    
-    @Test 
+
+    @Test
     public void getServiceOwnerById() {
         when(serviceOwnerRepository.findById(anyLong())).thenReturn(Optional.of(serviceOwner));
 
@@ -128,31 +128,31 @@ public class ServiceServiceTest {
 
         assertEquals(serviceOwner, retrievedService);
     }
-      
-    @Test 
-    public void getServiceOwnerByServiceId() { 
+
+    @Test
+    public void getServiceOwnerByServiceId() {
         when(serviceOwnerRepository.findByServiceId(anyLong())).thenReturn(Optional.of(serviceOwner));
 
-        ServiceOwner retrievedService = serviceOwnerService.getByServiceId(1L); 
+        ServiceOwner retrievedService = serviceOwnerService.getByServiceId(1L);
 
         assertEquals(serviceOwner, retrievedService);
     }
-    
-    @Test 
-    public void saveServiceReservation() { 
+
+    @Test
+    public void saveServiceReservation() {
         when(serviceReservationRepository.save(any(ServiceReservation.class))).thenReturn(serviceReservation);
 
-        serviceReservationService.save(serviceReservation); 
+        serviceReservationService.save(serviceReservation);
 
         verify(serviceReservationRepository, times(1)).save(serviceReservation);
     }
-    
+
     @Test
     public void viewService() {
         Long serviceId = 1L;
         Service mockService = new Service();
         mockService.setTitle("Test Service");
-        
+
         ServiceRepository serviceRepository = mock(ServiceRepository.class);
         when(serviceRepository.findById(serviceId)).thenReturn(Optional.of(mockService));
 
@@ -169,10 +169,10 @@ public class ServiceServiceTest {
         ResponseServiceDTO result = serviceService.view(serviceId);
 
         assertEquals(mockService.getId(), result.getId());
-        assertEquals(mockService.getTitle(), result.getTitle()); 
+        assertEquals(mockService.getTitle(), result.getTitle());
         assertEquals(mockPlaces.size(), result.getPlacesRelated().size());
     }
-    
+
     @Test
     public void getServiceReservationById() {
         Long reservationId = 1L;
@@ -181,7 +181,7 @@ public class ServiceServiceTest {
         ServiceReservationRepository serviceReservationRepository = mock(ServiceReservationRepository.class);
         when(serviceReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
 
-        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository,
         		null, serviceOwnerService, serviceService, null);
 
         ServiceReservation result = serviceReservationService.get(reservationId);
@@ -191,11 +191,11 @@ public class ServiceServiceTest {
 
     @Test
     public void testViewServiceReservation() {
-        Long reservationId = 1L; 
+        Long reservationId = 1L;
         ServiceReservation mockReservation = new ServiceReservation();
 
-        mockReservation.setProduct(new Service()); 
-        mockReservation.setFinalPrice(BigDecimal.TEN); 
+        mockReservation.setProduct(new Service());
+        mockReservation.setFinalPrice(BigDecimal.TEN);
 
         ServiceReservationRepository serviceReservationRepository = mock(ServiceReservationRepository.class);
         when(serviceReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
@@ -219,9 +219,9 @@ public class ServiceServiceTest {
         ResponseServiceReservationDTO result = serviceReservationService.view(reservationId);
 
         assertNotNull(result);
-    
+
     }
-    
+
     @Test
     public void updateStatusServiceReservation() {
         ServiceReservationRepository serviceReservationRepository = mock(ServiceReservationRepository.class);
@@ -229,22 +229,22 @@ public class ServiceServiceTest {
         PlaceService placeService = mock(PlaceService.class);
         EventOwnerService eventOwnerService = mock(EventOwnerService.class);
 
-        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository,
         		eventOwnerService, serviceOwnerService, serviceService, placeService);
 
         Long reservationId = 1L;
-        Status status = Status.ACCEPTED; 
+        Status status = Status.ACCEPTED;
 
         ServiceReservation mockReservation = new ServiceReservation();
         mockReservation.setProduct(new Service());
-        mockReservation.setStatus(Status.PENDING); 
+        mockReservation.setStatus(Status.PENDING);
 
         when(serviceReservationRepository.findById(reservationId)).thenReturn(Optional.of(mockReservation));
 
         EventOwner mockEventOwner = new EventOwner();
         when(eventOwnerService.getByServiceReservation(reservationId)).thenReturn(mockEventOwner);
 
-        List<Place> mockPlaces = new ArrayList<>(); 
+        List<Place> mockPlaces = new ArrayList<>();
         when(placeService.getAllByExclusiveService(reservationId)).thenReturn((mockPlaces));
 
         when(serviceReservationRepository.save(any(ServiceReservation.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
@@ -254,7 +254,7 @@ public class ServiceServiceTest {
         assertEquals(mockReservation.getId(), result.getId());
         assertEquals(mockReservation.getStatus(), status);
     }
-    
+
     @Test
     public void deleteService() {
         ServiceRepository serviceRepository = mock(ServiceRepository.class);
@@ -280,9 +280,9 @@ public class ServiceServiceTest {
         assertEquals(response.getId(), serviceId);
         assertEquals(response.getPlacesRelated(), places);
     }
-    
+
     @Test
-    public void viewAllServices() { 
+    public void viewAllServices() {
         ServiceRepository serviceRepository = Mockito.mock(ServiceRepository.class);
         ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
 
@@ -303,10 +303,10 @@ public class ServiceServiceTest {
         services.add(service2);
 
         when(serviceRepository.findAll()).thenReturn(services);
-        when(modelMapper.map(service1, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(1L, "Service 1", "", ServiceNature.BAR, new BigDecimal(50)));
-        when(modelMapper.map(service2, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(2L, "Service 2", "media1.jpg", ServiceNature.BARMEN, new BigDecimal("50.3")));
+        when(modelMapper.map(service1, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(1L, "Service 1", "", ServiceNature.BAR, new BigDecimal(50)), null);
+        when(modelMapper.map(service2, ListedServiceDTO.class)).thenReturn(new ListedServiceDTO(2L, "Service 2", "media1.jpg", ServiceNature.BARMEN, new BigDecimal("50.3")), null);
 
-        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, null);
+        ServiceService serviceService = new ServiceService(serviceRepository, serviceOwnerService, null, null);
 
         List<ListedServiceDTO> result = serviceService.viewAll();
 
@@ -318,11 +318,11 @@ public class ServiceServiceTest {
         assertEquals("Service 2", result.get(1).getTitle());
         assertEquals("media1.jpg", result.get(1).getFirstMedia());
     }
-    
+
     @Test
     public void deleteServiceReservation() {
         Long reservationId = 1L;
- 
+
         ServiceReservation serviceReservation = new ServiceReservation();
         serviceReservation.setId(reservationId);
         serviceReservation.setStartsAt(LocalDateTime.now());
@@ -373,7 +373,7 @@ public class ServiceServiceTest {
         ModelMapper modelMapper = Mockito.mock(ModelMapper.class);
         when(modelMapper.map(serviceReservation, ResponseServiceReservationDTO.class)).thenReturn(expectedResponse);
 
-        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository, 
+        ServiceReservationService serviceReservationService = new ServiceReservationService(serviceReservationRepository,
         		null, serviceOwnerService, serviceService, null);
 
         ResponseServiceReservationDTO actualResponse = serviceReservationService.delete(reservationId);
@@ -383,6 +383,5 @@ public class ServiceServiceTest {
 
         assertEquals(expectedResponse, actualResponse);
     }
-    
-}
-*/
+
+}*/
