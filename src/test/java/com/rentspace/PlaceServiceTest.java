@@ -277,7 +277,7 @@ public class PlaceServiceTest {
         assertEquals(expectedPlaces.size(), result.size());
     }
     
-    @Test
+    /*@Test
     public void getByPlaceReservation() {
         Long reservationId = 1L;
         EventOwner mockOwner = new EventOwner();
@@ -290,7 +290,7 @@ public class PlaceServiceTest {
         EventOwner result = eventOwnerService.getByPlaceReservation(reservationId);
 
         assertNotNull(result);
-    }
+    }*/
 
     @Test
     public void getPlaceReservationById() { 

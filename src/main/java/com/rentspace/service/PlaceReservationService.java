@@ -111,4 +111,18 @@ public class PlaceReservationService extends ModelMapperFuncs {
         placeReservationRepository.delete(placeReservation);
         return map(placeReservation, ResponsePlaceReservationDTO.class);
     }
+
+    public List<ResponsePlaceReservationDTO> viewAll() {
+        List<ResponsePlaceReservationDTO> dtos = new ArrayList<>();
+        for (PlaceReservation reservation : placeReservationRepository.findAll()) {
+            dtos.add(
+                    buildResponse(
+                            reservation,
+                            placeOwnerService.getByPlaceId(reservation.getProduct().getId()),
+                            eventOwnerService.getByPlaceReservation(reservation.getId())
+                    )
+            );
+        }
+        return dtos;
+    }
 }

@@ -1,6 +1,7 @@
 package com.rentspace.service;
 
 import com.rentspace.exception.ApiRequestException;
+import com.rentspace.model.user.EventOwner;
 import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceOwnerRepository;
@@ -23,7 +24,7 @@ public class ServiceOwnerService {
                 .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_OWNER_ID + id));
     }
 
-    public ServiceOwner getByServiceId(@Param("id") Long id) {
+    public ServiceOwner getByServiceId(Long id) {
         return serviceOwnerRepository.findByServiceId(id)
                 .orElseThrow(() -> new ApiRequestException(SERVICE_OWNER_SEARCH_ERROR + id));
     }
