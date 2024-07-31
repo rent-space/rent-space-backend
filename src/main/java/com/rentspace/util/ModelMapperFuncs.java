@@ -2,10 +2,12 @@ package com.rentspace.util;
 
 import com.rentspace.DTO.listed.ListedPlaceDTO;
 import com.rentspace.DTO.listed.ListedServiceDTO;
+import com.rentspace.DTO.listed.ListedServiceReservationDTO;
 import com.rentspace.DTO.persist.PersistUserDTO;
 import com.rentspace.DTO.persist.reservation.PersistPlaceReservationDTO;
 import com.rentspace.DTO.persist.reservation.PersistServiceReservationDTO;
 import com.rentspace.DTO.response.product.ResponsePlaceDTO;
+import com.rentspace.DTO.response.product.ResponseProductDTO;
 import com.rentspace.DTO.response.reservation.ResponsePlaceReservationDTO;
 import com.rentspace.DTO.response.product.ResponseServiceDTO;
 import com.rentspace.DTO.response.ResponseUserDTO;
@@ -181,5 +183,19 @@ public abstract class ModelMapperFuncs {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+    public List<ListedServiceReservationDTO> buildServiceReservationList(List<ServiceReservation> serviceReservations) {
+        List<ListedServiceReservationDTO> responseServiceReservationDTOS = new ArrayList<>();
+        serviceReservations.forEach(serviceReservation -> {
+            ListedServiceReservationDTO listedServiceReservationDTO = new ListedServiceReservationDTO();
+            listedServiceReservationDTO.setAddress(serviceReservation.getAddress());
+            listedServiceReservationDTO.setCity(serviceReservation.getCity());
+            listedServiceReservationDTO.setFinalPrice(serviceReservation.getFinalPrice());
+            responseServiceReservationDTOS.add(listedServiceReservationDTO);
+
+        });
+
+        return responseServiceReservationDTOS;
     }
 }

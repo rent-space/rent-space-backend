@@ -108,6 +108,6 @@ public class ServiceReservationService extends ModelMapperFuncs {
 
     public List<ListedServiceReservationDTO> viewAll() {
         List<ServiceReservation> reservations = serviceReservationRepository.findAll();
-        return mapToList(reservations, ListedServiceReservationDTO.class);
+        return buildServiceReservationList(reservations);
     }
 }
