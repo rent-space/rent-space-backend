@@ -182,7 +182,7 @@ public class ExceptionTest {
     	when(serviceOwnerRepository.findById(ownerId)).thenReturn(Optional.empty());
 
         ServiceService serviceService = new ServiceService(serviceRepository, new ServiceOwnerService(null), 
-        		new PlaceService(null, null));
+        		new PlaceService(null, null), null);
 
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
         	serviceService.get(ownerId);

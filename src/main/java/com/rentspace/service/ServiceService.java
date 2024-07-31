@@ -12,9 +12,14 @@ import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceRepository;
 import com.rentspace.util.ModelMapperFuncs;
 import lombok.AllArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.rentspace.exception.ExceptionMessages.INVALID_SERVICE_ID;
 
@@ -25,6 +30,7 @@ public class ServiceService extends ModelMapperFuncs {
     private ServiceRepository serviceRepository;
     private ServiceOwnerService serviceOwnerService;
     private PlaceService placeService;
+    private ImageService imageService;
 
     public void save(Service model) { this.serviceRepository.save(model); }
 
@@ -33,27 +39,55 @@ public class ServiceService extends ModelMapperFuncs {
                 .orElseThrow(() -> new ApiRequestException(INVALID_SERVICE_ID  + id));
     }
 
-    public ResponseServiceDTO create(PersistServiceDTO persistDTO) {
-        ServiceOwner owner = serviceOwnerService.get(persistDTO.getOwnerId());
+    public ResponseServiceDTO create(PersistServiceDTO persistDTO, List<MultipartFile> file) throws IOException {
+        validatePersistDTO(persistDTO);
 
-        List<Place> places = new ArrayList<>();
-        persistDTO.getPlacesIdsRelated().forEach(
-                id -> places.add(this.placeService.get(id))
-        );
+        ServiceOwner owner = serviceOwnerService.get(persistDTO.getOwnerId());
+        List<Place> places = getPlaces(persistDTO.getPlacesIdsRelated());
+
         if (persistDTO.getMedia() == null) {
             persistDTO.setMedia(new ArrayList<>());
         }
-        Service service = map(persistDTO, Service.class);
 
-        this.save(service);
-        owner.getServices().add(service);
-        for (Place place : places) {
-            place.getServices().add(service);
-            this.placeService.save(place);
+        if (file != null && !file.isEmpty()) {
+            List<String> fileNames = imageService.uploadMultipleFiles(file);
+            System.out.println(fileNames);
+            persistDTO.setMedia(fileNames);
         }
-        serviceOwnerService.save(owner);
+
+        Service service = map(persistDTO, Service.class);
+        saveService(service, owner, places);
 
         return buildResponse(service, owner, places);
+    }
+
+    private void validatePersistDTO(PersistServiceDTO persistDTO) {
+        Objects.requireNonNull(persistDTO, "PersistServiceDTO must not be null");
+        Objects.requireNonNull(persistDTO.getOwnerId(), "OwnerId must not be null");
+        Objects.requireNonNull(persistDTO.getPlacesIdsRelated(), "PlacesIdsRelated must not be null");
+    }
+
+    private List<Place> getPlaces(List<Long> placesIdsRelated) {
+        List<Place> places = new ArrayList<>();
+        placesIdsRelated.forEach(id -> places.add(placeService.get(id)));
+        return places;
+    }
+
+//    private Service map(PersistServiceDTO persistDTO, Class<Service> serviceClass) {
+//        // Implement mapping logic here
+//        // This is a stub for demonstration purposes
+//        return new Service();
+//    }
+
+    private void saveService(Service service, ServiceOwner owner, List<Place> places) {
+        save(service);
+        owner.getServices().add(service);
+        serviceOwnerService.save(owner);
+
+        for (Place place : places) {
+            place.getServices().add(service);
+            placeService.save(place);
+        }
     }
 
     public List<String> getServiceNatures() {

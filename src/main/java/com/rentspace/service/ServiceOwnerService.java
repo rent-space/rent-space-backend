@@ -6,6 +6,7 @@ import com.rentspace.model.user.PlaceOwner;
 import com.rentspace.model.user.ServiceOwner;
 import com.rentspace.repository.ServiceOwnerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import static com.rentspace.exception.ExceptionMessages.INVALID_SERVICE_OWNER_ID;
 import static com.rentspace.exception.ExceptionMessages.SERVICE_OWNER_SEARCH_ERROR;
@@ -24,10 +25,7 @@ public class ServiceOwnerService {
     }
 
     public ServiceOwner getByServiceId(Long id) {
-        if(serviceOwnerRepository.findByServiceId(id).isPresent()){
-            return serviceOwnerRepository.findByServiceId(id).get();
-        }else{
-            return new ServiceOwner();
-        }
+        return serviceOwnerRepository.findByServiceId(id)
+                .orElseThrow(() -> new ApiRequestException(SERVICE_OWNER_SEARCH_ERROR + id));
     }
 }
