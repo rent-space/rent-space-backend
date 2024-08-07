@@ -50,7 +50,7 @@ public class UserServiceTest {
 
     @Test
     public void saveUser() { 
-        AppUser userToSave = new AppUser("Ronaldo Fenomeno", "RonaldoFe@example.com", "", "", "");
+        AppUser userToSave = new AppUser("Ronaldo Fenomeno", "RonaldoFe@example.com", "", "", "", "");
         when(userRepository.save(any(AppUser.class))).thenReturn(userToSave);
 
         userService.save(userToSave);

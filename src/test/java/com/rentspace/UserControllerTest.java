@@ -31,9 +31,9 @@ public class UserControllerTest {
     @Test 
     public void createEventOwner() { 
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.EVENT_OWNER, "Ricardo Fagundes", "",
-                "rfagundes@gmail.com", "83911111111", "");
+                "rfagundes@gmail.com", "83911111111", "", "");
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(0L, "Ricardo Fagundes", "",
-                "rfagundes@gmail.com", "83911111111", "", UserType.EVENT_OWNER);
+                "rfagundes@gmail.com", "83911111111", "", UserType.EVENT_OWNER, "");
 
         when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
@@ -46,9 +46,9 @@ public class UserControllerTest {
     @Test
     public void createPlaceOwner() { 
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.PLACE_OWNER, "Raquel Farias", "",
-                "raquelfarias@gmail.com", "83922222222", "");
+                "raquelfarias@gmail.com", "83922222222", "", "");
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Raquel Farias", "",
-                "raquelfarias@gmail.com", "83922222222", "", UserType.PLACE_OWNER);
+                "raquelfarias@gmail.com", "83922222222", "", UserType.PLACE_OWNER, "");
 
         when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 
@@ -61,9 +61,9 @@ public class UserControllerTest {
     @Test
     public void createServiceOwner() { 
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.SERVICE_OWNER, "Rafael Feitosa", "",
-                "rafeitosa@gmail.com", "83933333333", "");
+                "rafeitosa@gmail.com", "83933333333", "", "");
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(2L, "Rafael Feitosa", "",
-                "rafeitosa@gmail.com", "83933333333", "", UserType.SERVICE_OWNER);
+                "rafeitosa@gmail.com", "83933333333", "", UserType.SERVICE_OWNER, "");
 
         when(userService.create(persistUserDTO)).thenReturn(responseUserDTO);
 

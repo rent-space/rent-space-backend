@@ -110,7 +110,7 @@ public class ExceptionTest {
     @Test 
     void emailAlreadyExists() {
         PersistUserDTO persistUserDTO = new PersistUserDTO(UserType.EVENT_OWNER, "Renato Ferreira", "", 
-        		"rf@gmail.com", "83944444444", "");
+        		"rf@gmail.com", "83944444444", "", "");
  
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new AppUser()));
 
