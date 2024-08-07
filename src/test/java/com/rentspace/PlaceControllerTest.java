@@ -65,7 +65,7 @@ public class PlaceControllerTest {
                 BigDecimal.valueOf(100), 50, 1L);
    
         ResponseUserDTO responseUserDTO = new ResponseUserDTO(1L, "Rosane Fortuna", "",
-                "rosanefortuna@gmail.com", "83911111111", "", UserType.PLACE_OWNER);
+                "rosanefortuna@gmail.com", "83911111111", "", UserType.PLACE_OWNER, "");
         
         ResponsePlaceDTO responsePlaceDTO = new ResponsePlaceDTO(2L, "Place", "Description",
                 "Address", "City", "neighborhood",
