@@ -29,8 +29,8 @@ public class ServiceReservationController {
         return new ResponseEntity<>(serviceReservationService.view(id), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ListedServiceReservationDTO>> viewAll() {
+    @GetMapping("/all")
+    public ResponseEntity<List<ResponseServiceReservationDTO>> viewAll() {
         return new ResponseEntity<>(serviceReservationService.viewAll(), HttpStatus.OK);
     }
 
