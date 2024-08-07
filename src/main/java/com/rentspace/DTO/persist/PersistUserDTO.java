@@ -28,4 +28,6 @@ public class PersistUserDTO {
     private String telephone;
 
     private String webSite;
+
+    private String accountId;
 }

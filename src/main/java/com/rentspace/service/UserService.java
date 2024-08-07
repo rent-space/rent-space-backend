@@ -55,6 +55,13 @@ public class UserService extends ModelMapperFuncs {
         return buildResponse(user);
     }
 
+    public ResponseUserDTO setUserAccountId(Long id, String accountId) {
+        AppUser user = get(id);
+        user.setAccountId(accountId);
+
+        return buildResponse(userRepository.saveAndFlush(user));
+    }
+
     public ResponseUserDTO delete(Long id) {
         AppUser user = get(id);
         userRepository.delete(user);

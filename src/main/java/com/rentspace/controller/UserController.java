@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(path = "/usuario")
 @AllArgsConstructor
@@ -33,5 +35,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseUserDTO> delete(@PathVariable Long id) {
         return new ResponseEntity<>(userService.delete(id), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseUserDTO> setUserAccountId(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String accountId = (String) request.get("accountId");
+        return new ResponseEntity<>(userService.setUserAccountId(id, accountId), HttpStatus.OK);
     }
 }

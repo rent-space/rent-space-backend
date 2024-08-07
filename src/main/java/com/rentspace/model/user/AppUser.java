@@ -18,5 +18,5 @@ public class AppUser extends GenericModel {
     private String email;
     private String telephone;
     private String webSite;
-
+    private String accountId;
 }
