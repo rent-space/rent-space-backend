@@ -17,4 +17,5 @@ public class ResponseUserDTO {
     private String telephone;
     private String webSite;
     private UserType userType;
+    private String language;
 }
